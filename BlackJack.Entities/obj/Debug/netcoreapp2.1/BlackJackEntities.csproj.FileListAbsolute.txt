@@ -1,0 +1,16 @@
+C:\Vlad\Test\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.deps.json
+C:\Vlad\Test\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\Test\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\Test\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.csproj.CoreCompileInputs.cache
+C:\Vlad\Test\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.AssemblyInfoInputs.cache
+C:\Vlad\Test\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.AssemblyInfo.cs
+C:\Vlad\Test\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\Test\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.deps.json
+C:\Vlad\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\BlackJack\BlackJack.Entities\bin\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.csproj.CoreCompileInputs.cache
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.AssemblyInfoInputs.cache
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.AssemblyInfo.cs
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.pdb

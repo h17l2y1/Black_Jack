@@ -1,0 +1,17 @@
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.deps.json
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.dll
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csproj.CoreCompileInputs.cache
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfoInputs.cache
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfo.cs
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.dll
+C:\Vlad\Test\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.deps.json
+C:\Vlad\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.dll
+C:\Vlad\BlackJack\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csproj.CoreCompileInputs.cache
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfoInputs.cache
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfo.cs
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.dll
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csprojAssemblyReference.cache
