@@ -11,5 +11,6 @@ namespace BlackJackDataAccess
 
         public int UserPoints { get; set; }
 
+        public string UserRole { get; set; }
     }
 }

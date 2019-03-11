@@ -8,16 +8,15 @@ namespace BlackJackViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        [Display(Name = "Name")]
+        public string UserName { get; set; }
 
         [Required]
-        [Display(Name = "Год рождения")]
-        public int Year { get; set; }
+        [Display(Name = "Points")]
+        public int UserPoints { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
-        public string Password { get; set; }
-
+        [Required]
+        [Display(Name = "Role")]
+        public string UserRole { get; set; }
     }
 }

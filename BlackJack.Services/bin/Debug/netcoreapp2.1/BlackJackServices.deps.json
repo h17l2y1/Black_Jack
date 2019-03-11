@@ -10,7 +10,10 @@
         "dependencies": {
           "BlackJackDataAccess": "1.0.0",
           "BlackJackViewModels": "1.0.0",
-          "Microsoft.AspNetCore.Identity": "2.1.1"
+          "Microsoft.AspNetCore.Identity": "2.1.1",
+          "Microsoft.IdentityModel.Tokens": "5.2.0.0",
+          "Newtonsoft.Json": "11.0.0.0",
+          "System.IdentityModel.Tokens.Jwt": "5.2.0.0"
         },
         "runtime": {
           "BlackJackServices.dll": {}
@@ -897,6 +900,30 @@
           "BlackJackViewModels.dll": {}
         }
       },
+      "Microsoft.IdentityModel.Tokens/5.2.0.0": {
+        "runtime": {
+          "Microsoft.IdentityModel.Tokens.dll": {
+            "assemblyVersion": "5.2.0.0",
+            "fileVersion": "5.2.0.50129"
+          }
+        }
+      },
+      "Newtonsoft.Json/11.0.0.0": {
+        "runtime": {
+          "Newtonsoft.Json.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.2.21924"
+          }
+        }
+      },
+      "System.IdentityModel.Tokens.Jwt/5.2.0.0": {
+        "runtime": {
+          "System.IdentityModel.Tokens.Jwt.dll": {
+            "assemblyVersion": "5.2.0.0",
+            "fileVersion": "5.2.0.50129"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore.Reference/2.1.1.0": {
         "runtime": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
@@ -1513,6 +1540,21 @@
     },
     "BlackJackViewModels/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.IdentityModel.Tokens/5.2.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Newtonsoft.Json/11.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.IdentityModel.Tokens.Jwt/5.2.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     },

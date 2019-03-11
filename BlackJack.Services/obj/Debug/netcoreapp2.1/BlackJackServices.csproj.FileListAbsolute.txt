@@ -30,3 +30,9 @@ C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Microsoft.AspNetCor
 C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.xml
 C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\BlackJackViewModels.dll
 C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.dll
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Tokens.xml
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\System.IdentityModel.Tokens.Jwt.xml
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Newtonsoft.Json.dll
+C:\Vlad\BlackJack\BlackJack.Services\bin\Debug\netcoreapp2.1\Newtonsoft.Json.xml

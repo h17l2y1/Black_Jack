@@ -11,43 +11,59 @@ namespace BlackJack.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IRegisterService _service;
+        private readonly IAccountService _service;
 
-        public AccountController(IRegisterService service)
+        public AccountController(IAccountService service)
         {
             _service = service;
         }
 
-        // POST: api/Users/Register/
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        // POST: api/Account/Remove/
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(string id)
         {
-            await _service.RegisterAsync(model);
-            //jwt token
-            //GenerateToken for User
-            //if erroirt return badRequest
-            return Ok(/*token*/);
+            await _service.RemoveAsync(id);
+            return Ok();
+        }
+
+        // GET: api/Account/Get
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var user = await _service.FindByIdAsync(id);
+            return Ok(user);
+        }
+
+        // GET: api/Account/GetAll
+        [HttpGet]
+        public async Task<IActionResult> GetAll(string id)
+        {
+            var list = await _service.GetAllAsync();
+            return Ok(list);
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
         {
-            _service.RegisterAsync(model);
-            //jwt token
-            //GenerateToken for User
-            return Ok(/*token*/);
+            await _service.AddAsync(model);
+            var jwt = _service.GetToken(model);
+            var str = _service.GetTokenString(jwt);
+
+            return Ok(str);
         }
 
-
+        //[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        [Authorize]
-        public IActionResult Test()
+        public async Task<IActionResult> LogIn([FromBody] RegisterViewModel model)
         {
-            //_service.Register(model);
-            //jwt token
-            //GenerateToken for User
-            return Ok("You are autorize user");
+            if ( _service.UserIsExist(model.UserName) == false)
+            {
+                return await SignUp(model);
+            }
+
+            return Ok("You are autorized user");
         }
+
 
 
     }
