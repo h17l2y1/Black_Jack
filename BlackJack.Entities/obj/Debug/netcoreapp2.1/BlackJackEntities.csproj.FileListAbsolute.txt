@@ -14,3 +14,4 @@ C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.A
 C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.dll
 C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\BlackJack\BlackJack.Entities\obj\Debug\netcoreapp2.1\BlackJackEntities.csprojAssemblyReference.cache

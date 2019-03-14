@@ -5,13 +5,11 @@ using BlackJackViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlackJackServices.Services
@@ -39,9 +37,10 @@ namespace BlackJackServices.Services
             return user;
         }
 
-        public async Task AddAsync(RegisterViewModel model)
+        public async Task AddAsync(RegisterView model)
         {
-            User user = new User {
+            User user = new User
+            {
                 UserName = model.UserName,
                 UserPoints = 200,
                 UserRole = "user"
@@ -56,7 +55,7 @@ namespace BlackJackServices.Services
             await _userManager.DeleteAsync(user);
         }
 
-        public JwtSecurityToken GetToken(RegisterViewModel model)
+        public JwtSecurityToken GetToken(RegisterView model)
         {
             var identity = GetIdentity(model);
 
@@ -82,7 +81,7 @@ namespace BlackJackServices.Services
             return stringToken;
         }
 
-        private ClaimsIdentity GetIdentity(RegisterViewModel model)
+        private ClaimsIdentity GetIdentity(RegisterView model)
         {
             User user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
             if (user != null)

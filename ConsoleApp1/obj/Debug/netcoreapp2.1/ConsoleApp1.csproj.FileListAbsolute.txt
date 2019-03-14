@@ -1,0 +1,11 @@
+C:\Vlad\BlackJack\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.deps.json
+C:\Vlad\BlackJack\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.runtimeconfig.json
+C:\Vlad\BlackJack\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.runtimeconfig.dev.json
+C:\Vlad\BlackJack\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.dll
+C:\Vlad\BlackJack\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.pdb
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.csprojAssemblyReference.cache
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.csproj.CoreCompileInputs.cache
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.AssemblyInfoInputs.cache
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.AssemblyInfo.cs
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.dll
+C:\Vlad\BlackJack\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.pdb

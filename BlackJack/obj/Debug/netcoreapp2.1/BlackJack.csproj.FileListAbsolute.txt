@@ -64,8 +64,6 @@ C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.TagHelpers.input.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.TagHelpers.output.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorCoreGenerate.cache
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.1.g.cshtml.cs
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.g.cshtml.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Contact.g.cshtml.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.g.cshtml.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Privacy.g.cshtml.cs

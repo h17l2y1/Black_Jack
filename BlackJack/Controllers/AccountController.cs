@@ -1,7 +1,5 @@
-﻿using BlackJackServices.Services;
-using BlackJackServices.Services.Interfaces;
+﻿using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -43,7 +41,7 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> SignUp([FromBody] RegisterView model)
         {
             await _service.AddAsync(model);
             var jwt = _service.GetToken(model);
@@ -54,17 +52,15 @@ namespace BlackJack.Controllers
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<IActionResult> LogIn([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> LogIn([FromBody] RegisterView model)
         {
-            if ( _service.UserIsExist(model.UserName) == false)
+            if (_service.UserIsExist(model.UserName) == false)
             {
                 return await SignUp(model);
             }
 
             return Ok("You are autorized user");
         }
-
-
 
     }
 }

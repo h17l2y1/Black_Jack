@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BlackJack
 {
@@ -35,13 +37,20 @@ namespace BlackJack
             .AddJsonFile("appsettings.json")
             .Build();
 
+            // connection sting
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
 
+            // add services
             services.AddScoped<IUserService, UserServices>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IGameService, GameService>();
 
+            // cache
+            services.AddMemoryCache();
+            services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
+            // jwt
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,13 +73,13 @@ namespace BlackJack
                 options.SaveToken = true;
             });
 
+            // identity
             services.Configure<IdentityOptions>(options =>
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             });
-
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 
             services.Configure<CookiePolicyOptions>(options =>

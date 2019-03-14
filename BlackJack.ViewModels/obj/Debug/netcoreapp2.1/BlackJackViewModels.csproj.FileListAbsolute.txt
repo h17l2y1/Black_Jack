@@ -14,4 +14,3 @@ C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewMode
 C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.dll
 C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.pdb
-C:\Vlad\BlackJack\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csprojAssemblyReference.cache
