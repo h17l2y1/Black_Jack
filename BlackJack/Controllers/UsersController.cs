@@ -1,4 +1,4 @@
-﻿using BlackJackDataAccess;
+﻿using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +25,7 @@ namespace BlackJack.Controllers
 
         // GET: api/Users/Get
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public IActionResult Get([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace BlackJack.Controllers
 
         // DELETE: api/Users/Remove/5
         [HttpDelete("{id}")]
-        public IActionResult Remove([FromRoute] int id)
+        public IActionResult Remove([FromRoute] string id)
         {
             var result = _service.Get(id);
             _service.Remove(id);

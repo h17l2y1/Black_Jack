@@ -1,6 +1,6 @@
 ﻿using BlackJackServices.Services.Interfaces;
-using BlackJackViewModels.Game;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BlackJack.Controllers
 {
@@ -16,21 +16,33 @@ namespace BlackJack.Controllers
             _service = service;
         }
 
-        // POST: api/Game/StartGame
         [HttpPost]
-        public IActionResult StartGame([FromBody] RequestStartGame model)
+        public async Task<IActionResult> StartGame([FromBody] RequestStartGame model)
         {
-            var result = _service.StartGame(model.UserId, model.CountBots);
+            var userId = "6ae7e49b-b3ba-4c33-b7ad-4f80c4fb143a";
+            var result = await _service.StartGame(userId, model.CountBots);
             return Ok(result);
         }
 
         public class RequestStartGame
         {
-            public int UserId { get; set; }
+            public string UserId { get; set; }
             public int CountBots { get; set; }
         }
 
+        [HttpPost]
+        public IActionResult GetCard()
+        {
+            //var card = _service.(model.UserId, model.GameId);
 
+            return Ok("resuly");
+        }
+
+        public class RequestGetCard
+        {
+            public string UserId { get; set; }
+            public int GameId { get; set; }
+        }
 
     }
 }

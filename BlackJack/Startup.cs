@@ -1,6 +1,8 @@
 ﻿using BlackJackDataAccess;
 using BlackJackDataAccess.Repositories;
 using BlackJackDataAccess.Repositories.Interfaces;
+using BlackJackEntities.Entities;
+using BlackJackServices;
 using BlackJackServices.Services;
 using BlackJackServices.Services.Auth;
 using BlackJackServices.Services.Interfaces;
@@ -11,13 +13,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BlackJack
 {
@@ -40,11 +41,20 @@ namespace BlackJack
             // connection sting
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
 
-            // add services
+            // services
             services.AddScoped<IUserService, UserServices>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<ICacheWrapperService, CacheWrapperService>();
+
+            // repository
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IGameRepository, GameRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<ICardMoveRepository, CardMoveRepository>();
+            services.AddScoped<IGameUsersRepository, GameUsersRepository>();
+            services.AddScoped<IBotRepository, BotRepository>();
+            services.AddScoped<IDialerRepository, DialerRepository>();
 
             // cache
             services.AddMemoryCache();

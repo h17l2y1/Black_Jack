@@ -1,8 +1,5 @@
 ﻿using BlackJackDataAccess.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using BlackJackEntities.Entities;
 
 namespace BlackJackDataAccess.Repositories
 {

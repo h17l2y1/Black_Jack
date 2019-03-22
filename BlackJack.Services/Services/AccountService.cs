@@ -1,4 +1,4 @@
-﻿using BlackJackDataAccess;
+﻿using BlackJackEntities.Entities;
 using BlackJackServices.Services.Auth;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
@@ -43,7 +43,6 @@ namespace BlackJackServices.Services
             {
                 UserName = model.UserName,
                 UserPoints = 200,
-                UserRole = "user"
             };
 
             await _userManager.CreateAsync(user);

@@ -22,5 +22,3 @@ C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAcce
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csproj.CopyComplete
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.dll
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
-C:\Vlad\BlackJack\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Vlad\BlackJack\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.xml

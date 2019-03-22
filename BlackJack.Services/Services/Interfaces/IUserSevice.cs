@@ -1,4 +1,5 @@
-﻿using BlackJackDataAccess;
+﻿using BlackJackEntities.Entities;
+using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
 {
@@ -6,14 +7,12 @@ namespace BlackJackServices.Services.Interfaces
     {
         object GetAll();
 
-        object Get(int id);
+        object Get(string id);
 
-        //object Find()
-
-        void Add(User user);
+        Task Add(User user);
 
         void Update(User user);
 
-        void Remove(int id);
+        void Remove(string id);
     }
 }

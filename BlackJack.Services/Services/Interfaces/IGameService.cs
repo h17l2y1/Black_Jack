@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BlackJackViewModels.Game;
+using System;
 using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
 {
     public interface IGameService
     {
-        object StartGame(/*Guid*/ int userId, int countBots);
+        Task<object> StartGame(string userId, int countBots);
+
+        CardView GetCardView();
 
     }
 }

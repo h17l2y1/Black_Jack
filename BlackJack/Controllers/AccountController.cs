@@ -16,7 +16,6 @@ namespace BlackJack.Controllers
             _service = service;
         }
 
-        // POST: api/Account/Remove/
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(string id)
         {
@@ -24,7 +23,6 @@ namespace BlackJack.Controllers
             return Ok();
         }
 
-        // GET: api/Account/Get
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -32,7 +30,6 @@ namespace BlackJack.Controllers
             return Ok(user);
         }
 
-        // GET: api/Account/GetAll
         [HttpGet]
         public async Task<IActionResult> GetAll(string id)
         {

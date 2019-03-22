@@ -59,6 +59,7 @@ C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csprojAssemblyRefe
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csproj.CoreCompileInputs.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cs
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfoInputs.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.TagHelpers.input.cache
@@ -79,4 +80,3 @@ C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.Views.pdb
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csproj.CopyComplete
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.dll
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.pdb
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs

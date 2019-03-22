@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,15 +25,21 @@ namespace BlackJackDataAccess
             return _context.Set<TEntity>().AsNoTracking().Where(predicate).AsQueryable();
         }
 
-        public TEntity Get(int id)
+        public TEntity Get(string id)
         {
             return _context.Set<TEntity>().Find(id);
         }
 
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
-            _context.SaveChangesAsync();
+            var result = _context.Set<TEntity>().Add(entity);
+            var save = _context.SaveChanges();
+        }
+
+        public async Task AddRange(List<TEntity> entity)
+        {
+            var result = _context.Set<TEntity>().AddRangeAsync(entity);
+            var save = _context.SaveChanges();
         }
 
         public void Update(TEntity entity)
@@ -42,11 +49,18 @@ namespace BlackJackDataAccess
             _context.SaveChangesAsync();
         }
 
-        public void Remove(int id)
+        public void Remove(string id)
         {
             _context.Set<TEntity>().Remove(Get(id));
             _context.SaveChanges();
         }
+
+        public int Count()
+        {
+            return _context.Set<TEntity>().ToList().Count();
+        }
+
+        private bool _disposed = false;        protected virtual void Dispose(bool disposing)        {            if (!this._disposed)            {                if (disposing)                {                    _context.Dispose();                }            }            this._disposed = true;        }        public void Dispose()        {            Dispose(true);            GC.SuppressFinalize(this);        }
 
     }
 }

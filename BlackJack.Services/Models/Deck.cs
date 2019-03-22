@@ -1,4 +1,4 @@
-﻿using BlackJackServices.Services.Enums;
+﻿using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,6 @@ namespace BlackJackServices.Services
 {
     public class Deck : IDeck
     {
-        //private List<Card> _listOfCards;
-
         public List<Card> ListOfCards { get; set; }
 
         public Deck()
@@ -46,6 +44,12 @@ namespace BlackJackServices.Services
         private void RemoveCard()
         {
             ListOfCards.RemoveAt(0);
+        }
+
+        public int CardsLeft()
+        {
+            var cardLeft = ListOfCards.Count;
+            return cardLeft;
         }
 
     }

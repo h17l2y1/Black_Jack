@@ -1,11 +1,12 @@
-﻿using BlackJackDataAccess;
-using BlackJackDataAccess.Repositories.Interfaces;
+﻿using BlackJackDataAccess.Repositories.Interfaces;
+using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlackJackServices.Services
 {
-    public class UserServices : IUserService 
+    public class UserServices : IUserService
     {
         private readonly IUserRepository _repository;
 
@@ -19,14 +20,14 @@ namespace BlackJackServices.Services
             return _repository.GetAll().ToList();
         }
 
-        public object Get(int id)
+        public object Get(string id)
         {
             return _repository.Get(id);
         }
 
-        public void Add(User user)
+        public Task Add(User user)
         {
-            _repository.Add(user);
+            return _repository.Add(user);
         }
 
         public void Update(User user)
@@ -34,7 +35,7 @@ namespace BlackJackServices.Services
             _repository.Update(user);
         }
 
-        public void Remove(int id)
+        public void Remove(string id)
         {
             _repository.Remove(id);
         }
