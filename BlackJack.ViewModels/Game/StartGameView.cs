@@ -4,7 +4,7 @@ namespace BlackJackViewModels.Game
 {
     public class StartGameView
     {
-        public int GameId { get; set; }
+        public string GameId { get; set; }
         public List<PlayerView> Bots { get; set; }
         public PlayerView User { get; set; }
         public int Cardsleft { get; set; }

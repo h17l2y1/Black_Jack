@@ -2,6 +2,7 @@
 using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,8 +44,6 @@ namespace BlackJackServices.Services
 
             SaveToCache(game.Id, _deck);
 
-            var gameModel = CreateStartGameModel(countBots); // 
-
             await CreateCardTable();
             await CreateBotTable();
             await CreateDialerTable();
@@ -53,33 +52,25 @@ namespace BlackJackServices.Services
             await Start(userId, game.Id, countBots);
 
 
+            var gameModel = CreateStartGameModel(userId, game.Id, countBots);
+
+
             return gameModel;
         }
-
-
-
-
 
         private async Task Start(string userId, string gameId, int countBots)
         {
             await AddUserToGame(userId, gameId);
+
             await AddCardToUser(userId, gameId);
             await AddCardToBot(gameId, countBots);
-
             await AddCardToDialer(gameId);
-
-
-            //var botlist = CreateBotList();
-
-
-            //await AddBotToGame(gameId, countBots);
-            //var userCards = GetAllUserCard(userId, gameId);
 
         }
 
 
 
-
+        // Add Card
 
         private async Task AddCardToDialer(string gameId)
         {
@@ -105,16 +96,6 @@ namespace BlackJackServices.Services
 
             await _cardMoveRepository.AddRange(listCardMoves);
         }
-
-
-
-
-
-
-
-
-
-        // work good \\
 
         private async Task AddCardToBot(string gameId, int countBots)
         {
@@ -162,6 +143,11 @@ namespace BlackJackServices.Services
             }
             await _cardMoveRepository.AddRange(listCardMoves);
         }
+
+
+
+
+        // Other
 
         private async Task AddUserToGame(string userId, string gameId)
         {
@@ -216,6 +202,7 @@ namespace BlackJackServices.Services
         }
 
 
+
         // Create Tables
 
         private async Task CreateCardTable()
@@ -258,32 +245,20 @@ namespace BlackJackServices.Services
 
 
 
+        // View models
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private StartGameView CreateStartGameModel(int countBots)
+        private StartGameView CreateStartGameModel(string userId, string gameId, int countBots)
         {
+            var listCard = _cardMoveRepository.GetAll().Where(t => t.GameId == gameId);
+
             var gameModel = new StartGameView();
-            gameModel.User = CreateUser();
-            gameModel.Bots.Add(CreateDialer());
+            gameModel.GameId = gameId;
+            gameModel.User = CreateUser(userId, listCard);
+            gameModel.Bots.Add(CreateDialer(listCard));
 
             for (int i = 0; i < countBots; i++)
             {
-                gameModel.Bots.Add(CreateBot());
+                gameModel.Bots.Add(CreateBot(i, listCard));
             }
 
             gameModel.Cardsleft = _deck.CardsLeft();
@@ -292,67 +267,67 @@ namespace BlackJackServices.Services
             return gameModel;
         }
 
-        private PlayerView CreateUser()
+        private PlayerView CreateUser(string userId, IQueryable<CardMove> listCard)
         {
+            var cards = listCard.Where(t => t.Role == "user").AsEnumerable();
+
             var user = new PlayerView();
-            user.Name = "USER";
-            user.Cards.AddRange(GetTwoCard());
+            user.Name = _userRepository.Get(userId).Name;
+            user.Cards.AddRange(GetCardView(cards));
+            
+            // ???
             user.Score = GetScore(user.Cards);
 
             return user;
         }
 
-        private PlayerView CreateBot()
+        private PlayerView CreateDialer(IQueryable<CardMove> listCard)
         {
-            var bot = new PlayerView();
-            bot.Name = "BOT";
-            bot.Cards.AddRange(GetTwoCard());
-            bot.Score = GetScore(bot.Cards);
+            var listDialer = new List<Dialer>();
+            listDialer.AddRange(_dialerRepository.GetAll());
+            var dialerEntity = listDialer[0];
 
-            //bot = GetCardIfNeed(bot, 19);
+            var cards = listCard.Where(t => t.Role == "Dialer").AsEnumerable();
 
-            return bot;
-        }
-
-        private PlayerView CreateDialer()
-        {
             var dialer = new PlayerView();
-            dialer.Name = "DIALER";
-            dialer.Cards.AddRange(GetTwoCard());
+            dialer.Name = _dialerRepository.Get(dialerEntity.Id).Name;
+            dialer.Cards.AddRange(GetCardView(cards));
+
+            // ???
             dialer.Score = GetScore(dialer.Cards);
-
-            //dialer = GetCardIfNeed(dialer, 17);
-
             return dialer;
         }
 
-        private List<CardView> GetTwoCard()
+        private PlayerView CreateBot(int i, IQueryable<CardMove> listCard)
         {
-            var list = new List<CardView>();
+            var cards = listCard.Where(t => t.Name == $"Bot {i+1}").AsEnumerable();
 
-            for (int i = 0; i < 2; i++)
-            {
-                list.Add(GetCardView());
-            }
+            var botList = _botRepository.GetAll();
 
-            return list;
+            var bot = new PlayerView();
+            bot.Name = botList.FirstOrDefault(t => t.Name == $"Bot {i+1}").Name;
+            bot.Cards.AddRange(GetCardView(cards));
+
+            // ???
+            bot.Score = GetScore(bot.Cards);
+            return bot;
         }
 
-        public CardView GetCardView(/*string gameId*/)
+        private IEnumerable<CardView> GetCardView(IEnumerable<CardMove> cards)
         {
-            var gameId = "11";
+            var listCardView = new List<CardView>();
 
-            _deck = _cache.GetFromCache<Deck>(gameId) ?? _deck;
+            foreach (var card in cards)
+            {
+                var cardModel = new CardView();
+                cardModel.Ranks = card.Card.Rank.ToString();
+                cardModel.Suit = card.Card.Suit.ToString();
+                cardModel.Value = card.Card.CardValue;
 
-            var card = _deck.GetCard();
-            var cardModel = new CardView();
-            cardModel.Ranks = card.Rank.ToString();
-            cardModel.Suit = card.Suit.ToString();
-            cardModel.Value = card.RankValue;
+                listCardView.Add(cardModel);
+            }
 
-            SaveToCache(gameId, _deck);
-
-            return cardModel;
+            return listCardView;
         }
 
         private int GetScore(List<CardView> list)
@@ -365,21 +340,7 @@ namespace BlackJackServices.Services
             return score;
         }
 
-        public PlayerView GetCardIfNeed(PlayerView player, int minScore)
-        {
-            player.Score = GetScore(player.Cards);
 
-            while (true)
-            {
-                if (player.Score >= minScore)
-                {
-                    break;
-                }
-                player.Cards.Add(GetCardView());
-                player.Score = GetScore(player.Cards);
-            }
 
-            return player;
-        }
     }
 }
