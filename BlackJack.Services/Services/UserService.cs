@@ -8,9 +8,9 @@ namespace BlackJackServices.Services
 {
     public class UserServices : IUserService
     {
-        private readonly IUserRepository _repository;
+        private readonly IPlayerRepository _repository;
 
-        public UserServices(IUserRepository repository)
+        public UserServices(IPlayerRepository repository)
         {
             _repository = repository;
         }
@@ -25,12 +25,12 @@ namespace BlackJackServices.Services
             return _repository.Get(id);
         }
 
-        public Task Add(User user)
+        public Task Add(Player user)
         {
             return _repository.Add(user);
         }
 
-        public void Update(User user)
+        public void Update(Player user)
         {
             _repository.Update(user);
         }

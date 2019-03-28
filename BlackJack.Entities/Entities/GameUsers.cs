@@ -7,7 +7,7 @@ namespace BlackJackEntities.Entities
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public Player User { get; set; }
         
         public string GameId { get; set; }
 

@@ -19,8 +19,7 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<IActionResult> StartGame([FromBody] RequestStartGame model)
         {
-            var userId = "6ae7e49b-b3ba-4c33-b7ad-4f80c4fb143a";
-            var result = await _service.StartGame(userId, model.CountBots);
+            var result = await _service.StartGame(model.UserId, model.CountBots);
             return Ok(result);
         }
 
@@ -31,18 +30,29 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetCard()
+        public async Task<IActionResult> GetCard([FromBody] RequestGetCard model)
         {
-            //var card = _service.(model.UserId, model.GameId);
-
-            return Ok("resuly");
+            await _service.AddOneCard(model.UserId, model.GameId);
+            return Ok("Card added");
         }
 
         public class RequestGetCard
         {
             public string UserId { get; set; }
-            public int GameId { get; set; }
+            public string GameId { get; set; }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Stop([FromBody] RequestStop model)
+        {
+            var winners = await _service.Stop(model.UserId, model.GameId);
+            return Ok(winners);
+        }
+
+        public class RequestStop
+        {
+            public string UserId { get; set; }
+            public string GameId { get; set; }
+        }
     }
 }

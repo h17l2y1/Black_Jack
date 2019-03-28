@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Vlad\\BlackJack\\BlackJack.ViewModels\\BlackJackViewModels.csproj",
+      "projectUniqueName": "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj",
       "projectName": "BlackJackViewModels",
-      "projectPath": "C:\\Vlad\\BlackJack\\BlackJack.ViewModels\\BlackJackViewModels.csproj",
+      "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj",
       "packagesPath": "C:\\Users\\Anuitex - 79\\.nuget\\packages\\",
-      "outputPath": "C:\\Vlad\\BlackJack\\BlackJack.ViewModels\\obj\\",
+      "outputPath": "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

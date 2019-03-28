@@ -5,7 +5,6 @@ namespace BlackJackEntities.Entities
 {
     public class Game : BaseEntity
     {
-
         public virtual ICollection<CardMove> CardMoves { get; set; }
 
         public Game()
@@ -14,6 +13,6 @@ namespace BlackJackEntities.Entities
         }
 
         [NotMapped]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Player> Users { get; set; }
     }
 }

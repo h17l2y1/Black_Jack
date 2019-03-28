@@ -16,10 +16,10 @@ namespace BlackJackServices.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<Player> _userManager;
+        private readonly SignInManager<Player> _signInManager;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountService(UserManager<Player> userManager, SignInManager<Player> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,20 +39,17 @@ namespace BlackJackServices.Services
 
         public async Task AddAsync(RegisterView model)
         {
-            User user = new User
+            Player user = new Player
             {
-                UserName = model.UserName,
-                UserPoints = 200,
+                UserName = model.Name,
+                Points = model.Points,
+                Role = "User"
             };
 
             await _userManager.CreateAsync(user);
         }
 
-        public async Task RemoveAsync(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
-        }
+
 
         public JwtSecurityToken GetToken(RegisterView model)
         {
@@ -74,21 +71,16 @@ namespace BlackJackServices.Services
             return jwt;
         }
 
-        public string GetTokenString(JwtSecurityToken jwt)
-        {
-            var stringToken = new JwtSecurityTokenHandler().WriteToken(jwt);
-            return stringToken;
-        }
 
         private ClaimsIdentity GetIdentity(RegisterView model)
         {
-            User user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.Name);
             if (user != null)
             {
                 var claimsList = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, model.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, model.UserRole),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, model.Name),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, model.Role),
                     new Claim("aaa","bb"),
 
 
@@ -104,6 +96,19 @@ namespace BlackJackServices.Services
 
             return null;
         }
+
+        public string GetTokenString(JwtSecurityToken jwt)
+        {
+            var stringToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return stringToken;
+        }
+
+        public async Task RemoveAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+        }
+
 
         public bool UserIsExist(string newUser)
         {

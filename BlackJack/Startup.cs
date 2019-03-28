@@ -48,13 +48,11 @@ namespace BlackJack
             services.AddScoped<ICacheWrapperService, CacheWrapperService>();
 
             // repository
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPlayerRepository, UserRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<ICardMoveRepository, CardMoveRepository>();
             services.AddScoped<IGameUsersRepository, GameUsersRepository>();
-            services.AddScoped<IBotRepository, BotRepository>();
-            services.AddScoped<IDialerRepository, DialerRepository>();
 
             // cache
             services.AddMemoryCache();
@@ -90,7 +88,7 @@ namespace BlackJack
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             });
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentity<Player, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

@@ -759,6 +759,15 @@
           }
         }
       },
+      "morelinq/3.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/MoreLinq.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/MoreLinq.dll": {}
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "type": "package",
         "dependencies": {
@@ -1344,9 +1353,11 @@
           "BlackJackEntities": "1.0.0",
           "Microsoft.AspNetCore.Identity": "2.1.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.1.1",
+          "Microsoft.EntityFrameworkCore": "2.1.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.1",
           "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6",
-          "Microsoft.Extensions.Identity.Stores": "2.1.1"
+          "Microsoft.Extensions.Identity.Stores": "2.1.1",
+          "morelinq": "3.1.0"
         },
         "compile": {
           "bin/placeholder/BlackJackDataAccess.dll": {}
@@ -2317,6 +2328,26 @@
         "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "morelinq/3.1.0": {
+      "sha512": "J0DocueE/VH8+NC7Wh71TrvZjTauJt2rzseon59KlS2HMYGN38REMzq2cj/AnMnXFjsmpVGHo5Sl36FLG6c7vw==",
+      "type": "package",
+      "path": "morelinq/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net451/MoreLinq.dll",
+        "lib/net451/MoreLinq.pdb",
+        "lib/net451/MoreLinq.xml",
+        "lib/netstandard1.0/MoreLinq.dll",
+        "lib/netstandard1.0/MoreLinq.pdb",
+        "lib/netstandard1.0/MoreLinq.xml",
+        "lib/netstandard2.0/MoreLinq.dll",
+        "lib/netstandard2.0/MoreLinq.pdb",
+        "lib/netstandard2.0/MoreLinq.xml",
+        "morelinq.3.1.0.nupkg.sha512",
+        "morelinq.nuspec"
       ]
     },
     "NETStandard.Library/2.0.3": {
@@ -4490,11 +4521,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Vlad\\BlackJack\\BlackJack.Services\\BlackJackServices.csproj",
+      "projectUniqueName": "C:\\Vlad\\Black_Jack\\BlackJack.Services\\BlackJackServices.csproj",
       "projectName": "BlackJackServices",
-      "projectPath": "C:\\Vlad\\BlackJack\\BlackJack.Services\\BlackJackServices.csproj",
+      "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.Services\\BlackJackServices.csproj",
       "packagesPath": "C:\\Users\\Anuitex - 79\\.nuget\\packages\\",
-      "outputPath": "C:\\Vlad\\BlackJack\\BlackJack.Services\\obj\\",
+      "outputPath": "C:\\Vlad\\Black_Jack\\BlackJack.Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -4513,11 +4544,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Vlad\\BlackJack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj": {
-              "projectPath": "C:\\Vlad\\BlackJack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj"
+            "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj": {
+              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj"
             },
-            "C:\\Vlad\\BlackJack\\BlackJack.ViewModels\\BlackJackViewModels.csproj": {
-              "projectPath": "C:\\Vlad\\BlackJack\\BlackJack.ViewModels\\BlackJackViewModels.csproj"
+            "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj": {
+              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj"
             }
           }
         }

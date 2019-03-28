@@ -22,12 +22,52 @@ namespace BlackJackDataAccess
 
         public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
         {
-            return _context.Set<TEntity>().AsNoTracking().Where(predicate).AsQueryable();
+            return _context.Set<TEntity>().Where(predicate).AsQueryable();
         }
 
         public TEntity Get(string id)
         {
             return _context.Set<TEntity>().Find(id);
+        }
+
+        public TEntity Single()
+        {
+            return _context.Set<TEntity>().Single();
+        }
+
+        public TEntity Single(Func<TEntity, bool> predicate)
+        {
+            return _context.Set<TEntity>().Single();
+        }
+
+        public TEntity SingleOrDefault()
+        {
+            return _context.Set<TEntity>().SingleOrDefault();
+        }
+
+        public TEntity SingleOrDefault(Func<TEntity, bool> predicate)
+        {
+            return _context.Set<TEntity>().SingleOrDefault();
+        }
+
+        public TEntity First()
+        {
+            return _context.Set<TEntity>().First();
+        }
+
+        public TEntity FirstOrDefault()
+        {
+            return _context.Set<TEntity>().FirstOrDefault();
+        }
+
+        public TEntity First(Func<TEntity, bool> predicate)
+        {
+            return _context.Set<TEntity>().First();
+        }
+
+        public TEntity FirstOrDefault(Func<TEntity, bool> predicate)
+        {
+            return _context.Set<TEntity>().FirstOrDefault();
         }
 
         public async Task Add(TEntity entity)

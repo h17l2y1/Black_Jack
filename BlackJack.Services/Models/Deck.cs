@@ -1,4 +1,5 @@
-﻿using BlackJackEntities.Entities;
+﻿using BlackJackDataAccess.Repositories.Interfaces;
+using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,47 +9,34 @@ namespace BlackJackServices.Services
 {
     public class Deck : IDeck
     {
-        public List<Card> ListOfCards { get; set; }
+        public List<Card> CardList { get; set; }
 
-        public Deck()
+        public Deck(List<Card> list)
         {
-            ListOfCards = new List<Card>();
-            CreateDeck();
-            Shuffle();
-        }
-
-        private void CreateDeck()
-        {
-            foreach (Ranks rank in Enum.GetValues(typeof(Ranks)))
-            {
-                foreach (Suits suit in Enum.GetValues(typeof(Suits)))
-                {
-                    var card = new Card(rank, suit);
-                    ListOfCards.Add(card);
-                }
-            }
-        }
-
-        private void Shuffle()
-        {
-            ListOfCards = ListOfCards.OrderBy(a => Guid.NewGuid()).ToList();
+            CardList = new List<Card>();
+            Shuffle(list);
         }
 
         public Card GetCard()
         {
-            var card = ListOfCards[0];
+            var card = CardList[0];
             RemoveCard();
             return card;
         }
 
+        private void Shuffle(List<Card> list)
+        {
+            CardList = list.OrderBy(a => Guid.NewGuid()).ToList();
+        }
+
         private void RemoveCard()
         {
-            ListOfCards.RemoveAt(0);
+            CardList.RemoveAt(0);
         }
 
         public int CardsLeft()
         {
-            var cardLeft = ListOfCards.Count;
+            var cardLeft = CardList.Count;
             return cardLeft;
         }
 

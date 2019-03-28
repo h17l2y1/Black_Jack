@@ -51,7 +51,7 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn([FromBody] RegisterView model)
         {
-            if (_service.UserIsExist(model.UserName) == false)
+            if (_service.UserIsExist(model.Name) == false)
             {
                 return await SignUp(model);
             }

@@ -3,7 +3,7 @@ using BlackJackEntities.Entities;
 
 namespace BlackJackDataAccess.Repositories
 {
-    public class UserRepository : BaseGenericRepository<User>, IUserRepository
+    public class UserRepository : BaseGenericRepository<Player>, IPlayerRepository
     {
         public UserRepository(ApplicationContext context) : base(context)
         {

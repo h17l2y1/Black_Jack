@@ -9,14 +9,14 @@ namespace BlackJackViewModels
     {
         [Required]
         [Display(Name = "Name")]
-        public string UserName { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [Display(Name = "Points")]
-        public int UserPoints { get; set; }
+        public int Points { get; set; }
 
         [Required]
         [Display(Name = "Role")]
-        public string UserRole { get; set; }
+        public string Role { get; set; }
     }
 }

@@ -9,9 +9,9 @@ namespace BlackJackServices.Services.Interfaces
 
         object Get(string id);
 
-        Task Add(User user);
+        Task Add(Player user);
 
-        void Update(User user);
+        void Update(Player user);
 
         void Remove(string id);
     }

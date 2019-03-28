@@ -7,6 +7,9 @@ namespace BlackJackEntities.Entities
         public int Move { get; set; }
         public string Role { get; set; }
         public string Name { get; set; }
+        public int Value { get; set; }
+        public string PlayerId { get; set; }
+
 
         public string GameId { get; set; }
         [ForeignKey("GameId")]
@@ -15,6 +18,7 @@ namespace BlackJackEntities.Entities
         public string CardId { get; set; }
         [ForeignKey("CardId")]
         public virtual Card Card { get; set; }
+
 
     }
 }

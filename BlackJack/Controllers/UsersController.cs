@@ -44,7 +44,7 @@ namespace BlackJack.Controllers
 
         // POST: api/Users/Add/
         [HttpPost]
-        public IActionResult Add([FromBody] User user)
+        public IActionResult Add([FromBody] Player user)
         {
             _service.Add(user);
             return Ok(User);
@@ -52,7 +52,7 @@ namespace BlackJack.Controllers
 
         // PUT: api/Users/Update/5
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] User user)
+        public IActionResult Update([FromBody] Player user)
         {
             _service.Update(user);
             return NoContent();

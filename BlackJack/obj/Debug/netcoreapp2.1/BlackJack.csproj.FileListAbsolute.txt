@@ -40,6 +40,13 @@ C:\Vlad\Test\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.dll
 C:\Vlad\Test\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.pdb
 C:\Vlad\Test\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csprojAssemblyReference.cache
 C:\Vlad\Test\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.1.g.cshtml.cs
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csprojAssemblyReference.cache
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csproj.CoreCompileInputs.cache
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cache
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cs
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfoInputs.cache
+C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJack.deps.json
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJack.runtimeconfig.json
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJack.runtimeconfig.dev.json
@@ -55,13 +62,6 @@ C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJackServices.pdb
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJackViewModels.pdb
 C:\Vlad\BlackJack\BlackJack\bin\Debug\netcoreapp2.1\BlackJackEntities.pdb
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csprojAssemblyReference.cache
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.csproj.CoreCompileInputs.cache
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cache
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorAssemblyInfo.cs
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfoInputs.cache
-C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.AssemblyInfo.cs
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.TagHelpers.input.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.TagHelpers.output.cache
 C:\Vlad\BlackJack\BlackJack\obj\Debug\netcoreapp2.1\BlackJack.RazorCoreGenerate.cache

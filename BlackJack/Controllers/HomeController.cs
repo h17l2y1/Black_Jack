@@ -1,7 +1,4 @@
 ﻿using BlackJack.Models;
-using BlackJackDataAccess;
-using BlackJackServices.Services;
-using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
