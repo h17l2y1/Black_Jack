@@ -45,7 +45,6 @@ namespace BlackJackServices.Services
 
             //var gameModel = CreateStartGameModel(userId, game.Id, countBots);
 
-
             return null;
         }
 
@@ -72,14 +71,12 @@ namespace BlackJackServices.Services
             return winner;
         }
 
-        //
 
         private async Task Start(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
             await FirstMove(userId, gameId, playersList);
         }
-
 
 
 
@@ -273,95 +270,7 @@ namespace BlackJackServices.Services
 
 
 
-
-        // FIX
-
-        //private async Task AddOtherCardToBots(string gameId)
-        //{
-        //    var list = new List<CardMove>();
-        //    list.AddRange(_cardMoveRepository.Find(t => t.Role == "Bot"));
-
-        //    var botsCount = list.
-        //        GroupBy(x => x.Name).
-        //        Select(x => x).Count();
-
-        //    for (int i = 1; i < botsCount + 1; i++)
-        //    {
-        //        var bot = list.SingleOrDefault(item => item.Name == $"Bot {i}");
-
-        //        int value = bot.Value;
-        //        int nextMove = bot.Move;
-
-        //        List<CardMove> moves = new List<CardMove>();
-        //        while (value < 19)
-        //        {
-        //            string cardId = "999";
-        //            var move = new CardMove
-        //            {
-        //                GameId = gameId,
-        //                CardId = cardId,
-        //                Name = $"Bot {i}",
-        //                Role = "Bot",
-        //                Value = GetCardValue(cardId),
-        //                Move = nextMove += 1
-        //            };
-        //            moves.Add(move);
-        //            value = value + move.Value;
-        //        }
-        //        await _cardMoveRepository.AddRange(moves);
-        //    }
-        //}
-
-        //private async Task AddOtherCardToDialer(string gameId)
-        //{
-        //    var list = new List<CardMove>();
-        //    list.AddRange(_cardMoveRepository.GetAll().Where(t => t.Role == "Dialer"));
-
-        //    int value = 0;
-        //    int nextMove = 0;
-
-        //    foreach (var item in list)
-        //    {
-        //        if (item.Move > nextMove)
-        //        {
-        //            nextMove = item.Move;
-        //        }
-
-        //        value += item.Value;
-        //    }
-
-        //    while (value < 17)
-        //    {
-        //        string cardId = "999";
-        //        var move = new CardMove
-        //        {
-        //            GameId = gameId,
-        //            CardId = cardId,
-        //            Name = "Dialer",
-        //            Role = "Dialer",
-        //            Value = GetCardValue(cardId),
-        //            Move = nextMove + 1
-        //        };
-        //        await _cardMoveRepository.Add(move);
-        //        value += move.Value;
-        //    }
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
         // View models
-
-
 
         private StartGameView CreateStartGameModel(string userId, string gameId, int countBots)
         {

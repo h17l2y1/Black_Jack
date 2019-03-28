@@ -12707,11 +12707,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Vlad\\Black_Jack\\BlackJack\\BlackJack.csproj",
+      "projectUniqueName": "C:\\Vlad\\Black\\BlackJack\\BlackJack.csproj",
       "projectName": "BlackJack",
-      "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack\\BlackJack.csproj",
+      "projectPath": "C:\\Vlad\\Black\\BlackJack\\BlackJack.csproj",
       "packagesPath": "C:\\Users\\Anuitex - 79\\.nuget\\packages\\",
-      "outputPath": "C:\\Vlad\\Black_Jack\\BlackJack\\obj\\",
+      "outputPath": "C:\\Vlad\\Black\\BlackJack\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12730,14 +12730,14 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj": {
-              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj"
+            "C:\\Vlad\\Black\\BlackJack.DataAccess\\BlackJackDataAccess.csproj": {
+              "projectPath": "C:\\Vlad\\Black\\BlackJack.DataAccess\\BlackJackDataAccess.csproj"
             },
-            "C:\\Vlad\\Black_Jack\\BlackJack.Services\\BlackJackServices.csproj": {
-              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.Services\\BlackJackServices.csproj"
+            "C:\\Vlad\\Black\\BlackJack.Services\\BlackJackServices.csproj": {
+              "projectPath": "C:\\Vlad\\Black\\BlackJack.Services\\BlackJackServices.csproj"
             },
-            "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj": {
-              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.ViewModels\\BlackJackViewModels.csproj"
+            "C:\\Vlad\\Black\\BlackJack.ViewModels\\BlackJackViewModels.csproj": {
+              "projectPath": "C:\\Vlad\\Black\\BlackJack.ViewModels\\BlackJackViewModels.csproj"
             }
           }
         }

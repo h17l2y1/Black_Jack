@@ -4486,11 +4486,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj",
+      "projectUniqueName": "C:\\Vlad\\Black\\BlackJack.DataAccess\\BlackJackDataAccess.csproj",
       "projectName": "BlackJackDataAccess",
-      "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\BlackJackDataAccess.csproj",
+      "projectPath": "C:\\Vlad\\Black\\BlackJack.DataAccess\\BlackJackDataAccess.csproj",
       "packagesPath": "C:\\Users\\Anuitex - 79\\.nuget\\packages\\",
-      "outputPath": "C:\\Vlad\\Black_Jack\\BlackJack.DataAccess\\obj\\",
+      "outputPath": "C:\\Vlad\\Black\\BlackJack.DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -4509,8 +4509,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Vlad\\Black_Jack\\BlackJack.Entities\\BlackJackEntities.csproj": {
-              "projectPath": "C:\\Vlad\\Black_Jack\\BlackJack.Entities\\BlackJackEntities.csproj"
+            "C:\\Vlad\\Black\\BlackJack.Entities\\BlackJackEntities.csproj": {
+              "projectPath": "C:\\Vlad\\Black\\BlackJack.Entities\\BlackJackEntities.csproj"
             }
           }
         }
