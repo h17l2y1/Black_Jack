@@ -22,3 +22,15 @@ C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAcce
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csproj.CopyComplete
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.dll
 C:\Vlad\BlackJack\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\BlackJackDataAccess.deps.json
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\BlackJackDataAccess.dll
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csprojAssemblyReference.cache
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csproj.CoreCompileInputs.cache
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.AssemblyInfoInputs.cache
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.AssemblyInfo.cs
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csproj.CopyComplete
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.dll
+C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
