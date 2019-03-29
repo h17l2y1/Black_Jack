@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlackJackEntities.Entities
 {
+    [Table("AspNetUsers")]
     public class Player : IdentityUser
     {
         public int Points { get; set; }

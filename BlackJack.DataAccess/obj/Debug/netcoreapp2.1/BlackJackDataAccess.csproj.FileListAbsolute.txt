@@ -34,3 +34,5 @@ C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.A
 C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.csproj.CopyComplete
 C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.dll
 C:\Vlad\Black\BlackJack.DataAccess\obj\Debug\netcoreapp2.1\BlackJackDataAccess.pdb
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Protocols.dll
+C:\Vlad\Black\BlackJack.DataAccess\bin\Debug\netcoreapp2.1\Microsoft.IdentityModel.Protocols.xml

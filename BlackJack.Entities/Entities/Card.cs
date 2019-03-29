@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BlackJackEntities.Entities
 {
     public class Card : BaseEntity

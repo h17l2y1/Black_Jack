@@ -49,8 +49,6 @@ namespace BlackJackServices.Services
             await _userManager.CreateAsync(user);
         }
 
-
-
         public JwtSecurityToken GetToken(RegisterView model)
         {
             var identity = GetIdentity(model);
@@ -70,7 +68,6 @@ namespace BlackJackServices.Services
                     );
             return jwt;
         }
-
 
         private ClaimsIdentity GetIdentity(RegisterView model)
         {
@@ -108,7 +105,6 @@ namespace BlackJackServices.Services
             var user = await _userManager.FindByIdAsync(id);
             await _userManager.DeleteAsync(user);
         }
-
 
         public bool UserIsExist(string newUser)
         {

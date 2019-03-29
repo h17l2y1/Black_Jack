@@ -1,4 +1,5 @@
 ﻿using BlackJackDataAccess.Repositories.Interfaces;
+using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
@@ -19,17 +20,22 @@ namespace BlackJackServices.Services
         private readonly IPlayerRepository _playerRepository;
         private readonly ICardRepository _cardRepository;
 
+        IPlayerDapperRepository _playerDapperRepository;
+
         public GameService(
             ICacheWrapperService cache, IGameRepository gameRepository, ICardMoveRepository cardMoveRepository,
-            IGameUsersRepository gameUsersRepository, IPlayerRepository userRepository, ICardRepository cardRepository)
+            IGameUsersRepository gameUsersRepository, IPlayerRepository playerRepository, ICardRepository cardRepository,
+            IPlayerDapperRepository playerDapperRepository)
         {
             _cache = cache;
             _gameRepository = gameRepository;
             _gameUsersRepository = gameUsersRepository;
             _cardMoveRepository = cardMoveRepository;
-            _playerRepository = userRepository;
+            _playerRepository = playerRepository;
             _cardRepository = cardRepository;
             _deck = new Deck(_cardRepository.GetAll().ToList());
+
+            _playerDapperRepository = playerDapperRepository;
         }
 
         public async Task<object> StartGame(string userId, int countBots)
@@ -39,9 +45,12 @@ namespace BlackJackServices.Services
 
             SaveToCache(game.Id, _deck);
 
-            var playersList = GetPlaeyrs(userId, game.Id, countBots);
+            var playersList = GetPlayers(userId, game.Id, countBots);
 
             await Start(userId, game.Id, playersList);
+
+            // dapper Test
+            var dapperTest = _playerDapperRepository.Get(userId);
 
             var gameModel = CreateStartGameModel(userId, game.Id);
 
@@ -92,7 +101,7 @@ namespace BlackJackServices.Services
 
         }
 
-        private List<Player> GetPlaeyrs(string userId, string gameId, int countBots)
+        private List<Player> GetPlayers(string userId, string gameId, int countBots)
         {
             var botsList = _playerRepository.Find(t => t.Role == "Bot").ToList();
 
@@ -129,10 +138,37 @@ namespace BlackJackServices.Services
             await _cardMoveRepository.AddRange(listCardMoves);
         }
 
-
-
-
         // add other cards
+
+        private List<Player> GetBotsList(string userId, string gameId)
+        {
+            var gameUserList = _gameUsersRepository
+                .Find(t => t.GameId == gameId)
+                .Where(x => x.UserId != userId);
+
+            var playerIdList = new List<string>();
+
+            foreach (var player in gameUserList)
+            {
+                playerIdList.Add(player.UserId);
+            }
+
+            var botsList = new List<Player>();
+
+            var playersList = _playerRepository.GetAll().ToList();
+
+            foreach (var palyer in playersList)
+            {
+                foreach (var id in playerIdList)
+                {
+                    if (palyer.Id == id)
+                    {
+                        botsList.Add(palyer);
+                    }
+                }
+            }
+            return botsList;
+        }
 
         private async Task AddOtherCardToBots(string userId, string gameId)
         {
@@ -175,40 +211,7 @@ namespace BlackJackServices.Services
 
         }
 
-        private List<Player> GetBotsList(string userId, string gameId)
-        {
-            var gameUserList = _gameUsersRepository
-                .Find(t => t.GameId == gameId)
-                .Where(x => x.UserId != userId);
-
-            var playerIdList = new List<string>();
-
-            foreach (var player in gameUserList)
-            {
-                playerIdList.Add(player.UserId);
-            }
-
-            var botsList = new List<Player>();
-
-            var playersList = _playerRepository.GetAll().ToList();
-
-            foreach (var palyer in playersList)
-            {
-                foreach (var id in playerIdList)
-                {
-                    if (palyer.Id == id)
-                    {
-                        botsList.Add(palyer);
-                    }
-                }
-            }
-            return botsList;
-        }
-
-
-
-
-        // Good
+        
 
         private void SaveToCache(string gameId, Deck deck)
         {
@@ -266,8 +269,6 @@ namespace BlackJackServices.Services
             var card = _cardRepository.Get(cardId);
             return card.Value;
         }
-
-
 
 
         // View models

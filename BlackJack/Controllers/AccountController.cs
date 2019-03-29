@@ -31,7 +31,7 @@ namespace BlackJack.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string id)
+        public async Task<IActionResult> GetAll()
         {
             var list = await _service.GetAllAsync();
             return Ok(list);

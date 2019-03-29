@@ -1,7 +1,9 @@
 ﻿using BlackJackEntities.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlackJackDataAccess
 {
@@ -20,15 +22,17 @@ namespace BlackJackDataAccess
 
         public DbSet<Card> Cards { get; set; }
 
-
-        //
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Card>().HasData(CreateDeck().ToArray());
             builder.Entity<Player>().HasData(FirstInit().ToArray());
 
             base.OnModelCreating(builder);
+        }
+
+        internal IQueryable<object> Query<T>(string v)
+        {
+            throw new NotImplementedException();
         }
 
         private List<Player> FirstInit()
