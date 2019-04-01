@@ -1,4 +1,5 @@
-﻿using BlackJackDataAccess.Repositories.Interfaces;
+﻿using BlackJackDataAccess.Repositories.Dapper.Interfaces;
+using BlackJackDataAccess.Repositories.Interfaces;
 using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
@@ -20,12 +21,13 @@ namespace BlackJackServices.Services
         private readonly IPlayerRepository _playerRepository;
         private readonly ICardRepository _cardRepository;
 
-        IPlayerDapperRepository _playerDapperRepository;
+        private readonly IPlayerDapperRepository _playerDapperRepository;
+        private readonly ICardDapperRepository _cardDapperRepository;
 
         public GameService(
             ICacheWrapperService cache, IGameRepository gameRepository, ICardMoveRepository cardMoveRepository,
             IGameUsersRepository gameUsersRepository, IPlayerRepository playerRepository, ICardRepository cardRepository,
-            IPlayerDapperRepository playerDapperRepository)
+            IPlayerDapperRepository playerDapperRepository, ICardDapperRepository cardDapperRepository)
         {
             _cache = cache;
             _gameRepository = gameRepository;
@@ -36,6 +38,7 @@ namespace BlackJackServices.Services
             _deck = new Deck(_cardRepository.GetAll().ToList());
 
             _playerDapperRepository = playerDapperRepository;
+            _cardDapperRepository = cardDapperRepository;
         }
 
         public async Task<object> StartGame(string userId, int countBots)
@@ -49,8 +52,17 @@ namespace BlackJackServices.Services
 
             await Start(userId, game.Id, playersList);
 
+
             // dapper Test
-            var dapperTest = _playerDapperRepository.Get(userId);
+            string cardId = "06e4e35e-fec0-49f2-896a-ed8fa08363eb";
+            string user2Id = "a00ac108-a6f6-4f21-b0a1-d8305394321d";
+
+            var dapper = _cardDapperRepository.Get(cardId);
+
+            var ef6 = _cardRepository.Get(cardId);
+            //
+
+
 
             var gameModel = CreateStartGameModel(userId, game.Id);
 

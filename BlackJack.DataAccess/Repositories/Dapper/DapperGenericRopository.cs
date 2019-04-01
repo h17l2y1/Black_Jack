@@ -10,22 +10,23 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories
 {
-    public class DapperGenericRopository<TEntit> : IDapperRopository<TEntit> where TEntit : class
+    public class DapperGenericRopository<TEntity> : IDapperRopository<TEntity> where TEntity : class
     {
         private readonly string _connectionString;
 
-        protected readonly string _tableName = $"{ typeof(TEntit).Name }s";
+        protected readonly string _tableName = $"{ typeof(TEntity).Name }s";
+        //protected readonly string _tableName = "AspNetUsers";
 
         public DapperGenericRopository(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public TEntit Get(string id)
+        public TEntity Get(string id)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                return connection.Get<TEntit>(id);
+                return connection.Get<TEntity>(id);
             }
         }
 
@@ -33,11 +34,11 @@ namespace BlackJackDataAccess.Repositories
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Delete(connection.Get<TEntit>(id));
+                connection.Delete(connection.Get<TEntity>(id));
             }
         }
 
-        public async Task Add(TEntit item)
+        public async Task Add(TEntity item)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
@@ -45,7 +46,18 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-        public void Update(TEntit item)
+        public async Task AddRange(List<TEntity> list)
+        {
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                foreach (var item in list)
+                {
+                    connection.Insert(item);
+                }
+            }
+        }
+
+        public void Update(TEntity item)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
@@ -53,11 +65,107 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-        public IQueryable<TEntit> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                return connection.GetAll<TEntit>().AsQueryable();
+                return connection.GetAll<TEntity>().AsQueryable();
+            }
+        }
+
+        public TEntity First()
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QueryFirst<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity First(Func<TEntity, bool> predicate)
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QueryFirst<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity FirstOrDefault()
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QueryFirstOrDefault<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity FirstOrDefault(Func<TEntity, bool> predicate)
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QueryFirstOrDefault<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity Single()
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var result = connection.QuerySingle<TEntity>(sql);
+                return result;
+            }
+        }
+
+        public TEntity Single(Func<TEntity, bool> predicate)
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QuerySingle<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity SingleOrDefault()
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QuerySingleOrDefault<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public TEntity SingleOrDefault(Func<TEntity, bool> predicate)
+        {
+            var sql = $"SELECT * FROM {_tableName}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.QuerySingleOrDefault<TEntity>(sql);
+                return order;
+            }
+        }
+
+        public int Count()
+        {
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.GetAll<TEntity>().AsQueryable().Count();
             }
         }
 
@@ -65,60 +173,12 @@ namespace BlackJackDataAccess.Repositories
 
         // need do
 
-        public Task AddRange(List<TEntit> item)
+        public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public int Count()
-        {
-            throw new NotImplementedException();
-        }
 
-        public IQueryable<TEntit> Find(Func<TEntit, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit First()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit First(Func<TEntit, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit FirstOrDefault()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit FirstOrDefault(Func<TEntit, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit Single()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit Single(Func<TEntit, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit SingleOrDefault()
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntit SingleOrDefault(Func<TEntit, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
 
 
     }

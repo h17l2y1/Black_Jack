@@ -1,6 +1,7 @@
 ﻿using BlackJackDataAccess;
 using BlackJackDataAccess.Repositories;
 using BlackJackDataAccess.Repositories.Dapper;
+using BlackJackDataAccess.Repositories.Dapper.Interfaces;
 using BlackJackDataAccess.Repositories.Interfaces;
 using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackEntities.Entities;
@@ -60,7 +61,11 @@ namespace BlackJack
             services.AddScoped<ICardRepository, CardRepository>();
 
             // Dapper
+            services.AddTransient<IGameUsersDapperRepository>(f => new GameUsersDapperRepository(configuration.GetSection("DefaultConnection").Value));
+            services.AddTransient<ICardMoveDapperRepository>(f => new CardMoveDapperRepository(configuration.GetSection("DefaultConnection").Value));
             services.AddTransient<IPlayerDapperRepository>(f => new PlayerDapperRepository(configuration.GetSection("DefaultConnection").Value));
+            services.AddTransient<ICardDapperRepository>(f => new CardDapperRepository(configuration.GetSection("DefaultConnection").Value));
+            services.AddTransient<IGameDapperRepository>(f => new GameDapperRepository(configuration.GetSection("DefaultConnection").Value));
 
 
             // cache
