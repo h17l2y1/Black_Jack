@@ -42,7 +42,7 @@ namespace BlackJackServices.Services
             Player user = new Player
             {
                 UserName = model.Name,
-                Points = model.Points,
+                Points = 222,
                 Role = "User"
             };
 
@@ -77,10 +77,8 @@ namespace BlackJackServices.Services
                 var claimsList = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, model.Name),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, model.Role),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "User"),
                     new Claim("aaa","bb"),
-
-
                 };
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(

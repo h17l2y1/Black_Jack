@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlackJackEntities.Entities
 {
@@ -9,7 +10,6 @@ namespace BlackJackEntities.Entities
         public string Name { get; set; }
         public int Value { get; set; }
         public string PlayerId { get; set; }
-
 
         public string GameId { get; set; }
         [ForeignKey("GameId")]

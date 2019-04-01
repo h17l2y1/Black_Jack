@@ -48,6 +48,7 @@ namespace BlackJack
             // services
 
             services.AddScoped<ICacheWrapperService, CacheWrapperService>();
+            services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserServices>();
             services.AddScoped<IGameService, GameService>();

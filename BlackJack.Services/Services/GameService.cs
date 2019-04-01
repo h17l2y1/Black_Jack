@@ -249,11 +249,14 @@ namespace BlackJackServices.Services
             var cardMoveList = new List<CardMove>();
             cardMoveList.AddRange(_cardMoveRepository.GetAll().Where(x => x.GameId == gameId));
 
+            var gameUserList = new List<GameUsers>();
+            gameUserList.AddRange(_gameUsersRepository.GetAll().Where(x => x.GameId == gameId));
+
             var playersCount = cardMoveList
-                .GroupBy(x => x.Name)
+                .GroupBy(x => x.PlayerId)
                 .Select(x => new
                 {
-                    Name = x.Key,
+                    PlayerId = x.Key,
                     Value = x.Sum(f => f.Value)
                 })
                 .OrderBy(x => x.Value);
@@ -263,6 +266,18 @@ namespace BlackJackServices.Services
                 .MaxBy(z => z.Value)
                 .ToList();
 
+            foreach (var player in gameUserList)
+            {
+                foreach (var winner in winners)
+                {
+                    if (player.UserId == winner.PlayerId)
+                    {
+                        var hod = gameUserList.Single(t=>t.UserId == winner.PlayerId && t.GameId == gameId);
+                        hod.Winner = true;
+                        _gameUsersRepository.Update(hod);
+                    }
+                }
+            }
             return winners;
         }
 
