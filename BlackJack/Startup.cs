@@ -53,7 +53,6 @@ namespace BlackJack
             services.AddScoped<IGameService, GameService>();
 
             // EF6 repository
-
             services.AddScoped<IGameUsersRepository, GameUsersRepository>();
             services.AddScoped<ICardMoveRepository, CardMoveRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();

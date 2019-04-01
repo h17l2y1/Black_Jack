@@ -15,30 +15,44 @@ namespace BlackJackServices.Services
     {
         private Deck _deck;
         private ICacheWrapperService _cache;
-        private readonly IGameRepository _gameRepository;
         private readonly IGameUsersRepository _gameUsersRepository;
         private readonly ICardMoveRepository _cardMoveRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly ICardRepository _cardRepository;
+        private readonly IGameRepository _gameRepository;
 
+        private readonly IGameUsersDapperRepository _gameUsersDapperRepository;
+        private readonly ICardMoveDapperRepository _cardMoveDapperRepository;
         private readonly IPlayerDapperRepository _playerDapperRepository;
         private readonly ICardDapperRepository _cardDapperRepository;
+        private readonly IGameDapperRepository _gameDapperRepository;
 
         public GameService(
-            ICacheWrapperService cache, IGameRepository gameRepository, ICardMoveRepository cardMoveRepository,
-            IGameUsersRepository gameUsersRepository, IPlayerRepository playerRepository, ICardRepository cardRepository,
-            IPlayerDapperRepository playerDapperRepository, ICardDapperRepository cardDapperRepository)
+            ICacheWrapperService cache,
+            IGameUsersRepository gameUsersRepository, IGameUsersDapperRepository gameUsersDapperRepository,
+            ICardMoveRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
+            IPlayerRepository playerRepository, IPlayerDapperRepository playerDapperRepository,
+            ICardRepository cardRepository, ICardDapperRepository cardDapperRepository,
+            IGameRepository gameRepository, IGameDapperRepository gameDapperRepository
+            )
         {
             _cache = cache;
-            _gameRepository = gameRepository;
-            _gameUsersRepository = gameUsersRepository;
-            _cardMoveRepository = cardMoveRepository;
-            _playerRepository = playerRepository;
-            _cardRepository = cardRepository;
-            _deck = new Deck(_cardRepository.GetAll().ToList());
 
+            // ef6
+            _gameUsersRepository = gameUsersRepository; 
+            _cardMoveRepository = cardMoveRepository;   
+            _playerRepository = playerRepository;       
+            _cardRepository = cardRepository;           
+            _gameRepository = gameRepository;           
+
+            // dapper
+            _gameUsersDapperRepository = gameUsersDapperRepository;
+            _cardMoveDapperRepository = cardMoveDapperRepository;
             _playerDapperRepository = playerDapperRepository;
             _cardDapperRepository = cardDapperRepository;
+            _gameDapperRepository = gameDapperRepository;
+
+            _deck = new Deck(_cardRepository.GetAll().ToList());
         }
 
         public async Task<object> StartGame(string userId, int countBots)
@@ -51,18 +65,6 @@ namespace BlackJackServices.Services
             var playersList = GetPlayers(userId, game.Id, countBots);
 
             await Start(userId, game.Id, playersList);
-
-
-            // dapper Test
-            string cardId = "06e4e35e-fec0-49f2-896a-ed8fa08363eb";
-            string user2Id = "a00ac108-a6f6-4f21-b0a1-d8305394321d";
-
-            var dapper = _cardDapperRepository.Get(cardId);
-
-            var ef6 = _cardRepository.Get(cardId);
-            //
-
-
 
             var gameModel = CreateStartGameModel(userId, game.Id);
 
@@ -88,17 +90,18 @@ namespace BlackJackServices.Services
         {
             await AddOtherCardToBots(userId, gameId);
 
-            var winner = SearchWinner();
+            var winner = SearchWinner(gameId);
             return winner;
         }
 
+
+        // start
 
         private async Task Start(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
             await FirstMove(userId, gameId, playersList);
         }
-
 
 
         // First move
@@ -149,6 +152,7 @@ namespace BlackJackServices.Services
             }
             await _cardMoveRepository.AddRange(listCardMoves);
         }
+
 
         // add other cards
 
@@ -223,7 +227,8 @@ namespace BlackJackServices.Services
 
         }
 
-        
+
+        // other methods
 
         private void SaveToCache(string gameId, Deck deck)
         {
@@ -239,10 +244,10 @@ namespace BlackJackServices.Services
             return card;
         }
 
-        private object SearchWinner()
+        private object SearchWinner(string gameId)
         {
             var cardMoveList = new List<CardMove>();
-            cardMoveList.AddRange(_cardMoveRepository.GetAll());
+            cardMoveList.AddRange(_cardMoveRepository.GetAll().Where(x => x.GameId == gameId));
 
             var playersCount = cardMoveList
                 .GroupBy(x => x.Name)

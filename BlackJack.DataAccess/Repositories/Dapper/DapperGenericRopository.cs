@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories
 {
-    public class DapperGenericRopository<TEntity> : IDapperRopository<TEntity> where TEntity : class
+    public class DapperGenericRopository<TEntity> : IDapperRepository<TEntity> where TEntity : class
     {
         private readonly string _connectionString;
 
