@@ -21,12 +21,6 @@ namespace BlackJackServices.Services
         private readonly ICardRepository _cardRepository;
         private readonly IGameRepository _gameRepository;
 
-        private readonly IGameUsersDapperRepository _gameUsersDapperRepository;
-        private readonly ICardMoveDapperRepository _cardMoveDapperRepository;
-        private readonly IPlayerDapperRepository _playerDapperRepository;
-        private readonly ICardDapperRepository _cardDapperRepository;
-        private readonly IGameDapperRepository _gameDapperRepository;
-
         public GameService(
             ICacheWrapperService cache,
             IGameUsersRepository gameUsersRepository, IGameUsersDapperRepository gameUsersDapperRepository,
