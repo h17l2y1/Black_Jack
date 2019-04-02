@@ -1,4 +1,5 @@
 ﻿using BlackJackServices.Services.Interfaces;
+using BlackJackViewModels.Statistic;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,30 +18,24 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllPGamesFromPlayer([FromBody] RequestStop model)
+        public async Task<IActionResult> GetAllGames([FromBody] RequestGetAllGamesStatisticView model)
         {
-            var story = await _service.GetAllPGamesFromPlayer(model.PlayerId);
+            var gameStory = await _service.GetAllGames(model.PlayerId);
+            return Ok(gameStory);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllPlayers([FromBody] RequestGetAllPlayersStatisticView model)
+        {
+            var story = await _service.GetAllPlayers(model.GameId);
             return Ok(story);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllPlayersFromGame([FromBody] RequestStop model)
+        public async Task<IActionResult> GetAllMoves([FromBody] RequestGetAllMovesStatisticView model)
         {
-            var story = await _service.GetAllPlayersFromGame(model.GameId);
-            return Ok(story);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetAllMovesFromGame([FromBody] RequestStop model)
-        {
-            var moves = await _service.GetAllMovesFromGame(model.GameId);
+            var moves = await _service.GetAllMoves(model.GameId);
             return Ok(moves);
-        }
-
-        public class RequestStop
-        {
-            public string PlayerId { get; set; }
-            public string GameId { get; set; }
         }
 
     }

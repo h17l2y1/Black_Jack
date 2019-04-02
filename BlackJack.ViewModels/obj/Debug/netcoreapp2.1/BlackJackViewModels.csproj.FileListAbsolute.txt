@@ -23,3 +23,7 @@ C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.A
 C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.AssemblyInfo.cs
 C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.dll
 C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.pdb
+C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csprojAssemblyReference.cache
+C:\Vlad\Black\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackEntities.dll
+C:\Vlad\Black\BlackJack.ViewModels\bin\Debug\netcoreapp2.1\BlackJackEntities.pdb
+C:\Vlad\Black\BlackJack.ViewModels\obj\Debug\netcoreapp2.1\BlackJackViewModels.csproj.CopyComplete

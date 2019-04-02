@@ -1,4 +1,5 @@
 ﻿using BlackJackDataAccess;
+using BlackJackDataAccess.Domain;
 using BlackJackDataAccess.Repositories;
 using BlackJackDataAccess.Repositories.Dapper;
 using BlackJackDataAccess.Repositories.Dapper.Interfaces;
@@ -22,18 +23,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IO;
 
 namespace BlackJack
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -45,12 +45,12 @@ namespace BlackJack
             // connection sting
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
 
-            // services
+            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
 
+            // services
             services.AddScoped<ICacheWrapperService, CacheWrapperService>();
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUserService, UserServices>();
             services.AddScoped<IGameService, GameService>();
 
             // EF6 repository
@@ -61,12 +61,11 @@ namespace BlackJack
             services.AddScoped<ICardRepository, CardRepository>();
 
             // Dapper
-            services.AddTransient<IGameUsersDapperRepository>(f => new GameUsersDapperRepository(configuration.GetSection("DefaultConnection").Value));
-            services.AddTransient<ICardMoveDapperRepository>(f => new CardMoveDapperRepository(configuration.GetSection("DefaultConnection").Value));
-            services.AddTransient<IPlayerDapperRepository>(f => new PlayerDapperRepository(configuration.GetSection("DefaultConnection").Value));
-            services.AddTransient<ICardDapperRepository>(f => new CardDapperRepository(configuration.GetSection("DefaultConnection").Value));
-            services.AddTransient<IGameDapperRepository>(f => new GameDapperRepository(configuration.GetSection("DefaultConnection").Value));
-
+            services.AddTransient<IGameUsersDapperRepository, GameUsersDapperRepository>();
+            services.AddTransient<ICardMoveDapperRepository, CardMoveDapperRepository>();
+            services.AddTransient<IPlayerDapperRepository, PlayerDapperRepository>();
+            services.AddTransient<ICardDapperRepository, CardDapperRepository>();
+            services.AddTransient<IGameDapperRepository, GameDapperRepository>();
 
             // cache
             services.AddMemoryCache();

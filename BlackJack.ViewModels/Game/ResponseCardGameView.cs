@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlackJackViewModels.Game
+﻿namespace BlackJackViewModels.Game
 {
-    public class CardView
+    public class ResponseCardGameView
     {
         public string Ranks { get; set; }
         public string Suit { get; set; }

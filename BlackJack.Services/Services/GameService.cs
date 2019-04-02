@@ -55,7 +55,7 @@ namespace BlackJackServices.Services
             _deck = new Deck(_cardRepository.GetAll().ToList());
         }
 
-        public async Task<object> StartGame(string userId, int countBots)
+        public async Task<ResponseStartGameView> Start(string userId, int countBots)
         {
             var game = new Game();
             await _gameRepository.Add(game);
@@ -64,6 +64,8 @@ namespace BlackJackServices.Services
 
             var playersList = GetPlayers(userId, game.Id, countBots);
 
+            var dapper = _playerDapperRepository.GetAll();
+
             await Start(userId, game.Id, playersList);
 
             var gameModel = CreateStartGameModel(userId, game.Id);
@@ -71,19 +73,26 @@ namespace BlackJackServices.Services
             return gameModel;
         }
 
-        public async Task AddOneCard(string userId, string gameId)
+        public async Task<ResponseCardGameView> AddOneCard(string userId, string gameId)
         {
             List<Player> player = new List<Player>();
             var user = _playerRepository.Get(userId);
             player.Add(user);
 
             var countMove = _cardMoveRepository
-                .GetAll()
-                .Where(t => t.GameId == gameId && t.Name == user.UserName)
+                .Find(t => t.GameId == gameId && t.Name == user.UserName)
                 .ToList()
                 .Count;
 
-            await AddCard(countMove, gameId, player);
+            var card = await AddCard(countMove, gameId, player);
+
+            var response = new ResponseCardGameView
+            {
+                Ranks = card.Rank.ToString(),
+                Suit = card.Suit.ToString(),
+                Value = card.Value
+            };
+            return response;
         }
 
         public async Task<object> Stop(string userId, string gameId)
@@ -94,17 +103,11 @@ namespace BlackJackServices.Services
             return winner;
         }
 
-
-        // start
-
         private async Task Start(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
             await FirstMove(userId, gameId, playersList);
         }
-
-
-        // First move
 
         private async Task FirstMove(string userId, string gameId, List<Player> playersList)
         {
@@ -131,13 +134,12 @@ namespace BlackJackServices.Services
             return players;
         }
 
-        private async Task AddCard(int moveInt, string gameId, List<Player> players)
+        private async Task<Card> AddCard(int moveInt, string gameId, List<Player> players)
         {
             var listCardMoves = new List<CardMove>();
-
+            Card card = GetCard(gameId);
             foreach (var item in players)
             {
-                Card card = GetCard(gameId);
                 var move = new CardMove
                 {
                     GameId = gameId,
@@ -151,6 +153,7 @@ namespace BlackJackServices.Services
                 listCardMoves.Add(move);
             }
             await _cardMoveRepository.AddRange(listCardMoves);
+            return card;
         }
 
 
@@ -158,24 +161,20 @@ namespace BlackJackServices.Services
 
         private List<Player> GetBotsList(string userId, string gameId)
         {
-            var gameUserList = _gameUsersRepository
-                .Find(t => t.GameId == gameId)
-                .Where(x => x.UserId != userId);
-
-            var playerIdList = new List<string>();
-
-            foreach (var player in gameUserList)
-            {
-                playerIdList.Add(player.UserId);
-            }
-
             var botsList = new List<Player>();
 
-            var playersList = _playerRepository.GetAll().ToList();
+            var botsIdList = _gameUsersRepository
+                .Find(t => t.GameId == gameId && t.UserId != userId)
+                .Select(x => x.UserId)
+                .ToList();
+
+            var playersList = _playerRepository
+                .Find(t=>t.Id != userId)
+                .ToList();
 
             foreach (var palyer in playersList)
             {
-                foreach (var id in playerIdList)
+                foreach (var id in botsIdList)
                 {
                     if (palyer.Id == id)
                     {
@@ -305,7 +304,7 @@ namespace BlackJackServices.Services
 
         // View models
 
-        private StartGameView CreateStartGameModel(string userId, string gameId)
+        private ResponseStartGameView CreateStartGameModel(string userId, string gameId)
         {
             var botList = GetBotsList(userId, gameId);
             var user = _playerRepository.Get(userId);
@@ -314,7 +313,7 @@ namespace BlackJackServices.Services
                 .Where(t => t.GameId == gameId)
                 .ToList();
 
-            var gameModel = new StartGameView();
+            var gameModel = new ResponseStartGameView();
             gameModel.GameId = gameId;
             gameModel.User = CreateUser(user, listCard);
             gameModel.Bots.AddRange(GetBots(botList, listCard));
@@ -323,9 +322,9 @@ namespace BlackJackServices.Services
             return gameModel;
         }
 
-        private List<PlayerView> GetBots(List<Player> botList, List<CardMove> listCard)
+        private List<PlayerGameView> GetBots(List<Player> botList, List<CardMove> listCard)
         {
-            var list = new List<PlayerView>();
+            var list = new List<PlayerGameView>();
             foreach (var bot in botList)
             {
                 list.Add(CreateUser(bot, listCard));
@@ -334,11 +333,11 @@ namespace BlackJackServices.Services
             return list;
         }
 
-        private PlayerView CreateUser(Player user, List<CardMove> listCard)
+        private PlayerGameView CreateUser(Player user, List<CardMove> listCard)
         {
             var cards = listCard.Where(t => t.PlayerId == user.Id).ToList();
 
-            var userView = new PlayerView();
+            var userView = new PlayerGameView();
             userView.Name = user.UserName;
             userView.Cards.AddRange(GetCardView(cards));
             userView.Score = GetScore(cards);
@@ -346,12 +345,12 @@ namespace BlackJackServices.Services
             return userView;
         }
 
-        private List<CardView> GetCardView(List<CardMove> cards)
+        private List<ResponseCardGameView> GetCardView(List<CardMove> cards)
         {
-            var listCardView = new List<CardView>();
+            var listCardView = new List<ResponseCardGameView>();
             foreach (var card in cards)
             {
-                var cardModel = new CardView();
+                var cardModel = new ResponseCardGameView();
                 cardModel.Ranks = card.Card.Rank.ToString();
                 cardModel.Suit = card.Card.Suit.ToString();
                 cardModel.Value = card.Card.Value;

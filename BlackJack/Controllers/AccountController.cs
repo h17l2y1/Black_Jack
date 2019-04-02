@@ -19,43 +19,41 @@ namespace BlackJack.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(string id)
         {
-            await _service.RemoveAsync(id);
-            return Ok();
+            var player = await _service.Remove(id);
+            return Ok(player);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var user = await _service.FindByIdAsync(id);
-            return Ok(user);
+            var player = await _service.Get(id);
+            return Ok(player);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _service.GetAllAsync();
-            return Ok(list);
+            var players = await _service.GetAllAsync();
+            return Ok(players);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] RegisterView model)
+        public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
         {
-            await _service.AddAsync(model);
+            var player = await _service.AddAsync(model);
             var jwt = _service.GetToken(model);
             var str = _service.GetTokenString(jwt);
-
-            return Ok(str);
+            return Ok(player);
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<IActionResult> LogIn([FromBody] RegisterView model)
+        public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
         {
             if (_service.UserIsExist(model.Name) == false)
             {
                 return await SignUp(model);
             }
-
             return Ok("You are autorized user");
         }
 

@@ -2,11 +2,10 @@
 
 namespace BlackJackViewModels
 {
-    public class RegisterView
+    public class RequestSignUpAccountView
     {
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
-
     }
 }

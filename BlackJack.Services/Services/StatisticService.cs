@@ -2,6 +2,9 @@
 using BlackJackDataAccess.Repositories.Interfaces;
 using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackServices.Services.Interfaces;
+using BlackJackViewModels.Statistic;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlackJackServices
@@ -31,22 +34,25 @@ namespace BlackJackServices
             _playerDapperRepository = playerDapperRepository;
         }
 
-        public async Task<object> GetAllPGamesFromPlayer(string playerId)
+        public async Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId)
         {
             var games = _gameUsersDapperRepository.GetAllGamesFromPlayer(playerId);
-            return games;
+            var response = new ResponseGetAllGamesStatisticView(games);
+            return response;
         }
 
-        public async Task<object> GetAllPlayersFromGame(string gameId)
+        public async Task<ResponseGetAllPlayersStatisticView> GetAllPlayers(string gameId)
         {
-            var games = _gameUsersDapperRepository.GetAllPlayersFromGame(gameId);
-            return games;
+            var players = _gameUsersDapperRepository.GetAllPlayersFromGame(gameId);
+            var response = new ResponseGetAllPlayersStatisticView(players);
+            return response;
         }
 
-        public async Task<object> GetAllMovesFromGame(string gameId)
+        public async Task<ResponseGetAllMovesStatisticView> GetAllMoves(string gameId)
         {
             var gamesMoves = _cardMoveDapperRepository.GetAllMovesFromGame(gameId);
-            return gamesMoves;
+            var response = new ResponseGetAllMovesStatisticView(gamesMoves);
+            return response;
         }
 
 

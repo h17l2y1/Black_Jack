@@ -1,4 +1,5 @@
 ﻿using BlackJackViewModels;
+using BlackJackViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
@@ -6,15 +7,15 @@ namespace BlackJackServices.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task AddAsync(RegisterView model);
+        Task<ResponseSignUpAccountView> AddAsync(RequestSignUpAccountView model);
 
-        Task RemoveAsync(string id);
+        Task<ResponseRemoveAccountView> Remove(string id);
 
-        Task<object> FindByIdAsync(string id);
+        Task<ResponseGetAccountView> Get(string id);
 
-        Task<object> GetAllAsync();
+        Task<ResponseGetAllAccountView> GetAllAsync();
 
-        JwtSecurityToken GetToken(RegisterView model);
+        JwtSecurityToken GetToken(RequestSignUpAccountView model);
 
         string GetTokenString(JwtSecurityToken jwt);
 

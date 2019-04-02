@@ -2,15 +2,15 @@
 
 namespace BlackJackViewModels.Game
 {
-    public class PlayerView
+    public class PlayerGameView
     {
         public string Name { get; set; }
-        public List<CardView> Cards { get; set; }
+        public List<ResponseCardGameView> Cards { get; set; }
         public int Score { get; set; }
 
-        public PlayerView()
+        public PlayerGameView()
         {
-            Cards = new List<CardView>();
+            Cards = new List<ResponseCardGameView>();
         }
 
     }

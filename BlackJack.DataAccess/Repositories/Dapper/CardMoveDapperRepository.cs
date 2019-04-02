@@ -1,6 +1,9 @@
-﻿using BlackJackDataAccess.Repositories.Dapper.Interfaces;
+﻿using BlackJackDataAccess.Domain;
+using BlackJackDataAccess.Repositories.Dapper.Interfaces;
 using BlackJackEntities.Entities;
 using Dapper;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -8,14 +11,15 @@ namespace BlackJackDataAccess.Repositories.Dapper
 {
     public class CardMoveDapperRepository : DapperGenericRopository<CardMove>, ICardMoveDapperRepository
     {
-        private string _connectionString;
+        private readonly string _connectionString;
 
-        public CardMoveDapperRepository(string connectionString) : base(connectionString)
+        public CardMoveDapperRepository(IOptions<ConnectionConfig> connectionConfig) : base(connectionConfig)
         {
-            _connectionString = connectionString;
+            var connection = connectionConfig.Value;
+            _connectionString = connection.DefaultConnection;
         }
 
-        public object GetAllMovesFromGame(string gameId)
+        public IEnumerable<dynamic> GetAllMovesFromGame(string gameId)
         {
             var sql = $"SELECT Move, Name, CardId FROM CardMoves WHERE GameId = '{ gameId }'";
             using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -24,6 +28,6 @@ namespace BlackJackDataAccess.Repositories.Dapper
                 return game;
             }
         }
-        
+
     }
 }

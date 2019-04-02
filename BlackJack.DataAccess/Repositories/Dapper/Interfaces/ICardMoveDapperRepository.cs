@@ -1,9 +1,10 @@
 ﻿using BlackJackEntities.Entities;
+using System.Collections.Generic;
 
 namespace BlackJackDataAccess.Repositories.Dapper.Interfaces
 {
     public interface ICardMoveDapperRepository : IBaseGenericRepository<CardMove>
     {
-        object GetAllMovesFromGame(string userId);
+        IEnumerable<dynamic> GetAllMovesFromGame(string gameId);
     }
 }

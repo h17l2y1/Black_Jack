@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
 {
-    public interface IUserService
+    public interface IPlayerService
     {
         object GetAll();
 

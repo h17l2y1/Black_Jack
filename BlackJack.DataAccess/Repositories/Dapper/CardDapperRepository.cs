@@ -1,11 +1,13 @@
-﻿using BlackJackDataAccess.Repositories.Dapper.Interfaces;
+﻿using BlackJackDataAccess.Domain;
+using BlackJackDataAccess.Repositories.Dapper.Interfaces;
 using BlackJackEntities.Entities;
+using Microsoft.Extensions.Options;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
     public class CardDapperRepository : DapperGenericRopository<Card>, ICardDapperRepository
     {
-        public CardDapperRepository(string connectionString) : base(connectionString)
+        public CardDapperRepository(IOptions<ConnectionConfig> connectionConfig) : base(connectionConfig)
         {
 
         }

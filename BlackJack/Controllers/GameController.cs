@@ -1,4 +1,6 @@
 ﻿using BlackJackServices.Services.Interfaces;
+using BlackJackViewModels;
+using BlackJackViewModels.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,42 +19,25 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> StartGame([FromBody] RequestStartGame model)
+        public async Task<IActionResult> StartGame([FromBody] RequestStartGameView model)
         {
-            var result = await _service.StartGame(model.UserId, model.CountBots);
+            var result = await _service.Start(model.UserId, model.CountBots);
             return Ok(result);
         }
 
-        public class RequestStartGame
+        [HttpPost]
+        public async Task<IActionResult> GetCard([FromBody] RequestGetCardGameView model)
         {
-            public string UserId { get; set; }
-            public int CountBots { get; set; }
+            var card = await _service.AddOneCard(model.UserId, model.GameId);
+            return Ok(card);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetCard([FromBody] RequestGetCard model)
-        {
-            await _service.AddOneCard(model.UserId, model.GameId);
-            return Ok("Card added");
-        }
-
-        public class RequestGetCard
-        {
-            public string UserId { get; set; }
-            public string GameId { get; set; }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Stop([FromBody] RequestStop model)
+        public async Task<IActionResult> Stop([FromBody] RequestStopGameView model)
         {
             var winners = await _service.Stop(model.UserId, model.GameId);
             return Ok(winners);
         }
 
-        public class RequestStop
-        {
-            public string UserId { get; set; }
-            public string GameId { get; set; }
-        }
     }
 }

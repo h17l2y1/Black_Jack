@@ -2,6 +2,7 @@
 using BlackJackServices.Services.Auth;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
+using BlackJackViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,19 +26,22 @@ namespace BlackJackServices.Services
             _signInManager = signInManager;
         }
 
-        public async Task<object> GetAllAsync()
+        public async Task<ResponseGetAllAccountView> GetAllAsync()
         {
-            var usersList = await _userManager.Users.ToListAsync();
-            return usersList;
+            var playerList = await _userManager.Users.ToListAsync();
+
+            var listView = new List<PlayerAccountView>();
+
+            foreach (var player in playerList)
+            {
+                listView.Add(Mapper(player, new PlayerAccountView()));
+            }
+
+            var response = new ResponseGetAllAccountView(listView);
+            return response;
         }
 
-        public async Task<object> FindByIdAsync(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            return user;
-        }
-
-        public async Task AddAsync(RegisterView model)
+        public async Task<ResponseSignUpAccountView> AddAsync(RequestSignUpAccountView model)
         {
             Player user = new Player
             {
@@ -45,11 +49,38 @@ namespace BlackJackServices.Services
                 Points = 222,
                 Role = "User"
             };
-
             await _userManager.CreateAsync(user);
+
+            var response = Mapper(user, new ResponseSignUpAccountView());
+            return response;
         }
 
-        public JwtSecurityToken GetToken(RegisterView model)
+        public async Task<ResponseGetAccountView> Get(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var response = Mapper(user, new ResponseGetAccountView());
+            return response;
+        }
+
+        public async Task<ResponseRemoveAccountView> Remove(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+            var response = Mapper(user, new ResponseRemoveAccountView());
+            return response;
+        }
+
+        private T Mapper<T>(Player player, T view) where T : PlayerAccountView
+        {
+            var response = view;
+            view.Name = player.UserName;
+            view.Points = player.Points;
+            view.Role = player.Role;
+
+            return response;
+        }
+
+        public JwtSecurityToken GetToken(RequestSignUpAccountView model)
         {
             var identity = GetIdentity(model);
 
@@ -69,7 +100,7 @@ namespace BlackJackServices.Services
             return jwt;
         }
 
-        private ClaimsIdentity GetIdentity(RegisterView model)
+        private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
         {
             Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.Name);
             if (user != null)
@@ -98,12 +129,6 @@ namespace BlackJackServices.Services
             return stringToken;
         }
 
-        public async Task RemoveAsync(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
-        }
-
         public bool UserIsExist(string newUser)
         {
             var userIsExist = _userManager.Users.FirstOrDefault(x => x.UserName == newUser);
@@ -114,5 +139,6 @@ namespace BlackJackServices.Services
             }
             return false;
         }
+
     }
 }

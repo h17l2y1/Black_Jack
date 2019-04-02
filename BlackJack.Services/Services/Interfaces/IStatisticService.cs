@@ -1,15 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using BlackJackViewModels.Statistic;
+using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
 {
     public interface IStatisticService
     {
-        Task<object> GetAllPGamesFromPlayer(string playerId);
+        Task<ResponseGetAllGamesStatisticView> GetAllGames(string gameId);
 
-        Task<object> GetAllPlayersFromGame(string gameId);
+        Task<ResponseGetAllPlayersStatisticView> GetAllPlayers(string UserId);
 
-        Task<object> GetAllMovesFromGame(string gameId);
-
-
+        Task<ResponseGetAllMovesStatisticView> GetAllMoves(string UserId);
     }
 }

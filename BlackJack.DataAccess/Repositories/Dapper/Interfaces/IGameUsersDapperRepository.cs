@@ -1,11 +1,12 @@
 ﻿using BlackJackEntities.Entities;
+using System.Collections.Generic;
 
 namespace BlackJackDataAccess.Repositories.Dapper.Interfaces
 {
     public interface IGameUsersDapperRepository : IBaseGenericRepository<GameUsers>
     {
-        object GetAllGamesFromPlayer(string gameId);
+        IEnumerable<dynamic> GetAllGamesFromPlayer(string gameId);
 
-        object GetAllPlayersFromGame(string userId);
+        IEnumerable<dynamic> GetAllPlayersFromGame(string userId);
     }
 }

@@ -640,6 +640,9 @@
         }
       },
       "BlackJackViewModels/1.0.0": {
+        "dependencies": {
+          "BlackJackEntities": "1.0.0"
+        },
         "runtime": {
           "BlackJackViewModels.dll": {}
         },

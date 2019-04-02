@@ -1,6 +1,9 @@
-﻿using BlackJackDataAccess.Repositories.Interfaces;
+﻿using BlackJackDataAccess.Domain;
+using BlackJackDataAccess.Repositories.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,14 +15,14 @@ namespace BlackJackDataAccess.Repositories
 {
     public class DapperGenericRopository<TEntity> : IDapperRepository<TEntity> where TEntity : class
     {
-        private readonly string _connectionString;
-
         protected readonly string _tableName = $"{ typeof(TEntity).Name }s";
-        //protected readonly string _tableName = "AspNetUsers";
 
-        public DapperGenericRopository(string connectionString)
+        private string _connectionString;
+
+        public DapperGenericRopository(IOptions<ConnectionConfig> connectionConfig)
         {
-            _connectionString = connectionString;
+            var connection = connectionConfig.Value;
+            string _connectionString = connection.DefaultConnection;
         }
 
         public TEntity Get(string id)
@@ -170,16 +173,11 @@ namespace BlackJackDataAccess.Repositories
         }
 
 
-
         // need do
 
         public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
         {
             throw new NotImplementedException();
         }
-
-
-
-
     }
 }
