@@ -13,7 +13,6 @@ namespace BlackJackDataAccess.Repositories.Dapper
     {
         public GameUsersDapperRepository(IOptions<ConnectionConfig> connectionConfig) : base(connectionConfig)
         {
-
         }
 
         public IEnumerable<dynamic> GetAllGamesFromPlayer(string userId)
@@ -36,6 +35,5 @@ namespace BlackJackDataAccess.Repositories.Dapper
                 return order;
             }
         }
-
     }
 }

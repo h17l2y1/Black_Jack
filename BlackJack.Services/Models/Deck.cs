@@ -1,5 +1,4 @@
-﻿using BlackJackDataAccess.Repositories.Interfaces;
-using BlackJackEntities.Entities;
+﻿using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using System;
 using System.Collections.Generic;

@@ -16,12 +16,12 @@ namespace BlackJackDataAccess.Repositories
     {
         protected readonly string _tableName = $"{ typeof(TEntity).Name }s";
 
-        private readonly string _connectionString;
+        protected readonly string _connectionString;
 
         public MainGameDapperRepository(IOptions<ConnectionConfig> connectionConfig)
         {
             var connection = connectionConfig.Value;
-            string _connectionString = connection.DefaultConnection;
+            _connectionString = connection.DefaultConnection;
         }
 
         public TEntity Get(string id)

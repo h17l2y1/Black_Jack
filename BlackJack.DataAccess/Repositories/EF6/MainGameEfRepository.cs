@@ -7,7 +7,7 @@ namespace BlackJackDataAccess
 {
     public class MainGameEfRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
     {
-        private ApplicationContext _context;
+        protected ApplicationContext _context;
 
         public MainGameEfRepository(ApplicationContext context)
         {
@@ -16,7 +16,7 @@ namespace BlackJackDataAccess
 
         public IQueryable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>().ToList().AsQueryable();
+            return _context.Set<TEntity>().AsQueryable();
         }
 
         public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)

@@ -1,16 +1,9 @@
 ﻿using BlackJackDataAccess;
 using BlackJackDataAccess.Domain;
 using BlackJackDataAccess.Repositories;
-using BlackJackDataAccess.Repositories.Dapper;
-using BlackJackDataAccess.Repositories.Dapper.Interfaces;
-using BlackJackDataAccess.Repositories.Interface;
-using BlackJackDataAccess.Repositories.Interfaces;
-using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackEntities.Entities;
 using BlackJackServices;
-using BlackJackServices.Services;
 using BlackJackServices.Services.Auth;
-using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,37 +36,17 @@ namespace BlackJack
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            // connection sting
-            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
+            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
 
+            services.Service();
 
-            // services
-            services.AddScoped<ICacheWrapperService, CacheWrapperService>();
-            services.AddScoped<IStatisticService, StatisticService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IGameService, GameService>();
+            services.EfRepository();
+            //services.DapperRepository();
 
-            // EF6 repository
-            services.AddScoped<IGameUsersRepository, GameUsersEfRepository>();
-            services.AddScoped<ICardMoveRepository, CardMoveEfRepository>();
-            services.AddScoped<IPlayerRepository, PlayerEfRepository>();
-            services.AddScoped<IGameRepository, GameEfRepository>();
-            services.AddScoped<ICardRepository, CardEfRepository>();
-
-            // Dapper
-            services.AddTransient<IGameUsersRepository, GameUsersDapperRepository>();
-            services.AddTransient<ICardMoveRepository, CardMoveDapperRepository>();
-            services.AddTransient<IPlayerRepository, PlayerDapperRepository>();
-            services.AddTransient<IGameRepository, GameDapperRepository>();
-            services.AddTransient<ICardRepository, CardDapperRepository>();
-
-
-            // cache
             services.AddMemoryCache();
             services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
-            // jwt
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -96,7 +69,6 @@ namespace BlackJack
                 options.SaveToken = true;
             });
 
-            // identity
             services.Configure<IdentityOptions>(options =>
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);

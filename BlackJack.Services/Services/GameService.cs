@@ -1,6 +1,4 @@
-﻿using BlackJackDataAccess.Repositories.Dapper.Interfaces;
-using BlackJackDataAccess.Repositories.Interfaces;
-using BlackJackDataAccess.Repositories.Interfaces.Dapper;
+﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
@@ -15,52 +13,30 @@ namespace BlackJackServices.Services
     {
         private Deck _deck;
         private ICacheWrapperService _cache;
-        private readonly IGameEfUsersRepository _gameUsersRepository;
-        private readonly ICardMoveEfRepository _cardMoveRepository;
-        private readonly IPlayerEfRepository _playerRepository;
-        private readonly ICardEfRepository _cardRepository;
-        private readonly IGameEfRepository _gameRepository;
-
-        private readonly IGameUsersDapperRepository _gameUsersDapperRepository;
-        private readonly ICardMoveDapperRepository _cardMoveDapperRepository;
-        private readonly IPlayerDapperRepository _playerDapperRepository;
-        private readonly ICardDapperRepository _cardDapperRepository;
-        private readonly IGameDapperRepository _gameDapperRepository;
+        private readonly IGameUsersRepository _gameUsersRepository;
+        private readonly ICardMoveRepository _cardMoveRepository;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly ICardRepository _cardRepository;
+        private readonly IGameRepository _gameRepository;
 
         public GameService(
-            ICacheWrapperService cache,
-            IGameEfUsersRepository gameUsersRepository, IGameUsersDapperRepository gameUsersDapperRepository,
-            ICardMoveEfRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
-            IPlayerEfRepository playerRepository, IPlayerDapperRepository playerDapperRepository,
-            ICardEfRepository cardRepository, ICardDapperRepository cardDapperRepository,
-            IGameEfRepository gameRepository, IGameDapperRepository gameDapperRepository
+            ICacheWrapperService cache, IGameUsersRepository gameUsersRepository, ICardMoveRepository cardMoveRepository, 
+            IPlayerRepository playerRepository, ICardRepository cardRepository, IGameRepository gameRepository
             )
         {
             _cache = cache;
-
-            // ef6
-            _gameUsersRepository = gameUsersRepository; 
-            _cardMoveRepository = cardMoveRepository;   
-            _playerRepository = playerRepository;       
-            _cardRepository = cardRepository;           
-            _gameRepository = gameRepository;           
-
-            // dapper
-            _gameUsersDapperRepository = gameUsersDapperRepository;
-            _cardMoveDapperRepository = cardMoveDapperRepository;
-            _playerDapperRepository = playerDapperRepository;
-            _cardDapperRepository = cardDapperRepository;
-            _gameDapperRepository = gameDapperRepository;
-
+            _gameUsersRepository = gameUsersRepository;
+            _cardMoveRepository = cardMoveRepository;
+            _playerRepository = playerRepository;
+            _cardRepository = cardRepository;
+            _gameRepository = gameRepository;
             _deck = new Deck(_cardRepository.GetAll().ToList());
         }
 
         public async Task<ResponseStartGameView> Start(string userId, int countBots)
         {
             var game = new Game();
-            //
-            //var dapper = _
-            //
+
             await _gameRepository.Add(game);
 
             SaveToCache(game.Id, _deck);
@@ -172,7 +148,7 @@ namespace BlackJackServices.Services
                 .ToList();
 
             var playersList = _playerRepository
-                .Find(t=>t.Id != userId)
+                .Find(t => t.Id != userId)
                 .ToList();
 
             foreach (var palyer in playersList)
@@ -274,7 +250,7 @@ namespace BlackJackServices.Services
                 {
                     if (player.UserId == winner.PlayerId)
                     {
-                        var hod = gameUserList.Single(t=>t.UserId == winner.PlayerId && t.GameId == gameId);
+                        var hod = gameUserList.Single(t => t.UserId == winner.PlayerId && t.GameId == gameId);
                         hod.Winner = true;
                         _gameUsersRepository.Update(hod);
                     }
