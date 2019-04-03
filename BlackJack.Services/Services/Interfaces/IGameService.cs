@@ -9,7 +9,6 @@ namespace BlackJackServices.Services.Interfaces
 
         Task<ResponseCardGameView> AddOneCard(string userId, string gameId);
 
-        Task<object> Stop(string userId, string gameId);
-
+        Task<ResponseStopGameView> Stop(string userId, string gameId);
     }
 }

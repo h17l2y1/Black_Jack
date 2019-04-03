@@ -64,7 +64,7 @@ namespace BlackJackServices.Services
 
             var playersList = GetPlayers(userId, game.Id, countBots);
 
-            var dapper = _playerDapperRepository.GetAll();
+            //var dapper = _playerDapperRepository.GetAll();
 
             await Start(userId, game.Id, playersList);
 
@@ -95,12 +95,14 @@ namespace BlackJackServices.Services
             return response;
         }
 
-        public async Task<object> Stop(string userId, string gameId)
+        public async Task<ResponseStopGameView> Stop(string userId, string gameId)
         {
             await AddOtherCardToBots(userId, gameId);
+            var stopModel = await CreateStopGameModel(userId, gameId);
 
             var winner = SearchWinner(gameId);
-            return winner;
+
+            return stopModel;
         }
 
         private async Task Start(string userId, string gameId, List<Player> playersList)
@@ -309,8 +311,7 @@ namespace BlackJackServices.Services
             var botList = GetBotsList(userId, gameId);
             var user = _playerRepository.Get(userId);
             var listCard = _cardMoveRepository
-                .GetAll()
-                .Where(t => t.GameId == gameId)
+                .Find(t => t.GameId == gameId)
                 .ToList();
 
             var gameModel = new ResponseStartGameView();
@@ -329,7 +330,6 @@ namespace BlackJackServices.Services
             {
                 list.Add(CreateUser(bot, listCard));
             }
-
             return list;
         }
 
@@ -350,10 +350,12 @@ namespace BlackJackServices.Services
             var listCardView = new List<ResponseCardGameView>();
             foreach (var card in cards)
             {
-                var cardModel = new ResponseCardGameView();
-                cardModel.Ranks = card.Card.Rank.ToString();
-                cardModel.Suit = card.Card.Suit.ToString();
-                cardModel.Value = card.Card.Value;
+                var cardModel = new ResponseCardGameView
+                {
+                    Ranks = card.Card.Rank.ToString(),
+                    Suit = card.Card.Suit.ToString(),
+                    Value = card.Card.Value
+                };
 
                 listCardView.Add(cardModel);
             }
@@ -368,6 +370,23 @@ namespace BlackJackServices.Services
                 score += card.Value;
             }
             return score;
+        }
+
+        private async Task<ResponseStopGameView> CreateStopGameModel(string userId, string gameId)
+        {
+            var botList = GetBotsList(userId, gameId);
+            var user = _playerRepository.Get(userId);
+            var listCard = _cardMoveRepository
+                .Find(t => t.GameId == gameId)
+                .ToList();
+
+            var gameModel = new ResponseStopGameView();
+            gameModel.GameId = gameId;
+            gameModel.User = CreateUser(user, listCard);
+            gameModel.Bots.AddRange(GetBots(botList, listCard));
+            gameModel.Cardsleft = _deck.CardsLeft();
+
+            return gameModel;
         }
 
     }
