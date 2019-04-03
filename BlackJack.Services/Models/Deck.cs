@@ -8,7 +8,7 @@ namespace BlackJackServices.Services
 {
     public class Deck : IDeck
     {
-        public List<Card> CardList { get; set; }
+        protected List<Card> CardList { get; set; }
 
         public Deck(List<Card> list)
         {
