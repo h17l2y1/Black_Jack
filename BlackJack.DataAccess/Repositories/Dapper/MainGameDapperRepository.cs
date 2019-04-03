@@ -1,5 +1,4 @@
 ﻿using BlackJackDataAccess.Domain;
-using BlackJackDataAccess.Repositories.Interfaces;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -13,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories
 {
-    public class DapperGenericRopository<TEntity> : IDapperRepository<TEntity> where TEntity : class
+    public class MainGameDapperRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
     {
         protected readonly string _tableName = $"{ typeof(TEntity).Name }s";
 
-        private string _connectionString;
+        private readonly string _connectionString;
 
-        public DapperGenericRopository(IOptions<ConnectionConfig> connectionConfig)
+        public MainGameDapperRepository(IOptions<ConnectionConfig> connectionConfig)
         {
             var connection = connectionConfig.Value;
             string _connectionString = connection.DefaultConnection;

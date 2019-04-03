@@ -3,6 +3,7 @@ using BlackJackDataAccess.Domain;
 using BlackJackDataAccess.Repositories;
 using BlackJackDataAccess.Repositories.Dapper;
 using BlackJackDataAccess.Repositories.Dapper.Interfaces;
+using BlackJackDataAccess.Repositories.Interface;
 using BlackJackDataAccess.Repositories.Interfaces;
 using BlackJackDataAccess.Repositories.Interfaces.Dapper;
 using BlackJackEntities.Entities;
@@ -43,9 +44,9 @@ namespace BlackJack
                 .Build();
 
             // connection sting
+            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
 
-            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
 
             // services
             services.AddScoped<ICacheWrapperService, CacheWrapperService>();
@@ -54,18 +55,19 @@ namespace BlackJack
             services.AddScoped<IGameService, GameService>();
 
             // EF6 repository
-            services.AddScoped<IGameUsersRepository, GameUsersRepository>();
-            services.AddScoped<ICardMoveRepository, CardMoveRepository>();
-            services.AddScoped<IPlayerRepository, PlayerRepository>();
-            services.AddScoped<IGameRepository, GameRepository>();
-            services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<IGameUsersRepository, GameUsersEfRepository>();
+            services.AddScoped<ICardMoveRepository, CardMoveEfRepository>();
+            services.AddScoped<IPlayerRepository, PlayerEfRepository>();
+            services.AddScoped<IGameRepository, GameEfRepository>();
+            services.AddScoped<ICardRepository, CardEfRepository>();
 
             // Dapper
-            services.AddTransient<IGameUsersDapperRepository, GameUsersDapperRepository>();
-            services.AddTransient<ICardMoveDapperRepository, CardMoveDapperRepository>();
-            services.AddTransient<IPlayerDapperRepository, PlayerDapperRepository>();
-            services.AddTransient<ICardDapperRepository, CardDapperRepository>();
-            services.AddTransient<IGameDapperRepository, GameDapperRepository>();
+            services.AddTransient<IGameUsersRepository, GameUsersDapperRepository>();
+            services.AddTransient<ICardMoveRepository, CardMoveDapperRepository>();
+            services.AddTransient<IPlayerRepository, PlayerDapperRepository>();
+            services.AddTransient<IGameRepository, GameDapperRepository>();
+            services.AddTransient<ICardRepository, CardDapperRepository>();
+
 
             // cache
             services.AddMemoryCache();

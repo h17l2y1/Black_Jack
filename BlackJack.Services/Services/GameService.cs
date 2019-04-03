@@ -15,11 +15,11 @@ namespace BlackJackServices.Services
     {
         private Deck _deck;
         private ICacheWrapperService _cache;
-        private readonly IGameUsersRepository _gameUsersRepository;
-        private readonly ICardMoveRepository _cardMoveRepository;
-        private readonly IPlayerRepository _playerRepository;
-        private readonly ICardRepository _cardRepository;
-        private readonly IGameRepository _gameRepository;
+        private readonly IGameEfUsersRepository _gameUsersRepository;
+        private readonly ICardMoveEfRepository _cardMoveRepository;
+        private readonly IPlayerEfRepository _playerRepository;
+        private readonly ICardEfRepository _cardRepository;
+        private readonly IGameEfRepository _gameRepository;
 
         private readonly IGameUsersDapperRepository _gameUsersDapperRepository;
         private readonly ICardMoveDapperRepository _cardMoveDapperRepository;
@@ -29,11 +29,11 @@ namespace BlackJackServices.Services
 
         public GameService(
             ICacheWrapperService cache,
-            IGameUsersRepository gameUsersRepository, IGameUsersDapperRepository gameUsersDapperRepository,
-            ICardMoveRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
-            IPlayerRepository playerRepository, IPlayerDapperRepository playerDapperRepository,
-            ICardRepository cardRepository, ICardDapperRepository cardDapperRepository,
-            IGameRepository gameRepository, IGameDapperRepository gameDapperRepository
+            IGameEfUsersRepository gameUsersRepository, IGameUsersDapperRepository gameUsersDapperRepository,
+            ICardMoveEfRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
+            IPlayerEfRepository playerRepository, IPlayerDapperRepository playerDapperRepository,
+            ICardEfRepository cardRepository, ICardDapperRepository cardDapperRepository,
+            IGameEfRepository gameRepository, IGameDapperRepository gameDapperRepository
             )
         {
             _cache = cache;
@@ -58,13 +58,14 @@ namespace BlackJackServices.Services
         public async Task<ResponseStartGameView> Start(string userId, int countBots)
         {
             var game = new Game();
+            //
+            //var dapper = _
+            //
             await _gameRepository.Add(game);
 
             SaveToCache(game.Id, _deck);
 
             var playersList = GetPlayers(userId, game.Id, countBots);
-
-            //var dapper = _playerDapperRepository.GetAll();
 
             await Start(userId, game.Id, playersList);
 

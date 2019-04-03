@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlackJackDataAccess
+namespace BlackJackDataAccess.Repositories.Interface
 {
-    public interface IBaseGenericRepository<TEntity> where TEntity : class
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
         TEntity Get(string id);
 

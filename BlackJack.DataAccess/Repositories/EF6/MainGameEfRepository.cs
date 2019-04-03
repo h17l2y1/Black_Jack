@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess
 {
-    public class BaseGenericRepository<TEntity> : IBaseGenericRepository<TEntity> where TEntity : class
+    public class MainGameEfRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
     {
         private ApplicationContext _context;
 
-        public BaseGenericRepository(ApplicationContext context)
+        public MainGameEfRepository(ApplicationContext context)
         {
             _context = context;
         }

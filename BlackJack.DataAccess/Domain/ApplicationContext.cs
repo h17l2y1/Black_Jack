@@ -12,7 +12,7 @@ namespace BlackJackDataAccess
 
         }
 
-        public string Test { get; set; }
+        public string DefaultConnection { get; set; }
 
         public DbSet<GameUsers> GameUsers { get; set; }
 

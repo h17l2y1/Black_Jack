@@ -11,18 +11,18 @@ namespace BlackJackServices
 {
     public class StatisticService : IStatisticService
     {
-        private readonly ICardMoveRepository _cardMoveRepository;
-        private readonly IGameUsersRepository _gameUsersRepository;
-        private readonly IPlayerRepository _playerRepository;
+        private readonly ICardMoveEfRepository _cardMoveRepository;
+        private readonly IGameEfUsersRepository _gameUsersRepository;
+        private readonly IPlayerEfRepository _playerRepository;
 
         private readonly ICardMoveDapperRepository _cardMoveDapperRepository;
         private readonly IGameUsersDapperRepository _gameUsersDapperRepository;
         private readonly IPlayerDapperRepository _playerDapperRepository;
 
         public StatisticService(
-            ICardMoveRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
-            IGameUsersRepository gameUsersRepository, IGameUsersDapperRepository gameDapperUsersRepository,
-            IPlayerRepository playerRepository, IPlayerDapperRepository playerDapperRepository
+            ICardMoveEfRepository cardMoveRepository, ICardMoveDapperRepository cardMoveDapperRepository,
+            IGameEfUsersRepository gameUsersRepository, IGameUsersDapperRepository gameDapperUsersRepository,
+            IPlayerEfRepository playerRepository, IPlayerDapperRepository playerDapperRepository
 )
         {
             _cardMoveRepository = cardMoveRepository;
