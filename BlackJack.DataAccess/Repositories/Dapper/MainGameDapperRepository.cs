@@ -18,7 +18,7 @@ namespace BlackJackDataAccess.Repositories
 
         protected readonly string _connectionString;
 
-        public MainGameDapperRepository(IOptions<ConnectionConfig> connectionConfig)
+        public MainGameDapperRepository(IOptions<ConnectionStrings> connectionConfig)
         {
             var connection = connectionConfig.Value;
             _connectionString = connection.DefaultConnection;

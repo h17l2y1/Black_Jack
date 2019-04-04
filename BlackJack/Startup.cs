@@ -17,12 +17,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace BlackJack
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+
 
         public Startup(IConfiguration configuration)
         {
@@ -32,21 +36,30 @@ namespace BlackJack
         public void ConfigureServices(IServiceCollection services)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                    .Build();
 
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("DefaultConnection").Value));
-            services.Configure<ConnectionConfig>(Configuration.GetSection("ConnectionStrings"));
+
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value));
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             services.Service();
 
-            services.EfRepository();
-            //services.DapperRepository();
+            //services.EfRepository();
+            services.DapperRepository();
 
             services.AddMemoryCache();
             services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
+
+            // JWT
+            var appSettingsSection = Configuration.GetSection("AuthOptions");
+            services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
+            var appSettings = appSettingsSection.Get<AuthOptions>();
+
+            var byteKey = Encoding.ASCII.GetBytes(appSettings.Key);
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,19 +67,18 @@ namespace BlackJack
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = AuthOptions.ISSUER,
-                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidIssuer = appSettings.Issuer,
+                    ValidAudience = appSettings.Audience,
                     ValidateLifetime = true,
-                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    IssuerSigningKey = new SymmetricSecurityKey(byteKey),
                     ValidateIssuerSigningKey = true,
                 };
-                options.SaveToken = true;
             });
 
             services.Configure<IdentityOptions>(options =>

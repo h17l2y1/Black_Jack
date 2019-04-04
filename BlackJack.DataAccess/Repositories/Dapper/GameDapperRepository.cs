@@ -7,7 +7,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 {
     public class GameDapperRepository : MainGameDapperRepository<Game>, IGameRepository
     {
-        public GameDapperRepository(IOptions<ConnectionConfig> connectionConfig) : base(connectionConfig)
+        public GameDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
         {
 
         }

@@ -12,7 +12,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 {
     public class CardMoveDapperRepository : MainGameDapperRepository<CardMove>, ICardMoveRepository
     {
-        public CardMoveDapperRepository(IOptions<ConnectionConfig> connectionConfig) : base(connectionConfig)
+        public CardMoveDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
         {
 
         }

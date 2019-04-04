@@ -5,12 +5,14 @@ using BlackJackViewModels;
 using BlackJackViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BlackJackServices.Services
@@ -19,11 +21,13 @@ namespace BlackJackServices.Services
     {
         private readonly UserManager<Player> _userManager;
         private readonly SignInManager<Player> _signInManager;
+        private readonly AuthOptions _authOptions;
 
-        public AccountService(UserManager<Player> userManager, SignInManager<Player> signInManager)
+        public AccountService(IOptions<AuthOptions> authOptions, UserManager<Player> userManager, SignInManager<Player> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authOptions = authOptions.Value;
         }
 
         public async Task<ResponseGetAllAccountView> GetAllAsync()
@@ -46,7 +50,7 @@ namespace BlackJackServices.Services
             Player user = new Player
             {
                 UserName = model.Name,
-                Points = 222,
+                Points = 100,
                 Role = "User"
             };
             await _userManager.CreateAsync(user);
@@ -88,16 +92,25 @@ namespace BlackJackServices.Services
             {
                 return null;
             }
-
+            var key = Encoding.ASCII.GetBytes(_authOptions.Key);
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: DateTime.UtcNow,
-                    claims: identity.Claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
-                    );
+                issuer: _authOptions.Issuer,
+                audience: _authOptions.Audience,
+                claims: identity.Claims,
+                expires: DateTime.UtcNow.AddDays(_authOptions.LifeTime),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                );
             return jwt;
+
+            //var jwt = new JwtSecurityToken(
+            //        issuer: AuthOptions.ISSUER,
+            //        audience: AuthOptions.AUDIENCE,
+            //        notBefore: DateTime.UtcNow,
+            //        claims: identity.Claims,
+            //        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+            //        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+            //        );
+            //return jwt;
         }
 
         private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
@@ -109,7 +122,7 @@ namespace BlackJackServices.Services
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, model.Name),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, "User"),
-                    new Claim("aaa","bb"),
+                    new Claim("aaa","bb")
                 };
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(
@@ -119,7 +132,6 @@ namespace BlackJackServices.Services
 
                 return claimsIdentity;
             }
-
             return null;
         }
 

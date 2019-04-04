@@ -1,5 +1,6 @@
 ﻿using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -46,7 +47,7 @@ namespace BlackJack.Controllers
             return Ok(player);
         }
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
         {
