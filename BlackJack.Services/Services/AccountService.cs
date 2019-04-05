@@ -49,7 +49,7 @@ namespace BlackJackServices.Services
         {
             Player user = new Player
             {
-                UserName = model.Name,
+                UserName = model.UserName,
                 Points = 100,
                 Role = "User"
             };
@@ -115,12 +115,12 @@ namespace BlackJackServices.Services
 
         private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
         {
-            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.Name);
+            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
             if (user != null)
             {
                 var claimsList = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, model.Name),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, model.UserName),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, "User"),
                     new Claim("aaa","bb")
                 };

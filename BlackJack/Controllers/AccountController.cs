@@ -47,11 +47,11 @@ namespace BlackJack.Controllers
             return Ok(player);
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
         {
-            if (_service.UserIsExist(model.Name) == false)
+            if (_service.UserIsExist(model.UserName) == false)
             {
                 return await SignUp(model);
             }

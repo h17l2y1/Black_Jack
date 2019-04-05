@@ -18,7 +18,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace BlackJack
@@ -26,8 +25,7 @@ namespace BlackJack
     public class Startup
     {
         public IConfiguration Configuration { get; }
-
-
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,21 +38,18 @@ namespace BlackJack
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                     .Build();
 
-
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             services.Service();
 
-            //services.EfRepository();
-            services.DapperRepository();
+            services.EfRepository();
+            //services.DapperRepository();
 
             services.AddMemoryCache();
             services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
-
-            // JWT
             var appSettingsSection = Configuration.GetSection("AuthOptions");
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
             var appSettings = appSettingsSection.Get<AuthOptions>();
@@ -98,7 +93,6 @@ namespace BlackJack
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddCors();
-
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
