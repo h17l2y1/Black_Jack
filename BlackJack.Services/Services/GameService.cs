@@ -98,6 +98,30 @@ namespace BlackJackServices.Services
 
         }
 
+        private async Task<Card> AddCard(int moveInt, string gameId, List<Player> players)
+        {
+            var listCardMoves = new List<CardMove>();
+            var card = new Card();
+            foreach (var item in players)
+            {
+                Card newCard = GetCard(gameId);
+                var move = new CardMove
+                {
+                    GameId = gameId,
+                    CardId = newCard.Id,
+                    PlayerId = item.Id,
+                    Name = item.UserName,
+                    Role = item.Role,
+                    Value = newCard.Value,
+                    Move = moveInt
+                };
+                listCardMoves.Add(move);
+                card = newCard;
+            }
+            await _cardMoveRepository.AddRange(listCardMoves);
+            return card;
+        }
+
         private List<Player> GetPlayers(string userId, string gameId, int countBots)
         {
             var botsList = _playerRepository.Find(t => t.Role == "Bot").ToList();
@@ -111,28 +135,6 @@ namespace BlackJackServices.Services
             }
 
             return players;
-        }
-
-        private async Task<Card> AddCard(int moveInt, string gameId, List<Player> players)
-        {
-            var listCardMoves = new List<CardMove>();
-            Card card = GetCard(gameId);
-            foreach (var item in players)
-            {
-                var move = new CardMove
-                {
-                    GameId = gameId,
-                    CardId = card.Id,
-                    PlayerId = item.Id,
-                    Name = item.UserName,
-                    Role = item.Role,
-                    Value = card.Value,
-                    Move = moveInt
-                };
-                listCardMoves.Add(move);
-            }
-            await _cardMoveRepository.AddRange(listCardMoves);
-            return card;
         }
 
 
