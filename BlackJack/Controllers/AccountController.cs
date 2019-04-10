@@ -1,6 +1,5 @@
 ﻿using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -25,9 +24,9 @@ namespace BlackJack.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var player = await _service.Get(id);
+            var player = await _service.GetById(id);
             return Ok(player);
         }
 
@@ -42,20 +41,15 @@ namespace BlackJack.Controllers
         public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
         {
             var player = await _service.AddAsync(model);
-            var jwt = _service.GetToken(model);
-            var str = _service.GetTokenString(jwt);
             return Ok(player);
         }
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
         {
-            if (_service.UserIsExist(model.UserName) == false)
-            {
-                return await SignUp(model);
-            }
-            return Ok("You are autorized user");
+            var jwt = _service.GetToken(model);
+            var token = _service.GetTokenString(jwt);
+            return Ok(new { token });
         }
 
     }

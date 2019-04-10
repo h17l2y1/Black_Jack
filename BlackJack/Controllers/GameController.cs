@@ -1,13 +1,14 @@
 ﻿using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using BlackJackViewModels.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
-    //[Authorize]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class GameController : ControllerBase
     {

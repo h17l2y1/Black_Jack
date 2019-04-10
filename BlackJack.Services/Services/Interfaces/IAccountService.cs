@@ -1,6 +1,7 @@
 ﻿using BlackJackViewModels;
 using BlackJackViewModels.Account;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
@@ -11,7 +12,7 @@ namespace BlackJackServices.Services.Interfaces
 
         Task<ResponseRemoveAccountView> Remove(string id);
 
-        Task<ResponseGetAccountView> Get(string id);
+        Task<ResponseGetAccountView> GetById(string id);
 
         Task<ResponseGetAllAccountView> GetAllAsync();
 

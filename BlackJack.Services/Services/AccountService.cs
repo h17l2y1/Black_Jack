@@ -59,29 +59,33 @@ namespace BlackJackServices.Services
             return response;
         }
 
-        public async Task<ResponseGetAccountView> Get(string id)
+        public async Task<ResponseGetAccountView> GetById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             var response = Mapper(user, new ResponseGetAccountView());
             return response;
         }
 
-        public async Task<ResponseRemoveAccountView> Remove(string id)
+        private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
-            var response = Mapper(user, new ResponseRemoveAccountView());
-            return response;
-        }
+            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            if (user != null)
+            {
+                var claimsList = new List<Claim>
+                {
+                    new Claim("UserName", user.UserName),
+                    new Claim("UserId",user.Id),
+                    new Claim("Role", user.Role)
+                };
 
-        private T Mapper<T>(Player player, T view) where T : PlayerAccountView
-        {
-            var response = view;
-            view.Name = player.UserName;
-            view.Points = player.Points;
-            view.Role = player.Role;
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                    claimsList,
+                    "Token"
+                    );
 
-            return response;
+                return claimsIdentity;
+            }
+            return null;
         }
 
         public JwtSecurityToken GetToken(RequestSignUpAccountView model)
@@ -101,38 +105,6 @@ namespace BlackJackServices.Services
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
                 );
             return jwt;
-
-            //var jwt = new JwtSecurityToken(
-            //        issuer: AuthOptions.ISSUER,
-            //        audience: AuthOptions.AUDIENCE,
-            //        notBefore: DateTime.UtcNow,
-            //        claims: identity.Claims,
-            //        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-            //        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
-            //        );
-            //return jwt;
-        }
-
-        private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
-        {
-            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
-            if (user != null)
-            {
-                var claimsList = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, model.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "User"),
-                    new Claim("aaa","bb")
-                };
-
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(
-                    claimsList,
-                    "Token"
-                    );
-
-                return claimsIdentity;
-            }
-            return null;
         }
 
         public string GetTokenString(JwtSecurityToken jwt)
@@ -150,6 +122,25 @@ namespace BlackJackServices.Services
                 return true;
             }
             return false;
+        }
+
+        private T Mapper<T>(Player player, T view) where T : PlayerAccountView
+        {
+            var response = view;
+            view.UserId = player.Id;
+            view.UserName = player.UserName;
+            view.Points = player.Points;
+            view.Role = player.Role;
+
+            return response;
+        }
+
+        public async Task<ResponseRemoveAccountView> Remove(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
+            var response = Mapper(user, new ResponseRemoveAccountView());
+            return response;
         }
 
     }
