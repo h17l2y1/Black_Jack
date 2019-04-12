@@ -12,6 +12,5 @@ namespace BlackJackViewModels.Game
         {
             Cards = new List<ResponseCardGameView>();
         }
-
     }
 }

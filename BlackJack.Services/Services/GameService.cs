@@ -77,11 +77,13 @@ namespace BlackJackServices.Services
             await AddOtherCardToBots(userId, gameId);
             var stopModel = await CreateStopGameModel(userId, gameId);
 
-            var winner = SearchWinner(gameId);
+            //var winner = SearchWinner(gameId);
 
             return stopModel;
         }
 
+        //
+        
         private async Task Start(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
@@ -224,7 +226,7 @@ namespace BlackJackServices.Services
             return card;
         }
 
-        private object SearchWinner(string gameId)
+        private List<object> SearchWinner(string gameId)
         {
             var cardMoveList = new List<CardMove>();
             cardMoveList.AddRange(_cardMoveRepository.GetAll().Where(x => x.GameId == gameId));
@@ -237,14 +239,18 @@ namespace BlackJackServices.Services
                 .Select(x => new
                 {
                     PlayerId = x.Key,
+                    Name = _playerRepository.Get(x.Key).UserName,
                     Value = x.Sum(f => f.Value)
                 })
                 .OrderBy(x => x.Value);
+            var winnersList = new List<object>();
 
             var winners = playersCount
                 .Where(x => x.Value < 21)
                 .MaxBy(z => z.Value)
                 .ToList();
+
+            winnersList.AddRange(winners);
 
             foreach (var player in gameUserList)
             {
@@ -258,7 +264,7 @@ namespace BlackJackServices.Services
                     }
                 }
             }
-            return winners;
+            return winnersList;
         }
 
         private async Task AddPlayersToGame(List<Player> playersId, string gameId)
@@ -364,6 +370,7 @@ namespace BlackJackServices.Services
             gameModel.User = CreateUser(user, listCard);
             gameModel.Bots.AddRange(GetBots(botList, listCard));
             gameModel.Cardsleft = _deck.CardsLeft();
+            gameModel.Winner = SearchWinner(gameId);
 
             return gameModel;
         }

@@ -1,7 +1,8 @@
 ﻿namespace BlackJackViewModels.Statistic
 {
-    public class RequestGetAllMovesStatisticView
+    public class RequestGetGameStatisticView
     {
         public string GameId { get; set; }
+        public string PlayerId { get; set; }
     }
 }

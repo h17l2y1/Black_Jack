@@ -8,6 +8,7 @@ namespace BlackJackViewModels.Game
         public List<PlayerGameView> Bots { get; set; }
         public PlayerGameView User { get; set; }
         public int Cardsleft { get; set; }
+        public List<object> Winner { get; set; }
 
         public ResponseStopGameView()
         {

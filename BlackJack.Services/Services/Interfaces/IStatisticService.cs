@@ -5,10 +5,8 @@ namespace BlackJackServices.Services.Interfaces
 {
     public interface IStatisticService
     {
-        Task<ResponseGetAllGamesStatisticView> GetAllGames(string gameId);
+        Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId);
 
-        Task<ResponseGetAllPlayersStatisticView> GetAllPlayers(string UserId);
-
-        Task<ResponseGetAllMovesStatisticView> GetAllMoves(string UserId);
+        Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId);
     }
 }

@@ -1,19 +1,22 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackServices.Services.Interfaces;
+using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlackJackServices
 {
     public class StatisticService : IStatisticService
     {
-        private readonly ICardMoveRepository _cardMoveRepository;
         private readonly IGameUsersRepository _gameUsersRepository;
+        private readonly IGameService _gameService;
 
-        public StatisticService(ICardMoveRepository cardMoveRepository, IGameUsersRepository gameUsersRepository)
+
+        public StatisticService(IGameUsersRepository gameUsersRepository, IGameService gameService)
         {
-            _cardMoveRepository = cardMoveRepository;
             _gameUsersRepository = gameUsersRepository;
+            _gameService = gameService;
         }
 
         public async Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId)
@@ -23,19 +26,44 @@ namespace BlackJackServices
             return response;
         }
 
-        public async Task<ResponseGetAllPlayersStatisticView> GetAllPlayers(string gameId)
+        public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId)
         {
-            var players = _gameUsersRepository.GetAllPlayersFromGame(gameId);
-            var response = new ResponseGetAllPlayersStatisticView(players);
-            return response;
+            var stopModel = _gameService.Stop(playerId, gameId);
+
+            var gameModel = new ResponseGetGameStatisticView();
+            gameModel.Cardsleft = stopModel.Result.Cardsleft;
+            gameModel.GameId = stopModel.Result.GameId;
+            gameModel.Winner = stopModel.Result.Winner;
+            // user
+            gameModel.User.Name = stopModel.Result.User.Name;
+            gameModel.User.Score = stopModel.Result.User.Score;
+            gameModel.User.Cards.AddRange(CardMapper(stopModel.Result.User.Cards));
+            //bot
+            foreach (var bot in stopModel.Result.Bots)
+            {
+                var newBot = new PlayerStatisticView();
+                newBot.Name = bot.Name;
+                newBot.Score = bot.Score;
+                newBot.Cards.AddRange(CardMapper(bot.Cards));
+                gameModel.Bots.Add(newBot);
+            }
+            return gameModel;
         }
 
-        public async Task<ResponseGetAllMovesStatisticView> GetAllMoves(string gameId)
+        private List<ResponseCardStatisticView> CardMapper(List<ResponseCardGameView> list)
         {
-            var gamesMoves = _cardMoveRepository.GetAllMovesFromGame(gameId);
-            var response = new ResponseGetAllMovesStatisticView(gamesMoves);
-            return response;
+            var listCard = new List<ResponseCardStatisticView>();
+            foreach (var card in list)
+            {
+                var newCard = new ResponseCardStatisticView();
+                newCard.Ranks = card.Ranks;
+                newCard.Suit = card.Suit;
+                newCard.Value = card.Value;
+                listCard.Add(newCard);
+            }
+            return listCard;
         }
+
     }
 
 }

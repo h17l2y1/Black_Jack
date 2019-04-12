@@ -20,23 +20,17 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAllGames([FromBody] RequestGetAllGamesStatisticView model)
         {
-            var gameStory = await _service.GetAllGames(model.PlayerId);
-            return Ok(gameStory);
+            var allGames = await _service.GetAllGames(model.PlayerId);
+            return Ok(allGames);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllPlayers([FromBody] RequestGetAllPlayersStatisticView model)
+        public async Task<IActionResult> GetGame([FromBody] RequestGetGameStatisticView model)
         {
-            var story = await _service.GetAllPlayers(model.GameId);
-            return Ok(story);
+            var game = await _service.GetGame(model.GameId, model.PlayerId);
+            return Ok(game);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetAllMoves([FromBody] RequestGetAllMovesStatisticView model)
-        {
-            var moves = await _service.GetAllMoves(model.GameId);
-            return Ok(moves);
-        }
 
     }
 }
