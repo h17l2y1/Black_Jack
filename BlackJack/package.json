@@ -65,6 +65,7 @@
     "skipTemplateCodegen": true,
     "skipMetadataEmit": false,
     "strictMetadataEmit": true,
+    "experimentalDecorators": true,
     "annotationsAs": "decorators"
   }
 }

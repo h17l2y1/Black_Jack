@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem('token')!= null) {
-      this.router.navigateByUrl('game')
+      //this.router.navigateByUrl('game')
     }
     this.signUpControl = new FormGroup({
       UserName: new FormControl()

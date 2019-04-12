@@ -490,7 +490,7 @@ var LoginComponent = /** @class */ (function () {
     }
     LoginComponent.prototype.ngOnInit = function () {
         if (localStorage.getItem('token') != null) {
-            this.router.navigateByUrl('game');
+            //this.router.navigateByUrl('game')
         }
         this.signUpControl = new forms_1.FormGroup({
             UserName: new forms_1.FormControl()
@@ -621,7 +621,7 @@ module.exports = ".games{\r\n    padding: 5px;\r\n    margin: 10px;\r\n    backg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  statistic works!\n</p>\n\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n\n\n\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n\n  <div (click)=\"onAllGames()\">All Games</div>\n\n<ol>\n  <!-- <li *ngFor=\"let game of allGamesRes.gameList\"> -->\n    <li *ngFor=\"let game of allGamesRes\">\n    <div class=\"games\" (click)=\"onGame(game.gameId)\">\n        <p >{{game.gameId}}</p>\n    </div>\n  </li>\n</ol>\n\n\n"
+module.exports = "<p>\n  statistic works!\n</p>\n\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n\n\n\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n\n  <div (click)=\"onAllGames()\">All Games</div>\n\n<ol>\n  <!-- <li *ngFor=\"let game of allGamesRes.gameList\"> -->\n    <li *ngFor=\"let game of allGamesRes.gameList\">\n    <div class=\"games\" (click)=\"onGame(game.gameId)\">\n        <p >{{game.gameId}}</p>\n    </div>\n  </li>\n</ol>\n\n\n"
 
 /***/ }),
 
@@ -684,7 +684,9 @@ var StatisticComponent = /** @class */ (function () {
         this.service.getAllGames(this.allGamesReq)
             .subscribe(function (response) {
             _this.allGamesRes = response;
+            console.log(_this.allGamesRes);
         });
+        debugger;
     };
     StatisticComponent.prototype.getUserId = function () {
         var token = localStorage.getItem('token');

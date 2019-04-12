@@ -50,8 +50,7 @@
   <div (click)="onAllGames()">All Games</div>
 
 <ol>
-  <!-- <li *ngFor="let game of allGamesRes.gameList"> -->
-    <li *ngFor="let game of allGamesRes">
+    <li *ngFor="let game of allGamesRes.gameList">
     <div class="games" (click)="onGame(game.gameId)">
         <p >{{game.gameId}}</p>
     </div>

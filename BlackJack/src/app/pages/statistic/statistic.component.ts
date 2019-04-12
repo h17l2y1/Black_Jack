@@ -6,6 +6,7 @@ import { RequestGetAllGamesStatisticView } from '../../../shared/models/Statisti
 import { ResponseGetAllGamesStatisticView } from '../../../shared/models/Statistic/ResponseGetAllGamesStatisticView';
 import { ResponseGetGameStatisticView } from '../../../shared/models/Statistic/ResponseGetGameStatisticView';
 import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/RequestGetGameStatisticView';
+import { Response } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-statistic',
@@ -15,7 +16,7 @@ import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/Re
 export class StatisticComponent implements OnInit {
 
   allGamesReq = new RequestGetAllGamesStatisticView;
-  allGamesRes = new ResponseGetAllGamesStatisticView;
+  public allGamesRes = new ResponseGetAllGamesStatisticView;
   gameReq = new RequestGetGameStatisticView;
   gameRes = new ResponseGetGameStatisticView; 
   userId: string = null;
