@@ -1,4 +1,4 @@
-﻿using BlackJackDataAccess;
+using BlackJackDataAccess;
 using BlackJackDataAccess.Domain;
 using BlackJackDataAccess.Repositories;
 using BlackJackEntities.Entities;
@@ -106,7 +106,7 @@ namespace BlackJack
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 
             app.UseAuthentication();
             app.UseCookiePolicy();
