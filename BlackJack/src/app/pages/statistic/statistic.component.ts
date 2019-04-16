@@ -7,6 +7,8 @@ import { ResponseGetAllGamesStatisticView } from '../../../shared/models/Statist
 import { ResponseGetGameStatisticView } from '../../../shared/models/Statistic/ResponseGetGameStatisticView';
 import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/RequestGetGameStatisticView';
 import { Response } from 'selenium-webdriver/http';
+import { ResponsePaginationStatisticView } from '../../../shared/models/Statistic/ResponsePaginationStatisticView';
+import { RequestPaginationStatisticView } from '../../../shared/models/Statistic/RequestPaginationStatisticView';
 
 @Component({
   selector: 'app-statistic',
@@ -22,11 +24,28 @@ export class StatisticComponent implements OnInit {
   userId: string = null;
   gameId: string = null;
   isGame: boolean = false;
+  public gamesList = new ResponsePaginationStatisticView;
+  fromNumber : RequestPaginationStatisticView = { from: 0 };
 
   constructor(private router: Router, private service: StatisticService) { }
 
   ngOnInit() {
     this.getUserId();
+    this.service.getTest(this.fromNumber)
+    this.getStat()
+  }
+
+  onStatPlus(){
+    this.fromNumber.from += 3;
+    this.getStat()
+  }
+
+  getStat(){
+    this.service.getTest(this.fromNumber)
+    .subscribe((response) => {
+      this.gamesList = response
+      console.log(this.gameRes);
+    })
   }
 
   onGame(gameId:string){

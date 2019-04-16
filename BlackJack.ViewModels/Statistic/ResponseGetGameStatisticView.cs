@@ -15,5 +15,6 @@ namespace BlackJackViewModels.Statistic
             Bots = new List<PlayerStatisticView>();
             User = new PlayerStatisticView();
         }
+
     }
 }

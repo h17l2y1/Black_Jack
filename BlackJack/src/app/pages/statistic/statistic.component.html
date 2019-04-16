@@ -1,6 +1,3 @@
-<p>
-  statistic works!
-</p>
 
 <button (click)="onBack()">Back to Game</button>
 <br><br><br>
@@ -58,3 +55,23 @@
 </ol>
 
 
+table 1`
+<table class="table">  
+  <thead>  
+    <tr>  
+        <th>UserName</th>  
+        <th>Winner</th>  
+        <th>Score</th>  
+        <th>GameId</th>  
+    </tr>  
+  </thead>  
+  <tbody>
+    <tr *ngFor="let item of gamesList.statistics">  
+      <td>{{item.userName}}</td>  
+      <td>{{item.winner}}</td>  
+      <td>{{item.score}}</td>  
+      <td>{{item.gameId}}</td>  
+    </tr>  
+  </tbody>
+</table>
+<button (click)="onStatPlus()">Next</button>

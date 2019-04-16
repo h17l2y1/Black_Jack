@@ -621,7 +621,7 @@ module.exports = ".games{\r\n    padding: 5px;\r\n    margin: 10px;\r\n    backg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  statistic works!\n</p>\n\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n\n\n\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n\n  <div (click)=\"onAllGames()\">All Games</div>\n\n<ol>\n  <!-- <li *ngFor=\"let game of allGamesRes.gameList\"> -->\n    <li *ngFor=\"let game of allGamesRes.gameList\">\n    <div class=\"games\" (click)=\"onGame(game.gameId)\">\n        <p >{{game.gameId}}</p>\n    </div>\n  </li>\n</ol>\n\n\n"
+module.exports = "\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n\n\n\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n\n  <div (click)=\"onAllGames()\">All Games</div>\n\n<ol>\n    <li *ngFor=\"let game of allGamesRes.gameList\">\n    <div class=\"games\" (click)=\"onGame(game.gameId)\">\n        <p >{{game.gameId}}</p>\n    </div>\n  </li>\n</ol>\n\n\ntable 1`\n<table class=\"table\">  \n  <thead>  \n    <tr>  \n        <th>UserName</th>  \n        <th>Winner</th>  \n        <th>Score</th>  \n        <th>GameId</th>  \n    </tr>  \n  </thead>  \n  <tbody>\n    <tr *ngFor=\"let item of gamesList.statistics\">  \n      <td>{{item.userName}}</td>  \n      <td>{{item.winner}}</td>  \n      <td>{{item.score}}</td>  \n      <td>{{item.gameId}}</td>  \n    </tr>  \n  </tbody>\n</table>\n<button (click)=\"onStatPlus()\">Next</button>\n"
 
 /***/ }),
 
@@ -652,6 +652,7 @@ var RequestGetAllGamesStatisticView_1 = __webpack_require__(/*! ../../../shared/
 var ResponseGetAllGamesStatisticView_1 = __webpack_require__(/*! ../../../shared/models/Statistic/ResponseGetAllGamesStatisticView */ "./src/shared/models/Statistic/ResponseGetAllGamesStatisticView.ts");
 var ResponseGetGameStatisticView_1 = __webpack_require__(/*! ../../../shared/models/Statistic/ResponseGetGameStatisticView */ "./src/shared/models/Statistic/ResponseGetGameStatisticView.ts");
 var RequestGetGameStatisticView_1 = __webpack_require__(/*! ../../../shared/models/Statistic/RequestGetGameStatisticView */ "./src/shared/models/Statistic/RequestGetGameStatisticView.ts");
+var ResponsePaginationStatisticView_1 = __webpack_require__(/*! ../../../shared/models/Statistic/ResponsePaginationStatisticView */ "./src/shared/models/Statistic/ResponsePaginationStatisticView.ts");
 var StatisticComponent = /** @class */ (function () {
     function StatisticComponent(router, service) {
         this.router = router;
@@ -663,9 +664,25 @@ var StatisticComponent = /** @class */ (function () {
         this.userId = null;
         this.gameId = null;
         this.isGame = false;
+        this.gamesList = new ResponsePaginationStatisticView_1.ResponsePaginationStatisticView;
+        this.fromNumber = { from: 0 };
     }
     StatisticComponent.prototype.ngOnInit = function () {
         this.getUserId();
+        this.service.getTest(this.fromNumber);
+        this.getStat();
+    };
+    StatisticComponent.prototype.onStatPlus = function () {
+        this.fromNumber.from += 3;
+        this.getStat();
+    };
+    StatisticComponent.prototype.getStat = function () {
+        var _this = this;
+        this.service.getTest(this.fromNumber)
+            .subscribe(function (response) {
+            _this.gamesList = response;
+            console.log(_this.gameRes);
+        });
     };
     StatisticComponent.prototype.onGame = function (gameId) {
         var _this = this;
@@ -684,9 +701,7 @@ var StatisticComponent = /** @class */ (function () {
         this.service.getAllGames(this.allGamesReq)
             .subscribe(function (response) {
             _this.allGamesRes = response;
-            console.log(_this.allGamesRes);
         });
-        debugger;
     };
     StatisticComponent.prototype.getUserId = function () {
         var token = localStorage.getItem('token');
@@ -1022,6 +1037,26 @@ exports.ResponseGetGameStatisticView = ResponseGetGameStatisticView;
 
 /***/ }),
 
+/***/ "./src/shared/models/Statistic/ResponsePaginationStatisticView.ts":
+/*!************************************************************************!*\
+  !*** ./src/shared/models/Statistic/ResponsePaginationStatisticView.ts ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ResponsePaginationStatisticView = /** @class */ (function () {
+    function ResponsePaginationStatisticView() {
+    }
+    return ResponsePaginationStatisticView;
+}());
+exports.ResponsePaginationStatisticView = ResponsePaginationStatisticView;
+
+
+/***/ }),
+
 /***/ "./src/shared/services/account.service.ts":
 /*!************************************************!*\
   !*** ./src/shared/services/account.service.ts ***!
@@ -1149,6 +1184,9 @@ var StatisticService = /** @class */ (function () {
     };
     StatisticService.prototype.getGame = function (model) {
         return this.http.post(this.rootUrl + 'api/Statistic/GetGame', model);
+    };
+    StatisticService.prototype.getTest = function (model) {
+        return this.http.post(this.rootUrl + 'api/Statistic/Pagination', model);
     };
     StatisticService = __decorate([
         core_1.Injectable({

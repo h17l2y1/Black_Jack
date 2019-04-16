@@ -1,4 +1,5 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
+using BlackJackEntities.Entities;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
@@ -9,14 +10,58 @@ namespace BlackJackServices
 {
     public class StatisticService : IStatisticService
     {
-        private readonly IGameUsersRepository _gameUsersRepository;
         private readonly IGameService _gameService;
+        private readonly IGameUsersRepository _gameUsersRepository;
+        private readonly IStatisticRepository _statisticRepository;
 
-
-        public StatisticService(IGameUsersRepository gameUsersRepository, IGameService gameService)
+        public StatisticService(IGameUsersRepository gameUsersRepository, IGameService gameService, IStatisticRepository statisticRepository)
         {
-            _gameUsersRepository = gameUsersRepository;
             _gameService = gameService;
+            _gameUsersRepository = gameUsersRepository;
+            _statisticRepository = statisticRepository;
+        }
+
+        public async Task<ResponsePaginationStatisticView> GetPagination(int from)
+        {
+            var games = _statisticRepository.GetAllGames(from);
+            var model = await GamesMapper(games);
+            return model;
+        }
+
+        //private Test Index(int page = 1)
+        //{
+        //    int pageSize = 3; 
+        //    IEnumerable<Phone> phonesPerPages = phones.Skip((page - 1) * pageSize).Take(pageSize);
+
+        //    var pageInfo = new PageInfo {
+        //        PageNumber = page,
+        //        PageSize = pageSize,
+        //        TotalItems = phones.Count
+        //    };
+
+        //    var ivm = new IndexViewModel {
+        //        PageInfo = pageInfo,
+        //        Phones = phonesPerPages
+        //    };
+        //    return ivm;
+        //}
+
+        private async Task<ResponsePaginationStatisticView> GamesMapper(List<Statistic> games)
+        {
+            var list = new List<StatisticStatisticView>();
+            foreach (var item in games)
+            {
+                var game = new StatisticStatisticView
+                {
+                    GameId = item.GameId,
+                    Score = item.Score,
+                    UserName = item.UserName,
+                    Winner = item.Winner
+                };
+                list.Add(game);
+            }
+            var model = new ResponsePaginationStatisticView(list);
+            return model;
         }
 
         public async Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId)
