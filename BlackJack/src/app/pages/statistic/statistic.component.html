@@ -2,7 +2,7 @@
 <button (click)="onBack()">Back to Game</button>
 <br><br><br>
 
-
+<!-- Game -->
 <div class="gameStat" *ngIf="isGame">
   <div class="gameProp">GameId: {{gameRes.gameId}}</div>
   <div class="gameProp">Cardleft: {{gameRes.cardsleft}}</div>
@@ -35,27 +35,29 @@
     </div>
 
   </div>
-
-
-
   <div class="gameProp" *ngFor="let item of gameRes.winner">
     Winner: {{item.name}}
   </div>
 </div>
 
-
-  <div (click)="onAllGames()">All Games</div>
-
+<!-- <div (click)="onAllGames()">All Games</div> -->
+<!-- 
 <ol>
-    <li *ngFor="let game of allGamesRes.gameList">
-    <div class="games" (click)="onGame(game.gameId)">
-        <p >{{game.gameId}}</p>
-    </div>
-  </li>
-</ol>
+  <div class="games" (click)="onGame(item.gameId)">
+      <p >{{item.gameId}}</p>
+  </div>
+</ol> -->
 
 
-table 1`
+
+<select [(ngModel)]="pageNumber.size" (click)="getStat()">
+  <option>3</option>
+  <option>5</option>
+  <option>10</option>
+</select>
+
+
+<!-- table -->
 <table class="table">  
   <thead>  
     <tr>  
@@ -66,7 +68,7 @@ table 1`
     </tr>  
   </thead>  
   <tbody>
-    <tr *ngFor="let item of gamesList.statistics">  
+    <tr *ngFor="let item of newPage.page" (click)="onGame(item.gameId)">  
       <td>{{item.userName}}</td>  
       <td>{{item.winner}}</td>  
       <td>{{item.score}}</td>  
@@ -74,4 +76,15 @@ table 1`
     </tr>  
   </tbody>
 </table>
-<button (click)="onStatPlus()">Next</button>
+
+<div class="manage">
+  <button (click)="onFirst()">First</button>
+  <button [disabled]="!isPrevious" (click)="onStatPrevious()"><</button>
+  
+  <button [disabled]="!isPrevious" (click)="onStatPrevious()">{{newPage.pageNumber -1}}</button>
+  <button>{{newPage.pageNumber}}</button>
+  <button [disabled]="!isNext" (click)="onStatNext()">{{newPage.pageNumber +1}}</button>
+  
+  <button [disabled]="!isNext" (click)="onStatNext()">></button>
+  <button (click)="onLast()">Last</button>  
+</div>

@@ -13,6 +13,5 @@ namespace BlackJackEntities.Entities
             Id = Guid.NewGuid().ToString();
             CreationDate = DateTime.UtcNow;
         }
-
     }
 }

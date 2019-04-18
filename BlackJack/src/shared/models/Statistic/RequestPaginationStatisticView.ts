@@ -1,3 +1,4 @@
 export class RequestPaginationStatisticView {
-    from:number;
+    page:number;
+    size:number;
 }

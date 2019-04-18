@@ -1,5 +1,9 @@
 import { StatisticStatisticView } from "./StatisticStatisticView";
 
 export class ResponsePaginationStatisticView {
-    statistics: Array<StatisticStatisticView>;
+    page: Array<StatisticStatisticView>;
+    pageNumber: number;
+    itemsOnPage: number;
+    totalItems: number;
+    totalPages: number;
 }

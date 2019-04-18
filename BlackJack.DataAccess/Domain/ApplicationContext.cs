@@ -44,7 +44,7 @@ namespace BlackJackDataAccess
             {
                 playerList.Add(new Player()
                 {
-                    UserName = $"Bot {i}",
+                    UserName = $"Bot_{i}",
                     Role = "Bot"
                 });
             }

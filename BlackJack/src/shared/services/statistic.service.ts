@@ -25,7 +25,7 @@ export class StatisticService {
     return this.http.post<ResponseGetGameStatisticView>(this.rootUrl + 'api/Statistic/GetGame', model);
   }
 
-  getTest(model: RequestPaginationStatisticView){
+  getPage(model: RequestPaginationStatisticView){
     return this.http.post<ResponsePaginationStatisticView>(this.rootUrl + 'api/Statistic/Pagination', model);
 
   }

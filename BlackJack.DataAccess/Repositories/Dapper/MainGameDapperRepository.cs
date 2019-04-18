@@ -42,6 +42,7 @@ namespace BlackJackDataAccess.Repositories
 
         public async Task Add(TEntity item)
         {
+            var a = item;
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Insert(item);
@@ -52,10 +53,7 @@ namespace BlackJackDataAccess.Repositories
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                foreach (var item in list)
-                {
-                    connection.Insert(item);
-                }
+                connection.Insert(list);
             }
         }
 
@@ -176,7 +174,14 @@ namespace BlackJackDataAccess.Repositories
 
         public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
         {
-            throw new NotImplementedException();
+            var sql = $"SELECT * FROM {_tableName} WHERE {predicate}";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var order = connection.Query<TEntity>(sql).AsQueryable();
+                return null;
+            }
         }
+
     }
 }

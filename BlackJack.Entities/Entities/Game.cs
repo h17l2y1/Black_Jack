@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using Dapper.Contrib.Extensions;
 
 namespace BlackJackEntities.Entities
 {
     public class Game : BaseEntity
     {
+        [Computed]
         public virtual ICollection<CardMove> CardMoves { get; set; }
 
         public Game()
@@ -12,7 +13,7 @@ namespace BlackJackEntities.Entities
             CardMoves = new List<CardMove>();
         }
 
-        [NotMapped]
+        [Computed]
         public virtual ICollection<Player> Users { get; set; }
     }
 }

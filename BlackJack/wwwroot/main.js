@@ -610,7 +610,7 @@ exports.SignUpComponent = SignUpComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".games{\r\n    padding: 5px;\r\n    margin: 10px;\r\n    background-color: burlywood;\r\n    width: 300px;\r\n}\r\n\r\n.players{\r\n    background-color: darkgray;\r\n}\r\n\r\n.gamesStat{\r\n    background-color: bisque;\r\n}\r\n\r\n.gameProp{\r\n    background-color: cornsilk;\r\n    margin: 5px;\r\n}\r\n\r\n.playerProp{\r\n    display: flex;\r\n    padding: 5px;\r\n    background-color: coral\r\n}\r\n\r\n.cards{\r\n    display: flex;\r\n}\r\n\r\n.card{\r\n    display: flex;\r\n    color: white;\r\n    background-color: rgb(70, 109, 109);\r\n    margin: 10px;\r\n    padding: 10px;\r\n}\r\n\r\n.cardProp{\r\n    margin: 5px;\r\n}\r\n\r\n#pl{\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    margin: 5px;\r\n}\r\n\r\n.bot{\r\n    padding: 10px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnZXMvc3RhdGlzdGljL3N0YXRpc3RpYy5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksYUFBYTtJQUNiLGFBQWE7SUFDYiw0QkFBNEI7SUFDNUIsYUFBYTtDQUNoQjs7QUFFRDtJQUNJLDJCQUEyQjtDQUM5Qjs7QUFFRDtJQUNJLHlCQUF5QjtDQUM1Qjs7QUFFRDtJQUNJLDJCQUEyQjtJQUMzQixZQUFZO0NBQ2Y7O0FBRUQ7SUFDSSxjQUFjO0lBQ2QsYUFBYTtJQUNiLHVCQUF1QjtDQUMxQjs7QUFFRDtJQUNJLGNBQWM7Q0FDakI7O0FBRUQ7SUFDSSxjQUFjO0lBQ2QsYUFBYTtJQUNiLG9DQUFvQztJQUNwQyxhQUFhO0lBQ2IsY0FBYztDQUNqQjs7QUFFRDtJQUNJLFlBQVk7Q0FDZjs7QUFFRDtJQUNJLGNBQWM7SUFDZCxnQkFBZ0I7SUFDaEIsWUFBWTtDQUNmOztBQUVEO0lBQ0ksY0FBYztDQUNqQiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL3N0YXRpc3RpYy9zdGF0aXN0aWMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5nYW1lc3tcclxuICAgIHBhZGRpbmc6IDVweDtcclxuICAgIG1hcmdpbjogMTBweDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJ1cmx5d29vZDtcclxuICAgIHdpZHRoOiAzMDBweDtcclxufVxyXG5cclxuLnBsYXllcnN7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBkYXJrZ3JheTtcclxufVxyXG5cclxuLmdhbWVzU3RhdHtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJpc3F1ZTtcclxufVxyXG5cclxuLmdhbWVQcm9we1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogY29ybnNpbGs7XHJcbiAgICBtYXJnaW46IDVweDtcclxufVxyXG5cclxuLnBsYXllclByb3B7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgcGFkZGluZzogNXB4O1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogY29yYWxcclxufVxyXG5cclxuLmNhcmRze1xyXG4gICAgZGlzcGxheTogZmxleDtcclxufVxyXG5cclxuLmNhcmR7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgY29sb3I6IHdoaXRlO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDcwLCAxMDksIDEwOSk7XHJcbiAgICBtYXJnaW46IDEwcHg7XHJcbiAgICBwYWRkaW5nOiAxMHB4O1xyXG59XHJcblxyXG4uY2FyZFByb3B7XHJcbiAgICBtYXJnaW46IDVweDtcclxufVxyXG5cclxuI3Bse1xyXG4gICAgZGlzcGxheTogZmxleDtcclxuICAgIGZsZXgtd3JhcDogd3JhcDtcclxuICAgIG1hcmdpbjogNXB4O1xyXG59XHJcblxyXG4uYm90e1xyXG4gICAgcGFkZGluZzogMTBweDtcclxufSJdfQ== */"
+module.exports = ".games{\r\n    padding: 5px;\r\n    margin: 10px;\r\n    background-color: burlywood;\r\n    width: 300px;\r\n}\r\n\r\n.players{\r\n    background-color: darkgray;\r\n}\r\n\r\n.gamesStat{\r\n    background-color: bisque;\r\n}\r\n\r\n.gameProp{\r\n    background-color: cornsilk;\r\n    margin: 5px;\r\n}\r\n\r\n.playerProp{\r\n    display: flex;\r\n    padding: 5px;\r\n    background-color: coral\r\n}\r\n\r\n.cards{\r\n    display: flex;\r\n}\r\n\r\n.card{\r\n    display: flex;\r\n    color: white;\r\n    background-color: rgb(70, 109, 109);\r\n    margin: 10px;\r\n    padding: 10px;\r\n}\r\n\r\n.cardProp{\r\n    margin: 5px;\r\n}\r\n\r\n#pl{\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    margin: 5px;\r\n}\r\n\r\n.bot{\r\n    padding: 10px;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnZXMvc3RhdGlzdGljL3N0YXRpc3RpYy5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksYUFBYTtJQUNiLGFBQWE7SUFDYiw0QkFBNEI7SUFDNUIsYUFBYTtDQUNoQjs7QUFFRDtJQUNJLDJCQUEyQjtDQUM5Qjs7QUFFRDtJQUNJLHlCQUF5QjtDQUM1Qjs7QUFFRDtJQUNJLDJCQUEyQjtJQUMzQixZQUFZO0NBQ2Y7O0FBRUQ7SUFDSSxjQUFjO0lBQ2QsYUFBYTtJQUNiLHVCQUF1QjtDQUMxQjs7QUFFRDtJQUNJLGNBQWM7Q0FDakI7O0FBRUQ7SUFDSSxjQUFjO0lBQ2QsYUFBYTtJQUNiLG9DQUFvQztJQUNwQyxhQUFhO0lBQ2IsY0FBYztDQUNqQjs7QUFFRDtJQUNJLFlBQVk7Q0FDZjs7QUFFRDtJQUNJLGNBQWM7SUFDZCxnQkFBZ0I7SUFDaEIsWUFBWTtDQUNmOztBQUVEO0lBQ0ksY0FBYztDQUNqQiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzL3N0YXRpc3RpYy9zdGF0aXN0aWMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5nYW1lc3tcclxuICAgIHBhZGRpbmc6IDVweDtcclxuICAgIG1hcmdpbjogMTBweDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJ1cmx5d29vZDtcclxuICAgIHdpZHRoOiAzMDBweDtcclxufVxyXG5cclxuLnBsYXllcnN7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiBkYXJrZ3JheTtcclxufVxyXG5cclxuLmdhbWVzU3RhdHtcclxuICAgIGJhY2tncm91bmQtY29sb3I6IGJpc3F1ZTtcclxufVxyXG5cclxuLmdhbWVQcm9we1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogY29ybnNpbGs7XHJcbiAgICBtYXJnaW46IDVweDtcclxufVxyXG5cclxuLnBsYXllclByb3B7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgcGFkZGluZzogNXB4O1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogY29yYWxcclxufVxyXG5cclxuLmNhcmRze1xyXG4gICAgZGlzcGxheTogZmxleDtcclxufVxyXG5cclxuLmNhcmR7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgY29sb3I6IHdoaXRlO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDcwLCAxMDksIDEwOSk7XHJcbiAgICBtYXJnaW46IDEwcHg7XHJcbiAgICBwYWRkaW5nOiAxMHB4O1xyXG59XHJcblxyXG4uY2FyZFByb3B7XHJcbiAgICBtYXJnaW46IDVweDtcclxufVxyXG5cclxuI3Bse1xyXG4gICAgZGlzcGxheTogZmxleDtcclxuICAgIGZsZXgtd3JhcDogd3JhcDtcclxuICAgIG1hcmdpbjogNXB4O1xyXG59XHJcblxyXG4uYm90e1xyXG4gICAgcGFkZGluZzogMTBweDtcclxufVxyXG4iXX0= */"
 
 /***/ }),
 
@@ -621,7 +621,7 @@ module.exports = ".games{\r\n    padding: 5px;\r\n    margin: 10px;\r\n    backg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n\n\n\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n\n  <div (click)=\"onAllGames()\">All Games</div>\n\n<ol>\n    <li *ngFor=\"let game of allGamesRes.gameList\">\n    <div class=\"games\" (click)=\"onGame(game.gameId)\">\n        <p >{{game.gameId}}</p>\n    </div>\n  </li>\n</ol>\n\n\ntable 1`\n<table class=\"table\">  \n  <thead>  \n    <tr>  \n        <th>UserName</th>  \n        <th>Winner</th>  \n        <th>Score</th>  \n        <th>GameId</th>  \n    </tr>  \n  </thead>  \n  <tbody>\n    <tr *ngFor=\"let item of gamesList.statistics\">  \n      <td>{{item.userName}}</td>  \n      <td>{{item.winner}}</td>  \n      <td>{{item.score}}</td>  \n      <td>{{item.gameId}}</td>  \n    </tr>  \n  </tbody>\n</table>\n<button (click)=\"onStatPlus()\">Next</button>\n"
+module.exports = "\n<button (click)=\"onBack()\">Back to Game</button>\n<br><br><br>\n\n<!-- Game -->\n<div class=\"gameStat\" *ngIf=\"isGame\">\n  <div class=\"gameProp\">GameId: {{gameRes.gameId}}</div>\n  <div class=\"gameProp\">Cardleft: {{gameRes.cardsleft}}</div>\n  <div class=\"gameProp\" id=\"pl\"> User\n    <div class=\"playerProp\">Name: {{gameRes.user.name}}</div>\n    <div class=\"playerProp\">Score: {{gameRes.user.score}}</div>\n      <div class=\"playerProp\">\n        <div class=\"cards\"  *ngFor=\"let card of gameRes.user.cards\">\n            <div class=\"card\">\n                <div class=\"cardProp\">{{card.ranks}}</div>\n                <div class=\"cardProp\">{{card.suit}}</div>\n                <div class=\"cardProp\">{{card.value}}</div>\n            </div>\n        </div>\n      </div><br>\n    <div class=\"gameProp\" id=\"pl\"> Bots\n      <div class=\"bot\" *ngFor=\"let bot of gameRes.bots\">\n          <div class=\"playerProp\">Name: {{bot.name}}</div>\n          <div class=\"playerProp\">Score: {{bot.score}}</div>\n          <div class=\"playerProp\">\n            <div class=\"cards\" *ngFor=\"let card of bot.cards\">\n                <div class=\"card\">\n                    <div class=\"cardProp\">{{card.ranks}}</div>\n                    <div class=\"cardProp\">{{card.suit}}</div>\n                    <div class=\"cardProp\">{{card.value}}</div>\n                </div>\n            </div>\n          </div><br>\n      </div>\n    </div>\n\n  </div>\n  <div class=\"gameProp\" *ngFor=\"let item of gameRes.winner\">\n    Winner: {{item.name}}\n  </div>\n</div>\n\n<!-- <div (click)=\"onAllGames()\">All Games</div> -->\n<!-- \n<ol>\n  <div class=\"games\" (click)=\"onGame(item.gameId)\">\n      <p >{{item.gameId}}</p>\n  </div>\n</ol> -->\n\n\n\n<select [(ngModel)]=\"pageNumber.size\" (click)=\"getStat()\">\n  <option>3</option>\n  <option>5</option>\n  <option>10</option>\n</select>\n\n\n<!-- table -->\n<table class=\"table\">  \n  <thead>  \n    <tr>  \n        <th>UserName</th>  \n        <th>Winner</th>  \n        <th>Score</th>  \n        <th>GameId</th>  \n    </tr>  \n  </thead>  \n  <tbody>\n    <tr *ngFor=\"let item of newPage.page\" (click)=\"onGame(item.gameId)\">  \n      <td>{{item.userName}}</td>  \n      <td>{{item.winner}}</td>  \n      <td>{{item.score}}</td>  \n      <td>{{item.gameId}}</td>  \n    </tr>  \n  </tbody>\n</table>\n\n<div class=\"manage\">\n  <button (click)=\"onFirst()\">First</button>\n  <button [disabled]=\"!isPrevious\" (click)=\"onStatPrevious()\"><</button>\n  \n  <button [disabled]=\"!isPrevious\" (click)=\"onStatPrevious()\">{{newPage.pageNumber -1}}</button>\n  <button>{{newPage.pageNumber}}</button>\n  <button [disabled]=\"!isNext\" (click)=\"onStatNext()\">{{newPage.pageNumber +1}}</button>\n  \n  <button [disabled]=\"!isNext\" (click)=\"onStatNext()\">></button>\n  <button (click)=\"onLast()\">Last</button>  \n</div>\n"
 
 /***/ }),
 
@@ -664,35 +664,35 @@ var StatisticComponent = /** @class */ (function () {
         this.userId = null;
         this.gameId = null;
         this.isGame = false;
-        this.gamesList = new ResponsePaginationStatisticView_1.ResponsePaginationStatisticView;
-        this.fromNumber = { from: 0 };
+        this.newPage = new ResponsePaginationStatisticView_1.ResponsePaginationStatisticView;
+        this.pageNumber = { page: 1, size: 3 };
+        this.isNext = true;
+        this.isPrevious = true;
     }
     StatisticComponent.prototype.ngOnInit = function () {
+        this.checker();
         this.getUserId();
-        this.service.getTest(this.fromNumber);
         this.getStat();
     };
-    StatisticComponent.prototype.onStatPlus = function () {
-        this.fromNumber.from += 3;
+    StatisticComponent.prototype.onFirst = function () {
+        this.pageNumber.page = 1;
         this.getStat();
+        this.checker();
     };
-    StatisticComponent.prototype.getStat = function () {
-        var _this = this;
-        this.service.getTest(this.fromNumber)
-            .subscribe(function (response) {
-            _this.gamesList = response;
-            console.log(_this.gameRes);
-        });
+    StatisticComponent.prototype.onLast = function () {
+        this.pageNumber.page = this.newPage.totalPages;
+        this.getStat();
+        this.checker();
     };
     StatisticComponent.prototype.onGame = function (gameId) {
         var _this = this;
+        console.log(gameId);
         this.isGame = true;
         this.gameReq.gameId = gameId;
         this.gameReq.playerId = this.userId;
         this.service.getGame(this.gameReq)
             .subscribe(function (response) {
             _this.gameRes = response;
-            console.log(_this.gameRes);
         });
     };
     StatisticComponent.prototype.onAllGames = function () {
@@ -701,6 +701,37 @@ var StatisticComponent = /** @class */ (function () {
         this.service.getAllGames(this.allGamesReq)
             .subscribe(function (response) {
             _this.allGamesRes = response;
+        });
+    };
+    StatisticComponent.prototype.checker = function () {
+        if (this.pageNumber.page == this.newPage.totalPages) {
+            this.isNext = false;
+        }
+        if (this.pageNumber.page < this.newPage.totalPages) {
+            this.isNext = true;
+        }
+        if (this.pageNumber.page == 1) {
+            this.isPrevious = false;
+        }
+        if (this.pageNumber.page > 1) {
+            this.isPrevious = true;
+        }
+    };
+    StatisticComponent.prototype.onStatNext = function () {
+        this.pageNumber.page += 1;
+        this.getStat();
+        this.checker();
+    };
+    StatisticComponent.prototype.onStatPrevious = function () {
+        this.pageNumber.page -= 1;
+        this.getStat();
+        this.checker();
+    };
+    StatisticComponent.prototype.getStat = function () {
+        var _this = this;
+        this.service.getPage(this.pageNumber)
+            .subscribe(function (response) {
+            _this.newPage = response;
         });
     };
     StatisticComponent.prototype.getUserId = function () {
@@ -1185,7 +1216,7 @@ var StatisticService = /** @class */ (function () {
     StatisticService.prototype.getGame = function (model) {
         return this.http.post(this.rootUrl + 'api/Statistic/GetGame', model);
     };
-    StatisticService.prototype.getTest = function (model) {
+    StatisticService.prototype.getPage = function (model) {
         return this.http.post(this.rootUrl + 'api/Statistic/Pagination', model);
     };
     StatisticService = __decorate([

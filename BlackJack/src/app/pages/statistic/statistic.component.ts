@@ -6,7 +6,6 @@ import { RequestGetAllGamesStatisticView } from '../../../shared/models/Statisti
 import { ResponseGetAllGamesStatisticView } from '../../../shared/models/Statistic/ResponseGetAllGamesStatisticView';
 import { ResponseGetGameStatisticView } from '../../../shared/models/Statistic/ResponseGetGameStatisticView';
 import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/RequestGetGameStatisticView';
-import { Response } from 'selenium-webdriver/http';
 import { ResponsePaginationStatisticView } from '../../../shared/models/Statistic/ResponsePaginationStatisticView';
 import { RequestPaginationStatisticView } from '../../../shared/models/Statistic/RequestPaginationStatisticView';
 
@@ -24,38 +23,40 @@ export class StatisticComponent implements OnInit {
   userId: string = null;
   gameId: string = null;
   isGame: boolean = false;
-  public gamesList = new ResponsePaginationStatisticView;
-  fromNumber : RequestPaginationStatisticView = { from: 0 };
+  public newPage = new ResponsePaginationStatisticView;
+  pageNumber : RequestPaginationStatisticView = { page: 1, size: 3 };
+  isNext: boolean = true;
+  isPrevious: boolean = true;
+
 
   constructor(private router: Router, private service: StatisticService) { }
 
   ngOnInit() {
+    this.checker();
     this.getUserId();
-    this.service.getTest(this.fromNumber)
     this.getStat()
   }
 
-  onStatPlus(){
-    this.fromNumber.from += 3;
-    this.getStat()
+  onFirst(){
+    this.pageNumber.page = 1;
+    this.getStat();
+    this.checker();
   }
 
-  getStat(){
-    this.service.getTest(this.fromNumber)
-    .subscribe((response) => {
-      this.gamesList = response
-      console.log(this.gameRes);
-    })
+  onLast(){
+    this.pageNumber.page = this.newPage.totalPages;
+    this.getStat();
+    this.checker();
   }
 
   onGame(gameId:string){
+    console.log(gameId);
     this.isGame = true;
     this.gameReq.gameId = gameId;
     this.gameReq.playerId = this.userId;
     this.service.getGame(this.gameReq)
     .subscribe((response) => {
       this.gameRes = response
-      console.log(this.gameRes);
     })
   }
 
@@ -65,6 +66,40 @@ export class StatisticComponent implements OnInit {
     .subscribe((response) => {
       this.allGamesRes = response
     });
+  }
+
+  checker(){
+    if(this.pageNumber.page == this.newPage.totalPages){
+      this.isNext = false;
+    }
+    if(this.pageNumber.page < this.newPage.totalPages){
+      this.isNext = true;
+    }
+    if(this.pageNumber.page == 1){
+      this.isPrevious = false;
+    }
+    if(this.pageNumber.page > 1){
+      this.isPrevious = true;
+    }
+  }
+
+  onStatNext(){
+    this.pageNumber.page += 1;
+    this.getStat();
+    this.checker();
+  }
+
+  onStatPrevious(){
+    this.pageNumber.page -= 1;
+    this.getStat();
+    this.checker();
+  }
+
+  getStat(){
+    this.service.getPage(this.pageNumber)
+    .subscribe((response) => {
+      this.newPage = response
+    })
   }
 
   getUserId() {

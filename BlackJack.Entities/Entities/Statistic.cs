@@ -6,6 +6,5 @@
         public string Winner { get; set; }
         public string Score { get; set; }
         public string GameId { get; set; }
-        //public string Prize { get; set; }
     }
 }

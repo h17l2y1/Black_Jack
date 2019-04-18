@@ -13,11 +13,9 @@ namespace BlackJackDataAccess.Repositories.EF6
 
         }
 
-        public List<Statistic> GetAllGames(int from)
+        public List<Statistic> GetGames(int from, int size)
         {
-
-            return null;
+            throw new System.NotImplementedException();
         }
-
     }
 }

@@ -4,6 +4,7 @@ using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlackJackServices
@@ -21,48 +22,63 @@ namespace BlackJackServices
             _statisticRepository = statisticRepository;
         }
 
-        public async Task<ResponsePaginationStatisticView> GetPagination(int from)
+        public async Task<ResponsePaginationStatisticView> GetPagination(int pageNumber, int pageSize)
         {
-            var games = _statisticRepository.GetAllGames(from);
-            var model = await GamesMapper(games);
+            var page = GetPage(pageNumber, pageSize);
+            var info = GetPageIngo(pageNumber, pageSize);
+            var model = await GetModel(page, info);
             return model;
         }
 
-        //private Test Index(int page = 1)
-        //{
-        //    int pageSize = 3; 
-        //    IEnumerable<Phone> phonesPerPages = phones.Skip((page - 1) * pageSize).Take(pageSize);
+        private List<Statistic> GetPage(int pageNumber, int pageSize)
+        {
+            var page = _statisticRepository.GetGames((pageNumber-1) * pageSize, pageSize);
+            return page;
+        }
 
-        //    var pageInfo = new PageInfo {
-        //        PageNumber = page,
-        //        PageSize = pageSize,
-        //        TotalItems = phones.Count
-        //    };
+        private PageInfo GetPageIngo(int pageNumber, int pageSize)
+        {
+            int totalItem = _statisticRepository.Count();
+            var info = new PageInfo()
+            {
+                PageNumber = pageNumber,
+                ItemsOnPage = pageSize,
+                TotalItems = totalItem,
+                TotalPages = (totalItem / pageSize)
+            };
+            return info;
+        }
 
-        //    var ivm = new IndexViewModel {
-        //        PageInfo = pageInfo,
-        //        Phones = phonesPerPages
-        //    };
-        //    return ivm;
-        //}
+        private async Task<ResponsePaginationStatisticView> GetModel(List<Statistic> page, PageInfo info)
+        {
+            var response = new ResponsePaginationStatisticView
+            {
+                Page = PageMapper(page),
+                PageNumber = info.PageNumber,
+                ItemsOnPage = info.ItemsOnPage,
+                TotalItems = info.TotalItems,
+                TotalPages = info.TotalPages
+            };
+            return response;
+        }
 
-        private async Task<ResponsePaginationStatisticView> GamesMapper(List<Statistic> games)
+        private List<StatisticStatisticView> PageMapper(List<Statistic> page)
         {
             var list = new List<StatisticStatisticView>();
-            foreach (var item in games)
+            foreach (var item in page)
             {
-                var game = new StatisticStatisticView
-                {
-                    GameId = item.GameId,
-                    Score = item.Score,
-                    UserName = item.UserName,
-                    Winner = item.Winner
-                };
-                list.Add(game);
+                var stat = new StatisticStatisticView();
+                stat.GameId = item.GameId;
+                stat.Score = item.Score;
+                stat.UserName = item.UserName;
+                stat.Winner = item.Winner;
+                list.Add(stat);
             }
-            var model = new ResponsePaginationStatisticView(list);
-            return model;
+            return list;
         }
+
+
+        // old
 
         public async Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId)
         {

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
@@ -17,16 +18,73 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
         }
 
+        public int CountMove(string gameId, string playerName)
+        {
+            var sql = $@"
+                        SELECT COUNT(*)
+                        FROM CardMoves
+                        WHERE GameId='{gameId}' and Name='{playerName}'";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var count = connection.QuerySingle<int>(sql);
+                return count;
+            }
+        }
+
+        public async Task AddCardToPlayer(List<CardMove> list)
+        {
+            var sql = $@"
+                        INSERT INTO CardMoves(Id, CreationDate, Move, Role, Name, Value, PlayerId, GameId, CardId) 
+                        VALUES(@Id, @CreationDate, @Move, @Role, @Name, @Value, @PlayerId, @GameId, @CardId)";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    connection.Query(sql, list[i]);
+                }
+            }
+        }
+
+        public async Task<List<CardMove>> GetMovesFromGame(string gameId)
+        {
+            var sql = $@"
+                        SELECT * FROM CardMoves
+                        WHERE GameId='{gameId}'";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var list = connection.Query<CardMove>(sql).ToList();
+                return list;
+            }
+        }
+
+        public async Task<List<CardMove>> BotsCardMoveList(string gameId, string userId)
+        {
+            var sql = $@"
+                        SELECT * FROM CardMoves
+                        WHERE GameId='{gameId}' and PlayerId != '{userId}'";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var list = connection.Query<CardMove>(sql).ToList();
+                return list;
+            }
+        }
+
+
+        // old
+
         public IEnumerable<dynamic> GetAllMovesFromGame(string gameId)
         {
             var sql = $"SELECT Move, Name, CardId FROM CardMoves WHERE GameId = '{ gameId }'";
-            var a = new List<CardMove>();
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
                 var game = connection.Query(sql);
-
                 return game;
             }
         }
+
     }
 }

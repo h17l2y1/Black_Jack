@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
   [Route("api/[controller]/[action]")]
-  //[Authorize]
   [ApiController]
   //[Authorize(AuthenticationSchemes = "Bearer")]
   public class StatisticController : ControllerBase
@@ -36,7 +35,7 @@ namespace BlackJack.Controllers
     [HttpPost]
     public async Task<IActionResult> Pagination([FromBody] RequestPaginationStatisticView model)
     {
-      var data = await _service.GetPagination(model.From);
+      var data = await _service.GetPagination(model.Page, model.Size);
       return Ok(data);
     }
   }

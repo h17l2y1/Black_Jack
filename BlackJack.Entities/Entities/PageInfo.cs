@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace BlackJackViewModels.Statistic
+﻿namespace BlackJackEntities.Entities
 {
-    public class ResponsePaginationStatisticView
+    public class PageInfo
     {
-        public List<StatisticStatisticView> Page { get; set; }
         public int PageNumber { get; set; }
         public int ItemsOnPage { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages { get; set; }
-
     }
 }

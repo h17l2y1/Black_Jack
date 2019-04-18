@@ -5,7 +5,7 @@ namespace BlackJackServices.Services.Interfaces
 {
     public interface IStatisticService
     {
-        Task<ResponsePaginationStatisticView> GetPagination(int from);        
+        Task<ResponsePaginationStatisticView> GetPagination(int page, int size);        
 
         Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId);
 
