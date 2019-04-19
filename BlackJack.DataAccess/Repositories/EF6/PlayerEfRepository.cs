@@ -27,5 +27,13 @@ namespace BlackJackDataAccess.Repositories
                 .SingleOrDefault(t => t.UserName == "Dialer");
             return listBots;
         }
+
+        public async Task<List<Player>> GetAllUsers()
+        {
+            var listBots = _context.Users
+                .Where(t => t.Role == "User")
+                .ToList();
+            return listBots;
+        }
     }
 }

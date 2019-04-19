@@ -1,6 +1,6 @@
-
-<button (click)="onBack()">Back to Game</button>
 <br><br><br>
+  <button class="btn btn-primary" (click)="onBack()">Back</button>
+<br>
 
 <!-- Game -->
 <div class="gameStat" *ngIf="isGame">
@@ -40,22 +40,12 @@
   </div>
 </div>
 
-<!-- <div (click)="onAllGames()">All Games</div> -->
-<!-- 
-<ol>
-  <div class="games" (click)="onGame(item.gameId)">
-      <p >{{item.gameId}}</p>
-  </div>
-</ol> -->
-
-
-
+<!-- select -->
 <select [(ngModel)]="pageNumber.size" (click)="getStat()">
   <option>3</option>
   <option>5</option>
   <option>10</option>
 </select>
-
 
 <!-- table -->
 <table class="table">  
@@ -77,14 +67,15 @@
   </tbody>
 </table>
 
-<div class="manage">
-  <button (click)="onFirst()">First</button>
-  <button [disabled]="!isPrevious" (click)="onStatPrevious()"><</button>
-  
-  <button [disabled]="!isPrevious" (click)="onStatPrevious()">{{newPage.pageNumber -1}}</button>
-  <button>{{newPage.pageNumber}}</button>
-  <button [disabled]="!isNext" (click)="onStatNext()">{{newPage.pageNumber +1}}</button>
-  
-  <button [disabled]="!isNext" (click)="onStatNext()">></button>
-  <button (click)="onLast()">Last</button>  
-</div>
+<!-- manage -->
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group mr-2" role="group" aria-label="First group">
+      <button (click)="onFirst()" class="btn btn-secondary">First</button>
+      <button [disabled]="!isPrevious" (click)="onStatPrevious()"  class="btn btn-secondary"><</button>
+      <button [disabled]="!isPrevious" (click)="onStatPrevious()"  class="btn btn-secondary">{{newPage.pageNumber -1}}</button>
+      <button class="btn btn-secondary">{{newPage.pageNumber}}</button>
+      <button [disabled]="!isNext" (click)="onStatNext()"  class="btn btn-secondary">{{newPage.pageNumber +1}}</button>
+      <button [disabled]="!isNext" (click)="onStatNext()" class="btn btn-secondary">></button>
+      <button  (click)="onLast()"  class="btn btn-secondary">Last</button>
+    </div>
+  </div>

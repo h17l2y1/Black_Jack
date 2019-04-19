@@ -1,4 +1,5 @@
-﻿using BlackJackEntities.Entities;
+﻿using BlackJackDataAccess.Repositories.Interface;
+using BlackJackEntities.Entities;
 using BlackJackServices.Services.Auth;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
@@ -22,12 +23,16 @@ namespace BlackJackServices.Services
         private readonly UserManager<Player> _userManager;
         private readonly SignInManager<Player> _signInManager;
         private readonly AuthOptions _authOptions;
+        private readonly IPlayerRepository _playerRepository;
 
-        public AccountService(IOptions<AuthOptions> authOptions, UserManager<Player> userManager, SignInManager<Player> signInManager)
+
+        public AccountService(IOptions<AuthOptions> authOptions, UserManager<Player> userManager,
+                                SignInManager<Player> signInManager, IPlayerRepository playerRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authOptions = authOptions.Value;
+            _playerRepository = playerRepository;
         }
 
         public async Task<ResponseGetAllAccountView> GetAllAsync()
@@ -45,11 +50,11 @@ namespace BlackJackServices.Services
             return response;
         }
 
-        public async Task<ResponseSignUpAccountView> AddAsync(RequestSignUpAccountView model)
+        public async Task<ResponseSignUpAccountView> AddAsync(string userName)
         {
             Player user = new Player
             {
-                UserName = model.UserName,
+                UserName = userName,
                 Points = 100,
                 Role = "User"
             };
@@ -66,9 +71,9 @@ namespace BlackJackServices.Services
             return response;
         }
 
-        private ClaimsIdentity GetIdentity(RequestSignUpAccountView model)
+        private ClaimsIdentity GetIdentity(string userName)
         {
-            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            Player user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
             if (user != null)
             {
                 var claimsList = new List<Claim>
@@ -88,14 +93,21 @@ namespace BlackJackServices.Services
             return null;
         }
 
-        public JwtSecurityToken GetToken(RequestSignUpAccountView model)
+        public async Task<JwtSecurityToken> GetToken(string userName)
         {
-            var identity = GetIdentity(model);
+            var identity = GetIdentity(userName);
 
             if (identity == null)
             {
-                return null;
+                await AddAsync(userName);
+                var newIdentity = GetIdentity(userName);
+                return await GetNewToken(newIdentity);
             }
+            return await GetNewToken(identity);
+        }
+
+        private async Task<JwtSecurityToken> GetNewToken(ClaimsIdentity identity)
+        {
             var key = Encoding.ASCII.GetBytes(_authOptions.Key);
             var jwt = new JwtSecurityToken(
                 issuer: _authOptions.Issuer,
@@ -142,6 +154,19 @@ namespace BlackJackServices.Services
             var response = Mapper(user, new ResponseRemoveAccountView());
             return response;
         }
+
+        public async Task<ResponseGetUsersAccount> GetUsers()
+        {
+            var users = await _playerRepository.GetAllUsers();
+            var list = new List<string>();
+            foreach (var item in users)
+            {
+                list.Add(item.UserName);
+            }
+            var response = new ResponseGetUsersAccount(list);
+            return response;
+        }
+
 
     }
 }

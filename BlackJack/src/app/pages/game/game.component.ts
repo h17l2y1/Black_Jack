@@ -25,7 +25,7 @@ export class GameComponent implements OnInit {
 
   gameControl: FormGroup;
   isNewGame: boolean = false;
-  stop: boolean = false;
+  isStop: boolean = false;
   userModel = new ResponseSignUpAccountView;
   startGameModel = new RequestStartGameView;
   gameModel = new ResponseStartGameView;
@@ -34,7 +34,6 @@ export class GameComponent implements OnInit {
   stopModel = new RequestStopGameView;
   stopGameModel = new ResponseStopGameView;
   winnerModel = new ResponseWinnerGameView;
-
   constructor(private router: Router, private accountService: AccountService,
   private gameService: GameService) { }
 
@@ -42,12 +41,12 @@ export class GameComponent implements OnInit {
     this.getUserData();
   }
 
-  onStatistic(){
-    this.router.navigateByUrl('statistic');
+  onBack(){
+    this.router.navigateByUrl('choose');
   }
 
   onStopGame(){
-    this.stop = true;
+    this.isStop = true;
     this.stopModel.userId = this.userModel.userId;
     this.stopModel.gameId = this.gameModel.gameId;
     this.gameService.stop(this.stopModel)    
@@ -57,8 +56,6 @@ export class GameComponent implements OnInit {
       this.gameModel.cardsleft = this.stopGameModel.cardsleft
       this.gameModel.user = this.stopGameModel.user;
       this.winnerModel = this.stopGameModel.winner;
-      console.log(this.stopGameModel);
-
     });
   }
 
@@ -70,10 +67,14 @@ export class GameComponent implements OnInit {
       this.cardModel = response
       this.gameModel.user.cards.push(this.cardModel);
       this.gameModel.user.score += this.cardModel.value;
+      if (this.gameModel.user.score > 21){
+        this.onStopGame();
+      }
     });
   }
 
   onStart() {
+    this.isStop = false;
     this.startGameModel.userId = this.userModel.userId;
     this.gameService.start(this.startGameModel)
       .subscribe((response) => {

@@ -1,6 +1,22 @@
-<br><br><br>
-<div class="login">
-  <input [(ngModel)]="signUpmodel.userName"> UserName <br> 
-  <button (click)="onLogin()">Login</button>
-</div>
+<br><br><br><br><br><br>
+
+
+<form [formGroup]="myFirstReactiveForm">
+    <div class="input-group">
+        <input class="form-control" formControlName="Name" placeholder="Name" required>
+        <div class="input-group-append">
+          <button (click)="onLogin()" type="button" class="btn btn-outline-secondary">Action</button>
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu"  >
+            <div *ngFor="let name of namesModel.userNames">
+              <div (click)="onTempName(name)" class="dropdown-item">{{name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
+
+
 

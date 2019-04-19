@@ -1,0 +1,33 @@
+<!-- <p>
+  choose works!
+</p>
+
+
+<div class="userData" *ngIf="userModel"> User Data 
+  <div class="userLine"> Id: {{userModel.userId}} </div>
+  <div class="userLine"> Login: {{userModel.userName}}</div>
+  <div class="userLine"> Points: {{userModel.points}}</div>
+  <div class="userLine"> Role: {{userModel.role}}</div>
+  <button (click)="onLogout()">Logout</button>
+  <button class="btStop" (click)="onGame()">Game</button>
+  <button class="btStop" (click)="onStatistic()">Statistic</button>
+</div><br/><br/><br/> -->
+
+<br><br><br>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">User Data</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Supa dupa player</h6>
+      <p class="card-text"> Id: {{userModel.userId}}</p>
+      <p class="card-text">Login: {{userModel.userName}} </p>
+      <p class="card-text">Points: {{userModel.points}}</p>
+      <p class="card-text">Role: {{userModel.role}}</p>
+      <div class="btn-group" role="group" aria-label="Basic example">
+          <button class="btn btn-secondary"(click)="onLogout()">Logout</button>
+          <button class="btn btn-secondary"(click)="onGame()">Game</button>
+          <button class="btn btn-secondary"(click)="onStatistic()">Statistic</button>
+        </div>
+    </div>
+</div>
+

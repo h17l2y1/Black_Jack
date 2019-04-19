@@ -10,6 +10,6 @@ namespace BlackJackDataAccess.Repositories.Interface
 
         Task<Player> FindDialer();
 
-
+        Task<List<Player>> GetAllUsers();
     }
 }

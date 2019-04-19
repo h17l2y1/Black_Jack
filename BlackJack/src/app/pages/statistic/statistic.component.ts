@@ -32,21 +32,22 @@ export class StatisticComponent implements OnInit {
   constructor(private router: Router, private service: StatisticService) { }
 
   ngOnInit() {
-    this.checker();
     this.getUserId();
     this.getStat()
+  }
+
+  onBack(){
+    this.router.navigateByUrl('choose');
   }
 
   onFirst(){
     this.pageNumber.page = 1;
     this.getStat();
-    this.checker();
   }
 
   onLast(){
     this.pageNumber.page = this.newPage.totalPages;
     this.getStat();
-    this.checker();
   }
 
   onGame(gameId:string){
@@ -86,16 +87,15 @@ export class StatisticComponent implements OnInit {
   onStatNext(){
     this.pageNumber.page += 1;
     this.getStat();
-    this.checker();
   }
 
   onStatPrevious(){
     this.pageNumber.page -= 1;
     this.getStat();
-    this.checker();
   }
 
   getStat(){
+    this.checker();
     this.service.getPage(this.pageNumber)
     .subscribe((response) => {
       this.newPage = response
@@ -106,10 +106,6 @@ export class StatisticComponent implements OnInit {
     var token = localStorage.getItem('token');
     var tokenClaims = jwt_decode(token, "");
     this.userId = tokenClaims.UserId;
-  }
-
-  onBack(){
-    this.router.navigateByUrl('game');
   }
 
 }

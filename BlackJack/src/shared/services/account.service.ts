@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestSignUpAccountView } from '../models/Account/RequestSignUpAccountView';
 import { ResponseSignUpAccountView } from '../models/Account/ResponseSignUpAccountView';
+import { ResponseGetUsersAccountView } from '../models/Account/ResponseGetUsersAccountView';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class AccountService {
 
   public get(userId : string){
     return this.http.get<ResponseSignUpAccountView>(this.rootUrl + 'api/Account/GetById/' + userId);
+  }
+
+  public getNames(){
+    return this.http.get<ResponseGetUsersAccountView>(this.rootUrl + 'api/Account/Getusers/');
   }
   
 }

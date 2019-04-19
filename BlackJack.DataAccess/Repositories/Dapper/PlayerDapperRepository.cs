@@ -40,6 +40,17 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
+        public async Task<List<Player>> GetAllUsers()
+        {
+            var sql = $@"SELECT * FROM AspNetUsers WHERE Role='User'";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var users = connection.Query<Player>(sql).ToList();
+                return users;
+            }
+        }
+
 
     }
 }

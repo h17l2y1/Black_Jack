@@ -1,13 +1,4 @@
 
-<div class="userData" *ngIf="userModel"> User Data 
-  <div class="userLine"> Id: {{userModel.userId}} </div>
-  <div class="userLine"> Login: {{userModel.userName}}</div>
-  <div class="userLine"> Points: {{userModel.points}}</div>
-  <div class="userLine"> Role: {{userModel.role}}</div>
-  <button (click)="onLogout()">Logout</button>
-  <button class="btStop" (click)="onStatistic()">Statistic</button>
-</div><br/><br/><br/>
-
 Start game
 <div class="selector">
   <div class="userLine">
@@ -20,10 +11,11 @@ Start game
       <option>5</option>
     </select>
   </div> 
-  <button (click)="onStart()">Start</button> 
+  <button class="btn btn-success" (click)="onStart()">Start</button> 
+  <button class="btn btn-primary" (click)="onBack()">Back</button>
 </div><br/><br/><br/>
 
-<div class="game" *ngIf="stop">  
+<div class="game" *ngIf="isStop">  
     <div class="player" *ngFor="let item of winnerModel">
       Name: {{item.name}}
       Value: {{item.value}}
@@ -44,8 +36,8 @@ Start game
       <div class="playerProp">
         <div class="">Score: {{gameModel.user.score}}</div>
         <div class="gameButtons">
-          <button class="btStart" (click)="onAddCard()">Add Card</button> 
-          <button class="btStop" (click)="onStopGame()">Stop</button> 
+          <button class="btStart" [disabled]="isStop" (click)="onAddCard()">Add Card</button> 
+          <button class="btStop" [disabled]="isStop" (click)="onStopGame()">Stop</button> 
        </div>
       </div>
   </div>
