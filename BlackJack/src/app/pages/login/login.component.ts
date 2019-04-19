@@ -49,9 +49,10 @@ export class LoginComponent implements OnInit {
 
   onLogin(){
     if (this.myFirstReactiveForm.value.Name == null) {
-      this.exeption();
+      this.isLoginNull = true;
     }
     if (this.myFirstReactiveForm.value.Name != null) {
+      this.isLoginNull = false;
       this.logining();
     }
   }
@@ -64,11 +65,6 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('choose');
       }
     );
-  }
-
-  exeption(){
-    this.isLoginNull = true;
-    console.log("Login is NULL");
   }
 }
 

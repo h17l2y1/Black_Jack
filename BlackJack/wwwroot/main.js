@@ -529,7 +529,7 @@ exports.GameComponent = GameComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<br><br><br><br><br><br>\n\n\n<form [formGroup]=\"myFirstReactiveForm\">\n    <div class=\"input-group\">\n        <input class=\"form-control\" formControlName=\"Name\" placeholder=\"Name\" required>\n        <div class=\"input-group-append\">\n          <button (click)=\"onLogin()\" type=\"button\" class=\"btn btn-outline-secondary\">Action</button>\n          <button type=\"button\" class=\"btn btn-outline-secondary dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <span class=\"sr-only\">Toggle Dropdown</span>\n          </button>\n          <div class=\"dropdown-menu\"  >\n            <div *ngFor=\"let name of namesModel.userNames\">\n              <div (click)=\"onTempName(name)\" class=\"dropdown-item\">{{name}}</div>\n          </div>\n        </div>\n      </div>\n    </div>\n</form>\n\n\n\n"
+module.exports = "<br><br><br><br><br><br>\n\n\n<form [formGroup]=\"myFirstReactiveForm\">\n    <div class=\"input-group\">\n\n\n        <input *ngIf=\"!isLoginNull\"class=\"form-control\" formControlName=\"Name\" placeholder=\"Name\" required>\n        <input *ngIf=\"isLoginNull\" class=\"form-control\" formControlName=\"Name\" placeholder=\"Name can't be NULL\">\n\n\n        <div class=\"input-group-append\">\n          <button (click)=\"onLogin()\" type=\"button\" class=\"btn btn-outline-secondary\">Action</button>\n          <button type=\"button\" class=\"btn btn-outline-secondary dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <span class=\"sr-only\">Toggle Dropdown</span>\n          </button>\n          <div class=\"dropdown-menu\"  >\n            <div *ngFor=\"let name of namesModel.userNames\">\n              <div (click)=\"onTempName(name)\" class=\"dropdown-item\">{{name}}</div>\n          </div>\n        </div>\n      </div>\n    </div>\n</form>\n\n\n\n"
 
 /***/ }),
 
@@ -566,6 +566,7 @@ var LoginComponent = /** @class */ (function () {
         this.signUpmodel = new RequestSignUpAccountView_1.RequestSignUpAccountView;
         this.namesModel = new ResponseGetUsersAccountView_1.ResponseGetUsersAccountView;
         this.temp = null;
+        this.isLoginNull = false;
     }
     LoginComponent.prototype.ngOnInit = function () {
         // if (localStorage.getItem('choose')!= null) {
@@ -593,9 +594,10 @@ var LoginComponent = /** @class */ (function () {
     };
     LoginComponent.prototype.onLogin = function () {
         if (this.myFirstReactiveForm.value.Name == null) {
-            this.exeption();
+            this.isLoginNull = true;
         }
         if (this.myFirstReactiveForm.value.Name != null) {
+            this.isLoginNull = false;
             this.logining();
         }
     };
@@ -606,9 +608,6 @@ var LoginComponent = /** @class */ (function () {
             localStorage.setItem('token', res.token);
             _this.router.navigateByUrl('choose');
         });
-    };
-    LoginComponent.prototype.exeption = function () {
-        console.log("Login is NULL");
     };
     LoginComponent = __decorate([
         core_1.Component({

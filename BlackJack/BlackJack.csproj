@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>8f1fdffb-68a0-43cd-9a53-bfe771436eb8</UserSecretsId>
+    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+
+    <TypeScriptCompilerBlocked>true</TypeScriptCompilerBlocked>
+    <PostBuildEvent>ng build --aot</PostBuildEvent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="%2a%2a\**" />
+    <Compile Remove="node_modules1\**" />
+    <Content Remove="%2a%2a\**" />
+    <Content Remove="node_modules1\**" />
+    <EmbeddedResource Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="node_modules1\**" />
+    <None Remove="%2a%2a\**" />
+    <None Remove="node_modules1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngularJS.Core" Version="1.7.7" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlackJack.DataAccess\BlackJackDataAccess.csproj" />
+    <ProjectReference Include="..\BlackJack.Services\BlackJackServices.csproj" />
+    <ProjectReference Include="..\BlackJack.ViewModels\BlackJackViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
