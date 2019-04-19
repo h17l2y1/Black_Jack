@@ -1,14 +1,10 @@
+
 <br><br><br><br><br><br>
 
-
+<div *ngIf="isLoginNull" class="alert alert-danger" role="alert">Name can't be NULL</div>
 <form [formGroup]="myFirstReactiveForm">
     <div class="input-group">
-
-
-        <input *ngIf="!isLoginNull"class="form-control" formControlName="Name" placeholder="Name" required>
-        <input *ngIf="isLoginNull" class="form-control" formControlName="Name" placeholder="Name can't be NULL" border-inline-color: #ff0000;>
-
-
+        <input class="form-control" formControlName="Name" placeholder="Name" required>
         <div class="input-group-append">
           <button (click)="onLogin()" type="button" class="btn btn-outline-secondary">Action</button>
           <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
