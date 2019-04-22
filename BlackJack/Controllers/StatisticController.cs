@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
   [Route("api/[controller]/[action]")]
-  [ApiController]
-  //[Authorize(AuthenticationSchemes = "Bearer")]
+  //[ApiController]
+  [Authorize(AuthenticationSchemes = "Bearer")]
   public class StatisticController : ControllerBase
   {
     private readonly IStatisticService _service;
@@ -16,13 +16,6 @@ namespace BlackJack.Controllers
     public StatisticController(IStatisticService service)
     {
       _service = service;
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> GetAllGames([FromBody] RequestGetAllGamesStatisticView model)
-    {
-      var allGames = await _service.GetAllGames(model.PlayerId);
-      return Ok(allGames);
     }
 
     [HttpPost]

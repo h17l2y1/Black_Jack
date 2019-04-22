@@ -1,18 +1,3 @@
-<!-- <p>
-  choose works!
-</p>
-
-
-<div class="userData" *ngIf="userModel"> User Data 
-  <div class="userLine"> Id: {{userModel.userId}} </div>
-  <div class="userLine"> Login: {{userModel.userName}}</div>
-  <div class="userLine"> Points: {{userModel.points}}</div>
-  <div class="userLine"> Role: {{userModel.role}}</div>
-  <button (click)="onLogout()">Logout</button>
-  <button class="btStop" (click)="onGame()">Game</button>
-  <button class="btStop" (click)="onStatistic()">Statistic</button>
-</div><br/><br/><br/> -->
-
 <br><br><br>
 
 <div class="card" style="width: 18rem;">
@@ -24,9 +9,9 @@
       <p class="card-text">Points: {{userModel.points}}</p>
       <p class="card-text">Role: {{userModel.role}}</p>
       <div class="btn-group" role="group" aria-label="Basic example">
-          <button class="btn btn-secondary"(click)="onLogout()">Logout</button>
-          <button class="btn btn-secondary"(click)="onGame()">Game</button>
-          <button class="btn btn-secondary"(click)="onStatistic()">Statistic</button>
+          <a class="btn btn-secondary" routerLink="/login" (click)="onLogout()">Logout</a>
+          <a class="btn btn-secondary" routerLink="/game">Game</a>
+          <a class="btn btn-secondary" routerLink="/statistic">Statistic</a>
         </div>
     </div>
 </div>

@@ -41,10 +41,6 @@ export class GameComponent implements OnInit {
     this.getUserData();
   }
 
-  onBack(){
-    this.router.navigateByUrl('choose');
-  }
-
   onStopGame(){
     this.isStop = true;
     this.stopModel.userId = this.userModel.userId;
@@ -96,11 +92,6 @@ export class GameComponent implements OnInit {
     var token = localStorage.getItem('token');
     var tokenClaims = jwt_decode(token, "");
     return tokenClaims.UserId;
-  }
-
-  onLogout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['login']);
   }
 
 }

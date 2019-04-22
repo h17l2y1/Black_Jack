@@ -6,7 +6,5 @@ namespace BlackJackDataAccess.Repositories.Interface
 {
     public interface ICardRepository : IMainGameRepository<Card>
     {
-        Task<List<Card>> GetCardFromGame(List<CardMove> list, string playerId);
-
     }
 }

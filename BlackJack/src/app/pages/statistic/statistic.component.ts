@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StatisticService } from '../../../shared/services/statistic.service';
 import { Router } from '@angular/router';
 import * as jwt_decode from "jwt-decode";
-import { RequestGetAllGamesStatisticView } from '../../../shared/models/Statistic/RequestGetAllGamesStatisticView';
-import { ResponseGetAllGamesStatisticView } from '../../../shared/models/Statistic/ResponseGetAllGamesStatisticView';
 import { ResponseGetGameStatisticView } from '../../../shared/models/Statistic/ResponseGetGameStatisticView';
 import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/RequestGetGameStatisticView';
 import { ResponsePaginationStatisticView } from '../../../shared/models/Statistic/ResponsePaginationStatisticView';
@@ -16,8 +14,6 @@ import { RequestPaginationStatisticView } from '../../../shared/models/Statistic
 })
 export class StatisticComponent implements OnInit {
 
-  allGamesReq = new RequestGetAllGamesStatisticView;
-  public allGamesRes = new ResponseGetAllGamesStatisticView;
   gameReq = new RequestGetGameStatisticView;
   gameRes = new ResponseGetGameStatisticView; 
   userId: string = null;
@@ -59,14 +55,6 @@ export class StatisticComponent implements OnInit {
     .subscribe((response) => {
       this.gameRes = response
     })
-  }
-
-  onAllGames(){
-    this.allGamesReq.playerId = this.userId;
-    this.service.getAllGames(this.allGamesReq)
-    .subscribe((response) => {
-      this.allGamesRes = response
-    });
   }
 
   checker(){

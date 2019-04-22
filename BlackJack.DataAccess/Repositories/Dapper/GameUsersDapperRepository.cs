@@ -65,40 +65,30 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
-        public async Task UpdateWinner(string playerId, string gameId)
+        public async Task<GameUsers> GetWinner(string playerId, string gameId)
         {
             var sql = $@"
-                        UPDATE GameUsers 
-                        SET Winner = '1'
+                        SELECT * 
+                        FROM GameUsers
                         WHERE GameId = '{gameId}' and UserId = '{playerId}'";
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
+                var winner = connection.QuerySingle<GameUsers>(sql);
+                return winner;
+            }
+        }
+
+        public async Task UpdateWinner(GameUsers player)
+        {
+            var sql = $@"
+                        UPDATE GameUsers 
+                        SET Winner = '1'
+                        WHERE GameId = '{player.GameId}' and UserId = '{player.UserId}'";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
                 connection.Query(sql);
-            }
-        }
-
-
-        // old
-
-        public IEnumerable<dynamic> GetAllGamesFromPlayer(string userId)
-        {
-            var sql = $"SELECT GameId FROM GameUsers WHERE UserId = '{ userId }'";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.Query(sql);
-                return order;
-            }
-        }
-
-        public IEnumerable<dynamic> GetAllPlayersFromGame(string gameId)
-        {
-            var sql = $"SELECT UserId, Winner FROM GameUsers WHERE GameId = '{ gameId }'";
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.Query(sql);
-                return order;
             }
         }
 

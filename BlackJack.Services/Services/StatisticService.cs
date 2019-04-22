@@ -4,7 +4,6 @@ using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlackJackServices
@@ -32,7 +31,7 @@ namespace BlackJackServices
 
         private List<Statistic> GetPage(int pageNumber, int pageSize)
         {
-            var page = _statisticRepository.GetGames((pageNumber-1) * pageSize, pageSize);
+            var page = _statisticRepository.GetGames((pageNumber - 1) * pageSize, pageSize);
             return page;
         }
 
@@ -75,16 +74,6 @@ namespace BlackJackServices
                 list.Add(stat);
             }
             return list;
-        }
-
-
-        // old
-
-        public async Task<ResponseGetAllGamesStatisticView> GetAllGames(string playerId)
-        {
-            var games = _gameUsersRepository.GetAllGamesFromPlayer(playerId);
-            var response = new ResponseGetAllGamesStatisticView(games);
-            return response;
         }
 
         public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId)

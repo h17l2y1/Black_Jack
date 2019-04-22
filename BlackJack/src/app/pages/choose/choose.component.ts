@@ -21,14 +21,6 @@ export class ChooseComponent implements OnInit {
     this.getUserData();
   }
 
-  onGame(){
-    this.router.navigateByUrl('game');
-  }
-
-  onStatistic(){
-    this.router.navigateByUrl('statistic');
-  }
-
   getUserData() {
     var userId = this.getUserId()
     this.accountService.get(userId)
@@ -45,6 +37,6 @@ export class ChooseComponent implements OnInit {
 
   onLogout() {
     localStorage.removeItem('token');
-    this.router.navigate(['login']);
+    // this.router.navigate(['login']);
   }
 }

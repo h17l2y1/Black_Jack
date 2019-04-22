@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
   constructor(private service: AccountService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
-    // if (localStorage.getItem('choose')!= null) {
-    //   this.router.navigateByUrl('game')
-    // }
+    if (localStorage.getItem('token')!= null) {
+      this.router.navigateByUrl('choose')
+    }
     this.initForm();
     this.getNames();
   }
@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
     this.service.getNames()
     .subscribe((response) => {
       this.namesModel = response
-      console.log(this.namesModel);
     });
   }
 

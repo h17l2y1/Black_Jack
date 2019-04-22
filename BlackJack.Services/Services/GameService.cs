@@ -77,8 +77,6 @@ namespace BlackJackServices.Services
             return stopModel;
         }
 
-        //
-
         private async Task Start(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
@@ -196,7 +194,11 @@ namespace BlackJackServices.Services
 
         private Card GetCard(string gameId)
         {
-            var a = _cache.GetFromCache<Deck>(gameId) ?? _deck;
+            var a = _cache.GetFromCache<Deck>(gameId);
+
+            var tempDeck = _cache.GetFromCache<Deck>(gameId) ?? _deck;
+            _deck = tempDeck;
+
             Card card = _deck.GetCard();
             SaveToCache(gameId, _deck);
 
@@ -225,11 +227,13 @@ namespace BlackJackServices.Services
 
             foreach (var winner in winners)
             {
-                _gameUsersRepository.UpdateWinner(winner.PlayerId, gameId);
+                var player = await _gameUsersRepository.GetWinner(winner.PlayerId, gameId);
+                player.Winner = true;
+                await _gameUsersRepository.UpdateWinner(player);
             }
-
             return winnersList;
         }
+
 
         private async Task AddPlayersToGame(List<Player> playersId, string gameId)
         {

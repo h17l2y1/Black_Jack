@@ -20,9 +20,6 @@ namespace BlackJackDataAccess.Repositories
 
         public async Task<List<string>> GetBotsIdList(string userId, string gameId)
         {
-            var list2 = _context.GameUsers.Where(t => t.GameId == gameId);
-
-
             var list = _context.GameUsers
                .Where(t => t.GameId == gameId && t.UserId != userId)
                .Select(x => x.UserId)
@@ -30,66 +27,16 @@ namespace BlackJackDataAccess.Repositories
             return list;
         }
 
-        public async Task UpdateWinner(string playerId, string gameId)
+        public async Task<GameUsers> GetWinner(string playerId, string gameId)
         {
-            var player = _context.GameUsers.Single(t => t.UserId == playerId && t.GameId == gameId);
-            player.Winner = true;
+            var winner = _context.GameUsers.Single(t => t.UserId == playerId && t.GameId == gameId);
+            return winner;
+        }
 
+        public async Task UpdateWinner(GameUsers player)
+        {
             _context.GameUsers.Update(player);
             _context.SaveChanges();
-        }
-
-
-        // need refactor
-
-        public IEnumerable<dynamic> GetAllGamesFromPlayer(string userId)
-        {
-            var response = new List<dynamic>();
-
-            var list = _context.Set<GameUsers>()
-                .Where(y => y.UserId == userId)
-                .Select(x => new
-                {
-                    x.GameId
-                })
-                .ToList();
-
-            foreach (var item in list)
-            {
-                response.Add(item);
-            }
-            response.AsEnumerable();
-
-            return response;
-        }
-
-        public IEnumerable<dynamic> GetAllPlayersFromGame(string gameId)
-        {
-            var response = new List<dynamic>();
-
-            var list = _context.Set<GameUsers>()
-                .Where(y => y.GameId == gameId)
-                .Select(x => new
-                {
-                    x.UserId
-                })
-                .ToList();
-
-            foreach (var item in list)
-            {
-                response.Add(item);
-            }
-            response.AsEnumerable();
-
-            return response;
-        }
-
-
-        // need do mb
-
-        public Task<List<CardMove>> GetAllMovesFromGame(string gameId)
-        {
-            throw new System.NotImplementedException();
         }
 
     }
