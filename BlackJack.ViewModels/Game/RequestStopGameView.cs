@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlackJackViewModels.Requests
 {
-    public class RequestStopGameView
-    {
-        public string UserId { get; set; }
-        public string GameId { get; set; }
-    }
+	public class RequestStopGameView
+	{
+		[Required]
+		public string UserId { get; set; }
+		[Required]
+		public string GameId { get; set; }
+	}
 }

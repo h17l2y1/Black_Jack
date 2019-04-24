@@ -58,7 +58,7 @@ namespace BlackJackServices.Services
             int move = _cardMoveRepository.CountMove(gameId, user.UserName);
 			if (move == 0)
 			{
-				throw new MoveNotFoundException("Game moves empty, game not registred");
+				throw new MoveNotFoundException();
 			}
 			Card card = await AddCard(move, gameId, player);
 			ResponseCardGameView response = CardMapper(card);
@@ -143,10 +143,10 @@ namespace BlackJackServices.Services
         private async Task<Card> AddCard(int moveInt, string gameId, List<Player> playersList)
         {
             var listCardMoves = new List<CardMove>();
-            var card = new Card();
+            var card1 = new Card();
             foreach (var player in playersList)
             {
-                card = GetCard(gameId);
+                Card card = GetCard(gameId);
                 var move = new CardMove
                 {
                     GameId = gameId,
@@ -158,16 +158,17 @@ namespace BlackJackServices.Services
                     Move = moveInt
                 };
                 listCardMoves.Add(move);
+				card1 = card;
             }
             await _cardMoveRepository.AddCardToPlayer(listCardMoves);
-            return card;
+            return card1;
         }
 
 		private Card GetCard(string gameId)
 		{
-			var a = _cache.GetFromCache<Deck>(gameId);
+			var a = _cache.GetFromCache(gameId);
 
-			var tempDeck = _cache.GetFromCache<Deck>(gameId) ?? _deck;
+			var tempDeck = _cache.GetFromCache(gameId) ?? _deck;
 			_deck = tempDeck;
 
 			Card card = _deck.GetCard();
@@ -186,7 +187,7 @@ namespace BlackJackServices.Services
 			List<CardMove> botsCardMoveList = await _cardMoveRepository.BotsCardMoveList(gameId, userId);
 			if (botsCardMoveList == null)
 			{
-				throw new NotFoundException("Bots moves not Found");
+				throw new NotFoundException("AddOtherCardToBots()");
 			}
 
 			var playersCount = botsCardMoveList
@@ -228,7 +229,7 @@ namespace BlackJackServices.Services
             var botsIdList = await _gameUsersRepository.GetBotsIdList(userId, gameId);
 			if (botsIdList == null)
 			{
-				throw new NotFoundException("Bots not Found");
+				throw new NotFoundException();
 			}
 
 			// bots from game
@@ -244,7 +245,7 @@ namespace BlackJackServices.Services
 			var cardMoveList = await _cardMoveRepository.GetMovesFromGame(gameId);
 			if (cardMoveList == null)
 			{
-				throw new NotFoundException("Moves not Found");
+				throw new MoveNotFoundException();
 			}
 			var playersCount = cardMoveList
 				.GroupBy(x => x.PlayerId)
@@ -268,7 +269,7 @@ namespace BlackJackServices.Services
 				var player = await _gameUsersRepository.GetWinner(winner.PlayerId, gameId);
 				if (player == null)
 				{
-					throw new NotFoundException("Player not Found");
+					throw new GameUserNotFoundException();
 				}
 				player.Winner = true;
 				await _gameUsersRepository.UpdateWinner(player);

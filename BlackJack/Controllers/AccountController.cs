@@ -1,3 +1,4 @@
+using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,13 @@ namespace BlackJack.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var player = await _service.GetById(id);
-            return Ok(player);
+            if (ModelState.IsValid)
+            {
+                var player = await _service.GetById(id);
+                return Ok(player);
+            }
+            throw new ModelNotValidException("Id error");
+
         }
 
         [HttpGet]
@@ -33,17 +39,23 @@ namespace BlackJack.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
         {
-            var token = await _service.Logining(model.UserName);
-            return Ok(new { token });
+            if (ModelState.IsValid)
+            {
+                var token = await _service.Logining(model.UserName);
+                return Ok(new { token });
+            }
+            throw new ModelNotValidException("RequestSignUpAccountView");
         }
-
-
-        // for debug
+        
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
         {
-            var player = await _service.SignUp(model.UserName);
-            return Ok(player);
+            if (ModelState.IsValid)
+            {
+                var player = await _service.SignUp(model.UserName);
+                return Ok(player);
+            }
+            throw new ModelNotValidException("RequestSignUpAccountView");
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace BlackJackViewModels.Statistic
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BlackJackViewModels.Statistic
 {
     public class RequestGetGameStatisticView
     {
-        public string GameId { get; set; }
-        public string PlayerId { get; set; }
+		[Required]
+		public string GameId { get; set; }
+		[Required]
+		public string PlayerId { get; set; }
     }
 }

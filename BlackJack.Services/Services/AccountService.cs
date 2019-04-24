@@ -65,7 +65,7 @@ namespace BlackJackServices.Services
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
-				throw new NotFoundException("User not Found");
+				throw new NotFoundException();
 			}
 			var response = Mapper(user, new ResponseGetAccountView());
 			return response;

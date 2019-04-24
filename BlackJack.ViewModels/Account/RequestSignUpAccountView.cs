@@ -6,6 +6,7 @@ namespace BlackJackViewModels
     {
         [Required]
         [Display(Name = "Name")]
-        public string UserName { get; set; }
+		[MaxLength(10)]
+		public string UserName { get; set; }
     }
 }
