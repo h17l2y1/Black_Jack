@@ -1,5 +1,6 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
@@ -21,24 +22,46 @@ namespace BlackJackServices
             _statisticRepository = statisticRepository;
         }
 
-        public async Task<ResponsePaginationStatisticView> GetPagination(int pageNumber, int pageSize)
+		public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId)
+		{
+			var stopModel = _gameService.Stop(playerId, gameId);
+
+			var gameModel = new ResponseGetGameStatisticView();
+			gameModel.Cardsleft = stopModel.Result.Cardsleft;
+			gameModel.GameId = stopModel.Result.GameId;
+			gameModel.Winner = stopModel.Result.Winner;
+			// user
+			gameModel.User.Name = stopModel.Result.User.Name;
+			gameModel.User.Score = stopModel.Result.User.Score;
+			gameModel.User.Cards.AddRange(CardMapper(stopModel.Result.User.Cards));
+			//bot
+			foreach (var bot in stopModel.Result.Bots)
+			{
+				var newBot = new PlayerStatisticView();
+				newBot.Name = bot.Name;
+				newBot.Score = bot.Score;
+				newBot.Cards.AddRange(CardMapper(bot.Cards));
+				gameModel.Bots.Add(newBot);
+			}
+			return gameModel;
+		}
+
+		public async Task<ResponsePaginationStatisticView> GetPagination(int pageNumber, int pageSize)
         {
-            var page = GetPage(pageNumber, pageSize);
-            var info = GetPageIngo(pageNumber, pageSize);
-            var model = await GetModel(page, info);
+			List<Statistic> page = _statisticRepository.GetGames((pageNumber - 1) * pageSize, pageSize);
+			if (page == null)
+			{
+				throw new StatisticDataNotFound("Page not found");
+			}
+			PageInfo info = GetPageIngo(pageNumber, pageSize);
+			ResponsePaginationStatisticView model = await CreateModel(page, info);
             return model;
         }
 
-        private List<Statistic> GetPage(int pageNumber, int pageSize)
-        {
-            var page = _statisticRepository.GetGames((pageNumber - 1) * pageSize, pageSize);
-            return page;
-        }
-
-        private PageInfo GetPageIngo(int pageNumber, int pageSize)
+		private PageInfo GetPageIngo(int pageNumber, int pageSize)
         {
             int totalItem = _statisticRepository.Count();
-            var info = new PageInfo()
+			var info = new PageInfo()
             {
                 PageNumber = pageNumber,
                 ItemsOnPage = pageSize,
@@ -48,7 +71,7 @@ namespace BlackJackServices
             return info;
         }
 
-        private async Task<ResponsePaginationStatisticView> GetModel(List<Statistic> page, PageInfo info)
+        private async Task<ResponsePaginationStatisticView> CreateModel(List<Statistic> page, PageInfo info)
         {
             var response = new ResponsePaginationStatisticView
             {
@@ -74,30 +97,6 @@ namespace BlackJackServices
                 list.Add(stat);
             }
             return list;
-        }
-
-        public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId)
-        {
-            var stopModel = _gameService.Stop(playerId, gameId);
-
-            var gameModel = new ResponseGetGameStatisticView();
-            gameModel.Cardsleft = stopModel.Result.Cardsleft;
-            gameModel.GameId = stopModel.Result.GameId;
-            gameModel.Winner = stopModel.Result.Winner;
-            // user
-            gameModel.User.Name = stopModel.Result.User.Name;
-            gameModel.User.Score = stopModel.Result.User.Score;
-            gameModel.User.Cards.AddRange(CardMapper(stopModel.Result.User.Cards));
-            //bot
-            foreach (var bot in stopModel.Result.Bots)
-            {
-                var newBot = new PlayerStatisticView();
-                newBot.Name = bot.Name;
-                newBot.Score = bot.Score;
-                newBot.Cards.AddRange(CardMapper(bot.Cards));
-                gameModel.Bots.Add(newBot);
-            }
-            return gameModel;
         }
 
         private List<ResponseCardStatisticView> CardMapper(List<ResponseCardGameView> list)

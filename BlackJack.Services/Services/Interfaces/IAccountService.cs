@@ -8,20 +8,13 @@ namespace BlackJackServices.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<ResponseSignUpAccountView> AddAsync(string userName);
+		Task<ResponseGetUsersAccount> GetUsers();
 
-        Task<ResponseRemoveAccountView> Remove(string id);
+		Task<ResponseSignUpAccountView> SignUp(string userName);
 
         Task<ResponseGetAccountView> GetById(string id);
 
-        Task<ResponseGetAllAccountView> GetAllAsync();
+		Task<string> Logining(string userName);
 
-        Task<JwtSecurityToken> GetToken(string userName);
-
-        string GetTokenString(JwtSecurityToken jwt);
-
-        bool UserIsExist(string userName);
-
-        Task<ResponseGetUsersAccount> GetUsers();
-    }
+	}
 }

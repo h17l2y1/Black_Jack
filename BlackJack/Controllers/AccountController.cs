@@ -5,59 +5,45 @@ using System.Threading.Tasks;
 
 namespace BlackJack.Controllers
 {
-  [Route("api/[controller]/[action]")]
-  [ApiController]
-  public class AccountController : ControllerBase
-  {
-    private readonly IAccountService _service;
-
-    public AccountController(IAccountService service)
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class AccountController : ControllerBase
     {
-      _service = service;
-    }
+        private readonly IAccountService _service;
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Remove(string id)
-    {
-      var player = await _service.Remove(id);
-      return Ok(player);
-    }
+        public AccountController(IAccountService service)
+        {
+            _service = service;
+        }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
-    {
-      var player = await _service.GetById(id);
-      return Ok(player);
-    }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var player = await _service.GetById(id);
+            return Ok(player);
+        }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-      var players = await _service.GetAllAsync();
-      return Ok(players);
-    }
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _service.GetUsers();
+            return Ok(users);
+        }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-      var users = await _service.GetUsers();
-      return Ok(users);
-    }
+        [HttpPost]
+        public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
+        {
+            var token = await _service.Logining(model.UserName);
+            return Ok(new { token });
+        }
 
-    [HttpPost]
-    public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
-    {
-      var player = await _service.AddAsync(model.UserName);
-      return Ok(player);
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
-    {
-      var jwt = _service.GetToken(model.UserName);
-      var token = _service.GetTokenString(await jwt);
-      return Ok(new { token });
+        // for debug
+        [HttpPost]
+        public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
+        {
+            var player = await _service.SignUp(model.UserName);
+            return Ok(player);
+        }
     }
-
-  }
 }

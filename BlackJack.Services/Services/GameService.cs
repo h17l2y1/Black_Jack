@@ -1,5 +1,7 @@
-﻿using BlackJackDataAccess.Repositories.Interface;
+﻿using BlackJack.Exceptions;
+using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using MoreLinq;
@@ -36,36 +38,31 @@ namespace BlackJackServices.Services
         public async Task<ResponseStartGameView> Start(string userId, int countBots)
         {
             var game = new Game();
-
             await _gameRepository.AddGame(game);
-
             SaveToCache(game.Id, _deck);
 
-            var playersList = await GetPlayers(userId, game.Id, countBots);
+            List<Player> playersList = await GetPlayers(userId, game.Id, countBots);
+            await StartGame(userId, game.Id, playersList);
 
-            await Start(userId, game.Id, playersList);
-
-            var gameModel = CreateStartGameModel(userId, game.Id);
-
-            return await gameModel;
+			ResponseStartGameView gameModel = await CreateStartGameModel(userId, game.Id);
+            return gameModel;
         }
 
         public async Task<ResponseCardGameView> AddOneCard(string userId, string gameId)
         {
-            List<Player> player = new List<Player>();
-            var user = _playerRepository.Get(userId);
+			// list because AddCard takes List<Player>
+            var player = new List<Player>();
+            Player user = _playerRepository.Get(userId);
             player.Add(user);
 
-            var countMove = _cardMoveRepository.CountMove(gameId, user.UserName);
+            int move = _cardMoveRepository.CountMove(gameId, user.UserName);
+			if (move == 0)
+			{
+				throw new MoveNotFoundException("Game moves empty, game not registred");
+			}
+			Card card = await AddCard(move, gameId, player);
+			ResponseCardGameView response = CardMapper(card);
 
-            var card = await AddCard(countMove, gameId, player);
-
-            var response = new ResponseCardGameView
-            {
-                Ranks = card.Rank.ToString(),
-                Suit = card.Suit.ToString(),
-                Value = card.Value
-            };
             return response;
         }
 
@@ -77,192 +74,217 @@ namespace BlackJackServices.Services
             return stopModel;
         }
 
-        private async Task Start(string userId, string gameId, List<Player> playersList)
+
+		// Start
+
+		private void SaveToCache(string gameId, Deck deck)
+		{
+			_cache.SaveToCache(gameId, deck);
+		}
+
+		private async Task<List<Player>> GetPlayers(string userId, string gameId, int countBots)
+		{
+			var players = new List<Player>();
+			List<Player> botsList = await _playerRepository.FindBots();
+			if (botsList == null)
+			{
+				throw new NotFoundException("Bots not Found");
+			}
+			Player user = _playerRepository.Get(userId);
+			if (user == null)
+			{
+				throw new NotFoundException("User not Found");
+			}
+			Player dialer = await _playerRepository.FindDialer();
+			if (dialer == null)
+			{
+				throw new NotFoundException("Dialer not Found");
+			}
+			players.Add(user);
+			players.Add(dialer);
+			for (int i = 0; i < countBots; i++)
+			{
+				players.Add(botsList.FindAll(t => t.UserName != "Dialer")[i]);
+			}
+
+			return players;
+		}
+
+		private async Task StartGame(string userId, string gameId, List<Player> playersList)
         {
             await AddPlayersToGame(playersList, gameId);
             await FirstMove(userId, gameId, playersList);
         }
 
-        private async Task FirstMove(string userId, string gameId, List<Player> playersList)
+		private async Task AddPlayersToGame(List<Player> playersList, string gameId)
+		{
+			var list = new List<GameUsers>();
+			foreach (var player in playersList)
+			{
+				var newGameUser = new GameUsers
+				{
+					GameId = gameId,
+					UserId = player.Id
+				};
+				list.Add(newGameUser);
+			}
+			await _gameUsersRepository.AddPlayersToGame(list);
+		}
+
+		private async Task FirstMove(string userId, string gameId, List<Player> playersList)
         {
             int moveInt = 1;
             for (int i = 0; i < 2; i++)
             {
                 await AddCard(moveInt, gameId, playersList);
             }
-
         }
 
-        private async Task<Card> AddCard(int moveInt, string gameId, List<Player> players)
+        private async Task<Card> AddCard(int moveInt, string gameId, List<Player> playersList)
         {
             var listCardMoves = new List<CardMove>();
             var card = new Card();
-            foreach (var item in players)
+            foreach (var player in playersList)
             {
-                Card newCard = GetCard(gameId);
+                card = GetCard(gameId);
                 var move = new CardMove
                 {
                     GameId = gameId,
-                    CardId = newCard.Id,
-                    PlayerId = item.Id,
-                    Name = item.UserName,
-                    Role = item.Role,
-                    Value = newCard.Value,
+                    CardId = card.Id,
+                    PlayerId = player.Id,
+                    Name = player.UserName,
+                    Role = player.Role,
+                    Value = card.Value,
                     Move = moveInt
                 };
                 listCardMoves.Add(move);
-                card = newCard;
             }
             await _cardMoveRepository.AddCardToPlayer(listCardMoves);
             return card;
         }
 
-        private async Task<List<Player>> GetPlayers(string userId, string gameId, int countBots)
-        {
-            var botsList = await _playerRepository.FindBots();
-            List<Player> players = new List<Player>();
-            players.Add(_playerRepository.Get(userId));
-            players.Add(await _playerRepository.FindDialer());
+		private Card GetCard(string gameId)
+		{
+			var a = _cache.GetFromCache<Deck>(gameId);
 
-            for (int i = 0; i < countBots; i++)
-            {
-                players.Add(botsList.FindAll(t => t.UserName != "Dialer")[i]);
-            }
-            return players;
-        }
+			var tempDeck = _cache.GetFromCache<Deck>(gameId) ?? _deck;
+			_deck = tempDeck;
+
+			Card card = _deck.GetCard();
+			SaveToCache(gameId, _deck);
+
+			return card;
+		}
 
 
-        // add other cards
 
-        private async Task<List<Player>> GetBotsList(string userId, string gameId)
+		// Stop
+
+		private async Task AddOtherCardToBots(string userId, string gameId)
+		{
+			List<Player> botList = await GetBotsFromGame(userId, gameId);
+			List<CardMove> botsCardMoveList = await _cardMoveRepository.BotsCardMoveList(gameId, userId);
+			if (botsCardMoveList == null)
+			{
+				throw new NotFoundException("Bots moves not Found");
+			}
+
+			var playersCount = botsCardMoveList
+				.GroupBy(x => x.PlayerId)
+				.Select(x => new
+				{
+					Name = x.Key,
+					Total = x.Sum(f => f.Value),
+					Move = x.Sum(t => t.Move)
+				})
+				.OrderBy(x => x.Total);
+
+			foreach (var item in playersCount)
+			{
+				if (item.Total < 17)
+				{
+					var player = new List<Player>();
+					player.Add(botList.Single(t => t.Id == item.Name));
+					await AddCard(item.Move, gameId, player);
+
+					playersCount = botsCardMoveList
+					.GroupBy(x => x.PlayerId)
+					.Select(x => new
+					{
+						Name = x.Key,
+						Total = x.Sum(f => f.Value),
+						Move = x.Sum(t => t.Move)
+					})
+					.OrderBy(x => x.Total);
+				}
+			}
+		}
+
+		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
         {
             var botsList = new List<Player>();
+
+			// id bots from game
             var botsIdList = await _gameUsersRepository.GetBotsIdList(userId, gameId);
-            foreach (var id in botsIdList)
+			if (botsIdList == null)
+			{
+				throw new NotFoundException("Bots not Found");
+			}
+
+			// bots from game
+			foreach (var id in botsIdList)
             {
                 botsList.Add(_playerRepository.Get(id));
             }
             return botsList;
         }
 
-        private async Task AddOtherCardToBots(string userId, string gameId)
-        {
-            var botList = await GetBotsList(userId, gameId);
+		private async Task<List<object>> SearchWinner(string gameId)
+		{
+			var cardMoveList = await _cardMoveRepository.GetMovesFromGame(gameId);
+			if (cardMoveList == null)
+			{
+				throw new NotFoundException("Moves not Found");
+			}
+			var playersCount = cardMoveList
+				.GroupBy(x => x.PlayerId)
+				.Select(x => new
+				{
+					PlayerId = x.Key,
+					Name = _playerRepository.Get(x.Key).UserName,
+					Value = x.Sum(f => f.Value)
+				})
+				.OrderBy(x => x.Value);
 
-            var botsCardMoveList = await _cardMoveRepository.BotsCardMoveList(gameId, userId);
+			var winnersList = new List<object>();
+			var winners = playersCount
+				.Where(x => x.Value < 21)
+				.MaxBy(z => z.Value)
+				.ToList();
+			winnersList.AddRange(winners);
 
-            var playersCount = botsCardMoveList
-                .GroupBy(x => x.PlayerId)
-                .Select(x => new
-                {
-                    Name = x.Key,
-                    Total = x.Sum(f => f.Value),
-                    Move = x.Sum(t => t.Move)
-                })
-                .OrderBy(x => x.Total);
-
-            foreach (var item in playersCount)
-            {
-                if (item.Total < 17)
-                {
-                    var player = new List<Player>();
-
-                    player.Add(botList.Single(t => t.Id == item.Name));
-
-                    await AddCard(item.Move, gameId, player);
-
-                    playersCount = botsCardMoveList
-                    .GroupBy(x => x.PlayerId)
-                    .Select(x => new
-                    {
-                        Name = x.Key,
-                        Total = x.Sum(f => f.Value),
-                        Move = x.Sum(t => t.Move)
-                    })
-                    .OrderBy(x => x.Total);
-                }
-            }
-        }
+			foreach (var winner in winners)
+			{
+				var player = await _gameUsersRepository.GetWinner(winner.PlayerId, gameId);
+				if (player == null)
+				{
+					throw new NotFoundException("Player not Found");
+				}
+				player.Winner = true;
+				await _gameUsersRepository.UpdateWinner(player);
+			}
+			return winnersList;
+		}
 
 
-        // other methods
-
-        private void SaveToCache(string gameId, Deck deck)
-        {
-            _cache.SaveToCache(gameId, deck);
-        }
-
-        private Card GetCard(string gameId)
-        {
-            var a = _cache.GetFromCache<Deck>(gameId);
-
-            var tempDeck = _cache.GetFromCache<Deck>(gameId) ?? _deck;
-            _deck = tempDeck;
-
-            Card card = _deck.GetCard();
-            SaveToCache(gameId, _deck);
-
-            return card;
-        }
-
-        private async Task<List<object>> SearchWinner(string gameId)
-        {
-            var cardMoveList = await _cardMoveRepository.GetMovesFromGame(gameId);
-            var playersCount = cardMoveList
-                .GroupBy(x => x.PlayerId)
-                .Select(x => new
-                {
-                    PlayerId = x.Key,
-                    Name = _playerRepository.Get(x.Key).UserName,
-                    Value = x.Sum(f => f.Value)
-                })
-                .OrderBy(x => x.Value);
-
-            var winnersList = new List<object>();
-            var winners = playersCount
-                .Where(x => x.Value < 21)
-                .MaxBy(z => z.Value)
-                .ToList();
-            winnersList.AddRange(winners);
-
-            foreach (var winner in winners)
-            {
-                var player = await _gameUsersRepository.GetWinner(winner.PlayerId, gameId);
-                player.Winner = true;
-                await _gameUsersRepository.UpdateWinner(player);
-            }
-            return winnersList;
-        }
-
-
-        private async Task AddPlayersToGame(List<Player> playersId, string gameId)
-        {
-            var list = new List<GameUsers>();
-            foreach (var player in playersId)
-            {
-                var gameToUser = new GameUsers
-                {
-                    GameId = gameId,
-                    UserId = player.Id
-                };
-                list.Add(gameToUser);
-            }
-            await _gameUsersRepository.AddPlayersToGame(list);
-        }
-
-        private int GetCardValue(string cardId)
-        {
-            var card = _cardRepository.Get(cardId);
-            return card.Value;
-        }
 
         // View models
 
         private async Task<ResponseStartGameView> CreateStartGameModel(string userId, string gameId)
         {
-            var botList = await GetBotsList(userId, gameId);
-            var user = _playerRepository.Get(userId);
-            var moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
+            List<Player> botList = await GetBotsFromGame(userId, gameId);
+            Player user = _playerRepository.Get(userId);
+            List<CardMove> moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
 
             var gameModel = new ResponseStartGameView();
             gameModel.GameId = gameId;
@@ -328,11 +350,11 @@ namespace BlackJackServices.Services
 
         private async Task<ResponseStopGameView> CreateStopGameModel(string userId, string gameId, List<object> winner)
         {
-            var botList = await GetBotsList(userId, gameId);
-            var user = _playerRepository.Get(userId);
-            var moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
+			List<Player> botList = await GetBotsFromGame(userId, gameId);
+			Player user = _playerRepository.Get(userId);
+			List<CardMove> moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
 
-            var gameModel = new ResponseStopGameView();
+			var gameModel = new ResponseStopGameView();
             gameModel.GameId = gameId;
             gameModel.User = await CreatePlayer(user, moveList);
             gameModel.Bots.AddRange(await GetBots(botList, moveList));
@@ -342,5 +364,16 @@ namespace BlackJackServices.Services
             return gameModel;
         }
 
-    }
+		private ResponseCardGameView CardMapper(Card card)
+		{
+			var response = new ResponseCardGameView
+			{
+				Ranks = card.Rank.ToString(),
+				Suit = card.Suit.ToString(),
+				Value = card.Value
+			};
+			return response;
+		}
+
+	}
 }

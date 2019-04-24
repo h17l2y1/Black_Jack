@@ -359,10 +359,10 @@ var AccountService = /** @class */ (function () {
         return this.http.post(this.rootUrl + 'api/Account/Login', user);
     };
     AccountService.prototype.get = function (userId) {
-        return this.http.get(this.rootUrl + 'api/Account/GetById/' + userId);
+        return this.http.get(this.rootUrl + 'api/Account/Get/' + userId);
     };
     AccountService.prototype.getNames = function () {
-        return this.http.get(this.rootUrl + 'api/Account/Getusers/');
+        return this.http.get(this.rootUrl + 'api/Account/GetUsers/');
     };
     AccountService.ngInjectableDef = i0.defineInjectable({ factory: function AccountService_Factory() { return new AccountService(i0.inject(i1.HttpClient)); }, token: AccountService, providedIn: "root" });
     return AccountService;

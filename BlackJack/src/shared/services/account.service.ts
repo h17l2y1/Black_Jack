@@ -25,11 +25,11 @@ export class AccountService {
   }
 
   public get(userId : string){
-    return this.http.get<ResponseSignUpAccountView>(this.rootUrl + 'api/Account/GetById/' + userId);
+    return this.http.get<ResponseSignUpAccountView>(this.rootUrl + 'api/Account/Get/' + userId);
   }
 
   public getNames(){
-    return this.http.get<ResponseGetUsersAccountView>(this.rootUrl + 'api/Account/Getusers/');
+    return this.http.get<ResponseGetUsersAccountView>(this.rootUrl + 'api/Account/GetUsers/');
   }
   
 }
