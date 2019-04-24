@@ -1,4 +1,5 @@
-﻿using BlackJackServices.Services.Interfaces;
+﻿using BlackJackServices.Exceptions;
+using BlackJackServices.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 
@@ -32,6 +33,10 @@ namespace BlackJackServices
         public T GetFromCache<T>(string key)
         {
             T data = _cache.Get<T>(key);
+			if (data == null)
+			{
+				throw new CacheNotFoundException("Cache empty");
+			}
             return data;
         }
 
