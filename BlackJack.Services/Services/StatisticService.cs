@@ -24,18 +24,18 @@ namespace BlackJackServices
 
 		public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string playerId)
 		{
-			var stopModel = _gameService.Stop(playerId, gameId);
+			var stopModel = await _gameService.Stop(playerId, gameId);
 
 			var gameModel = new ResponseGetGameStatisticView();
-			gameModel.Cardsleft = stopModel.Result.Cardsleft;
-			gameModel.GameId = stopModel.Result.GameId;
-			gameModel.Winner = stopModel.Result.Winner;
+			gameModel.Cardsleft = stopModel.Cardsleft;
+			gameModel.GameId = stopModel.GameId;
+			gameModel.Winner = stopModel.Winner;
 			// user
-			gameModel.User.Name = stopModel.Result.User.Name;
-			gameModel.User.Score = stopModel.Result.User.Score;
-			gameModel.User.Cards.AddRange(CardMapper(stopModel.Result.User.Cards));
+			gameModel.User.Name = stopModel.User.Name;
+			gameModel.User.Score = stopModel.User.Score;
+			gameModel.User.Cards.AddRange(CardMapper(stopModel.User.Cards));
 			//bot
-			foreach (var bot in stopModel.Result.Bots)
+			foreach (var bot in stopModel.Bots)
 			{
 				var newBot = new PlayerStatisticView();
 				newBot.Name = bot.Name;
@@ -48,38 +48,38 @@ namespace BlackJackServices
 
 		public async Task<ResponsePaginationStatisticView> GetPagination(int pageNumber, int pageSize)
 		{
-			List<Statistic> page = _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
+			List<Statistic> page = await _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
 			if (page == null)
 			{
 				throw new StatisticDataNotFound("Page not found");
 			}
-			PageInfo info = GetAllPageInfo(pageNumber, pageSize);
-			ResponsePaginationStatisticView model = await CreateModel(page, info);
+			PageInfo info = await GetAllPageInfo(pageNumber, pageSize);
+			ResponsePaginationStatisticView model = CreateModel(page, info);
 			return model;
 		}
 
 		public async Task<ResponsePaginationStatisticView> GetUserStat(int pageNumber, int pageSize, string userName)
 		{
-			List<Statistic> page = _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
+			List<Statistic> page = await _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
 			if (page.Count == 0)
 			{
 				throw new StatisticDataNotFound("Page not found");
 			}
-			PageInfo info = GetUserPageInfo(pageNumber, pageSize, userName);
-			ResponsePaginationStatisticView model = await CreateModel(page, info);
+			PageInfo info = await GetUserPageInfo(pageNumber, pageSize, userName);
+			ResponsePaginationStatisticView model = CreateModel(page, info);
 			return model;
 		}
 
-		private PageInfo GetUserPageInfo(int pageNumber, int pageSize, string userName)
+		private async Task<PageInfo> GetUserPageInfo(int pageNumber, int pageSize, string userName)
 		{
-			int totalItem = _statisticRepository.UserCount(userName);
+			int totalItem = await _statisticRepository.UserCount(userName);
 			var info = GetPageInfo(pageNumber, pageSize, totalItem);
 			return info;
 		}
 
-		private PageInfo GetAllPageInfo(int pageNumber, int pageSize)
+		private async Task<PageInfo> GetAllPageInfo(int pageNumber, int pageSize)
 		{
-			int totalItem = _statisticRepository.Count();
+			int totalItem = await _statisticRepository.CountElements();
 			var info = GetPageInfo(pageNumber, pageSize, totalItem);
 			return info;
 		}
@@ -108,7 +108,7 @@ namespace BlackJackServices
 			return pages;
 		}
 
-		private async Task<ResponsePaginationStatisticView> CreateModel(List<Statistic> page, PageInfo info)
+		private ResponsePaginationStatisticView CreateModel(List<Statistic> page, PageInfo info)
 		{
 			var response = new ResponsePaginationStatisticView
 			{

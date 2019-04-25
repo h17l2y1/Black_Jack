@@ -1,5 +1,6 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,30 +15,30 @@ namespace BlackJackDataAccess.Repositories
 
         public async Task AddPlayersToGame(List<GameUsers> list)
         {
-            _context.GameUsers.AddRange(list);
-            _context.SaveChanges();
-        }
+            await _context.GameUsers.AddRangeAsync(list);
+			await _context.SaveChangesAsync();
+		}
 
-        public async Task<List<string>> GetBotsIdList(string userId, string gameId)
+		public async Task<List<string>> GetBotsIdList(string userId, string gameId)
         {
-            var list = _context.GameUsers
+            var list = await _context.GameUsers
                .Where(t => t.GameId == gameId && t.UserId != userId)
                .Select(x => x.UserId)
-               .ToList();
+               .ToListAsync();
             return list;
         }
 
         public async Task<GameUsers> GetWinner(string playerId, string gameId)
         {
-            var winner = _context.GameUsers.Single(t => t.UserId == playerId && t.GameId == gameId);
+            var winner = await _context.GameUsers.SingleOrDefaultAsync(t => t.UserId == playerId && t.GameId == gameId);
             return winner;
         }
 
         public async Task UpdateWinner(GameUsers player)
         {
             _context.GameUsers.Update(player);
-            _context.SaveChanges();
-        }
+			await _context.SaveChangesAsync();
+		}
 
-    }
+	}
 }

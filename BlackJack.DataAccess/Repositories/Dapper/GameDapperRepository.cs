@@ -25,7 +25,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Query(sql, game);
+                await connection.QueryAsync(sql, game);
             }
         }
     }

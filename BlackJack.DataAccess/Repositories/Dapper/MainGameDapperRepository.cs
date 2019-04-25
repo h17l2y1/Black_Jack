@@ -45,7 +45,7 @@ namespace BlackJackDataAccess.Repositories
             var a = item;
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Insert(item);
+                await connection.InsertAsync(item);
             }
         }
 
@@ -53,7 +53,7 @@ namespace BlackJackDataAccess.Repositories
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Insert(list);
+				await connection.InsertAsync(list);
             }
         }
 
@@ -169,19 +169,9 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-
-        // need do
-
-        public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
-        {
-            var sql = $"SELECT * FROM {_tableName} WHERE {predicate}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.Query<TEntity>(sql).AsQueryable();
-                return null;
-            }
-        }
-
-    }
+		public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
@@ -16,7 +17,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		{
 		}
 
-		public List<Statistic> GetAllGames(int from, int size)
+		public async Task<List<Statistic>> GetAllGames(int from, int size)
 		{
 			var sql = $@"
                     SELECT 
@@ -46,12 +47,12 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var games = connection.Query<Statistic>(sql).ToList();
+				var games = (await connection.QueryAsync<Statistic>(sql)).ToList();
 				return games;
 			}
 		}
 
-		public int Count()
+		public async Task<int> CountElements()
 		{
 			var sql = $@"
                     SELECT COUNT(*) AS total FROM 
@@ -78,13 +79,13 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = connection.Query<int>(sql).ToList();
+				var dbCount = (await connection.QueryAsync<int>(sql)).ToList();
 				var count = dbCount[0];
 				return count;
 			}
 		}
 
-		public List<Statistic> GetUserGames(int from, int size, string userName)
+		public async Task<List<Statistic>> GetUserGames(int from, int size, string userName)
 		{
 			var sql = $@"
                     SELECT 
@@ -114,12 +115,12 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var games = connection.Query<Statistic>(sql).ToList();
+				var games = (await connection.QueryAsync<Statistic>(sql)).ToList();
 				return games;
 			}
 		}
 
-		public int UserCount(string userName)
+		public async Task<int> UserCount(string userName)
 		{
 			var sql = $@"
                     SELECT COUNT(*) AS total FROM 
@@ -146,7 +147,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = connection.Query<int>(sql).ToList();
+				var dbCount = (await connection.QueryAsync<int>(sql)).ToList();
 				var count = dbCount[0];
 				return count;
 			}

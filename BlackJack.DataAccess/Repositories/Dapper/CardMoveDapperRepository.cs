@@ -15,7 +15,6 @@ namespace BlackJackDataAccess.Repositories.Dapper
     {
         public CardMoveDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
         {
-
         }
 
         public int CountMove(string gameId, string playerName)
@@ -42,7 +41,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    connection.Query(sql, list[i]);
+					await connection.QueryAsync(sql, list[i]);
                 }
             }
         }
@@ -55,8 +54,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var list = connection.Query<CardMove>(sql).ToList();
-                return list;
+				var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
+				return list;
             }
         }
 
@@ -68,21 +67,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var list = connection.Query<CardMove>(sql).ToList();
+                var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
                 return list;
-            }
-        }
-
-
-        // old
-
-        public IEnumerable<dynamic> GetAllMovesFromGame(string gameId)
-        {
-            var sql = $"SELECT Move, Name, CardId FROM CardMoves WHERE GameId = '{ gameId }'";
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var game = connection.Query(sql);
-                return game;
             }
         }
 

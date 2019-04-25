@@ -1,5 +1,6 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,49 +21,26 @@ namespace BlackJackDataAccess.Repositories
             return countMove;
         }
 
-        public IEnumerable<dynamic> GetAllMovesFromGame(string gameId)
-        {
-            var response = new List<dynamic>();
-
-            var list = _context.Set<CardMove>()
-                .Where(y => y.GameId == gameId)
-                .Select(x => new
-                {
-                    x.Move,
-                    x.Name,
-                    x.CardId
-                })
-                .ToList();
-
-            foreach (var item in list)
-            {
-                response.Add(item);
-            }
-            response.AsEnumerable();
-
-            return response;
-        }
-
         public async Task AddCardToPlayer(List<CardMove> list)
         {
-            _context.CardMoves.AddRange(list);
-            _context.SaveChanges();
-        }
+            await _context.CardMoves.AddRangeAsync(list);
+			await _context.SaveChangesAsync();
+		}
 
-        public async Task<List<CardMove>> GetMovesFromGame(string gameId)
+		public async Task<List<CardMove>> GetMovesFromGame(string gameId)
         {
-            var listCard = _context.CardMoves
+            var listCard = await _context.CardMoves
                 .Where(t => t.GameId == gameId)
-                .ToList();
+                .ToListAsync();
             return listCard;
         }
 
         public async Task<List<CardMove>> BotsCardMoveList(string gameId, string userId)
         {
-            var cardMovelist = _context.CardMoves
+            var cardMovelist = await _context.CardMoves
                .Where(t => t.GameId == gameId && t.PlayerId != userId)
-               .ToList();
-            return cardMovelist;
+			.ToListAsync();
+			return cardMovelist;
         }
 
     }

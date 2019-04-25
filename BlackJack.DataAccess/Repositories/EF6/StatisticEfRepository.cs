@@ -1,6 +1,7 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.EF6
 {
@@ -11,17 +12,22 @@ namespace BlackJackDataAccess.Repositories.EF6
 
 		}
 
-		public List<Statistic> GetAllGames(int from, int size)
+		public Task<List<Statistic>> GetAllGames(int from, int size)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public List<Statistic> GetUserGames(int from, int size, string userName)
+		public Task<List<Statistic>> GetUserGames(int from, int size, string userName)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public int UserCount(string userName)
+		public Task<int> UserCount(string userName)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		Task<int> IStatisticRepository.CountElements()
 		{
 			throw new System.NotImplementedException();
 		}

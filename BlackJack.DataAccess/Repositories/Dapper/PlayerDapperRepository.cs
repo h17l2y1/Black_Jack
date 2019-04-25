@@ -24,7 +24,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var botList = connection.Query<Player>(sql).ToList();
+                var botList = (await connection.QueryAsync<Player>(sql)).ToList();
                 return botList;
             }
         }
@@ -35,8 +35,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var dilaer = connection.QuerySingle<Player>(sql);
-                return dilaer;
+				var dilaer = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
+				return dilaer;
             }
         }
 
@@ -46,7 +46,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var users = connection.Query<Player>(sql).ToList();
+                var users = (await connection.QueryAsync<Player>(sql)).ToList();
                 return users;
             }
         }

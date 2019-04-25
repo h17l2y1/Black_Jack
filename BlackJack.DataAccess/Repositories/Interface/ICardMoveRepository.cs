@@ -14,10 +14,5 @@ namespace BlackJackDataAccess.Repositories.Interface
 
         Task<List<CardMove>> BotsCardMoveList(string gameId, string userId);
 
-
-        // old
-
-        IEnumerable<dynamic> GetAllMovesFromGame(string gameId);
-
     }
 }

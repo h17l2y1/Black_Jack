@@ -27,7 +27,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    connection.Query(sql, list[i]);
+                    await connection.QueryAsync(sql, list[i]);
                 }
             }
         }
@@ -40,8 +40,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var list = connection.Query<string>(sql).ToList();
-                return list;
+				var list = (await connection.QueryAsync<string>(sql)).ToList();
+				return list;
             }
         }
 
@@ -50,8 +50,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
             var sql = $"SELECT * FROM GameUsers WHERE GameId = '{ gameId }'";
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var game = connection.Query<CardMove>(sql).ToList();
-                return game;
+				var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
+				return list;
             }
         }
 
@@ -60,8 +60,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
             var sql = $"SELECT * FROM GameUsers WHERE GameId = '{ gameId }'";
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var order = connection.Query<GameUsers>(sql).ToList();
-                return order;
+				var order = (await connection.QueryAsync<GameUsers>(sql)).ToList();
+				return order;
             }
         }
 
@@ -74,7 +74,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var winner = connection.QuerySingle<GameUsers>(sql);
+                var winner = await connection.QuerySingleAsync<GameUsers>(sql);
                 return winner;
             }
         }
@@ -88,7 +88,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Query(sql);
+                await connection.QueryAsync(sql);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,30 +11,29 @@ namespace BlackJackDataAccess.Repositories
     {
         public PlayerEfRepository(ApplicationContext context) : base(context)
         {
-
         }
 
         public async Task<List<Player>> FindBots()
         {
-            var listBots = _context.Users
+            var listBots = await _context.Users
                 .Where(t => t.Role == "Bot")
-                .ToList();
+                .ToListAsync();
             return listBots;
         }
 
         public async Task<Player> FindDialer()
         {
-            var listBots = _context.Users
-                .SingleOrDefault(t => t.UserName == "Dialer");
+            var listBots = await _context.Users
+                .SingleOrDefaultAsync(t => t.UserName == "Dialer");
             return listBots;
         }
 
         public async Task<List<Player>> GetAllUsers()
         {
-            var listBots = _context.Users
+            var listBots = await _context.Users
                 .Where(t => t.Role == "User")
-                .ToList();
-            return listBots;
+				.ToListAsync();
+			return listBots;
         }
     }
 }

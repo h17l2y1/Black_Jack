@@ -71,17 +71,17 @@ namespace BlackJackDataAccess
 
         public async Task Add(TEntity entity)
         {
-            var result = _context.Set<TEntity>().Add(entity);
-            var save = _context.SaveChanges();
+            await _context.Set<TEntity>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AddRange(List<TEntity> entity)
         {
-            var result = _context.Set<TEntity>().AddRangeAsync(entity);
-            var save = _context.SaveChanges();
-        }
+            await _context.Set<TEntity>().AddRangeAsync(entity);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Update(TEntity entity)
+		public void Update(TEntity entity)
         {
             var putEntity = entity;
             _context.Set<TEntity>().Update(entity);

@@ -80,18 +80,18 @@ namespace BlackJackServices.Services
 				user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			}
 			var identity = GetIdentity(user);
-			var token = await GetTokenString(identity);
+			var token = GetTokenString(identity);
 			return token;
 		}
 
-		private async Task<string> GetTokenString(ClaimsIdentity identity)
+		private string GetTokenString(ClaimsIdentity identity)
 		{
-			var jwt = await GetToken(identity);
+			var jwt = GetToken(identity);
 			var stringToken = new JwtSecurityTokenHandler().WriteToken(jwt);
 			return stringToken;
 		}
 
-		private async Task<JwtSecurityToken> GetToken(ClaimsIdentity identity)
+		private JwtSecurityToken GetToken(ClaimsIdentity identity)
 		{
 			var key = Encoding.ASCII.GetBytes(_authOptions.Key);
 			var jwt = new JwtSecurityToken(

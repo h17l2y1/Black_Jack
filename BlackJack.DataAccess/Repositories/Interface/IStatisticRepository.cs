@@ -1,16 +1,17 @@
 ﻿using BlackJackEntities.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Interface
 {
     public interface IStatisticRepository : IMainGameRepository<Statistic>
     {
-        List<Statistic> GetAllGames(int from, int size);
+        Task<List<Statistic>> GetAllGames(int from, int size);
 
-        int Count();
+		Task<int> CountElements();
 
-		List<Statistic> GetUserGames(int from, int size, string userName);
+		Task<List<Statistic>> GetUserGames(int from, int size, string userName);
 
-		int UserCount(string userName);
+		Task<int> UserCount(string userName);
 	}
 }

@@ -13,8 +13,8 @@ namespace BlackJackDataAccess.Repositories
 
         public async Task AddGame(Game game)
         {
-            _context.Games.Add(game);
-            _context.SaveChanges();
+            await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
         }
     }
 }

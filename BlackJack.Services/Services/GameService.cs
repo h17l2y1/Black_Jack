@@ -221,18 +221,6 @@ namespace BlackJackServices.Services
 			}
 		}
 
-		private void test()
-		{
-
-		}
-
-
-
-
-
-
-
-
 		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
         {
             var botsList = new List<Player>();
@@ -301,23 +289,23 @@ namespace BlackJackServices.Services
 
             var gameModel = new ResponseStartGameView();
             gameModel.GameId = gameId;
-            gameModel.User = await CreatePlayer(user, moveList);
-            gameModel.Bots.AddRange(await GetBots(botList, moveList));
+            gameModel.User = CreatePlayer(user, moveList);
+            gameModel.Bots.AddRange(GetBots(botList, moveList));
             gameModel.Cardsleft = _deck.CardsLeft();
             return gameModel;
         }
 
-        private async Task<List<PlayerGameView>> GetBots(List<Player> botList, List<CardMove> moveList)
+        private List<PlayerGameView> GetBots(List<Player> botList, List<CardMove> moveList)
         {
             var list = new List<PlayerGameView>();
             foreach (var bot in botList)
             {
-                list.Add(await CreatePlayer(bot, moveList));
+                list.Add(CreatePlayer(bot, moveList));
             }
             return list;
         }
 
-        private async Task<PlayerGameView> CreatePlayer(Player player, List<CardMove> moveList)
+        private PlayerGameView CreatePlayer(Player player, List<CardMove> moveList)
         {
             var playerMoves = moveList.Where(t => t.PlayerId == player.Id).ToList();
             var cardsList = new List<Card>();
@@ -369,8 +357,8 @@ namespace BlackJackServices.Services
 
 			var gameModel = new ResponseStopGameView();
             gameModel.GameId = gameId;
-            gameModel.User = await CreatePlayer(user, moveList);
-            gameModel.Bots.AddRange(await GetBots(botList, moveList));
+            gameModel.User = CreatePlayer(user, moveList);
+            gameModel.Bots.AddRange(GetBots(botList, moveList));
             gameModel.Cardsleft = _deck.CardsLeft();
             gameModel.Winner = winner;
 
