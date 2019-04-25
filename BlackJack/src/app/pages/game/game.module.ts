@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game.component';
@@ -10,7 +11,9 @@ import { GameComponent } from './game.component';
   ],
   imports: [
     CommonModule,
-    GameRoutingModule
+    GameRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class GameModule { }

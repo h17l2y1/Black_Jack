@@ -8,7 +8,7 @@ namespace BlackJackViewModels.Statistic
 		public int Page { get; set; }
 
 		[Required]
-		[Range(0, 5)]
+		[Range(0, 10)]
 		public int Size { get; set; }
     }
 }

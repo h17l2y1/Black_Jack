@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { StatisticRoutingModule } from './statistic-routing.module';
 import { StatisticComponent } from './statistic.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,8 +12,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     StatisticRoutingModule,
-    ReactiveFormsModule,
     FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class StatisticModule { }

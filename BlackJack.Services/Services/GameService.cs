@@ -257,7 +257,7 @@ namespace BlackJackServices.Services
 				})
 				.OrderBy(x => x.Value);
 
-			var winnersList = new List<object>();
+			var winnersList = new List<object>();	//  <--- Winner/s
 			var winners = playersCount
 				.Where(x => x.Value < 21)
 				.MaxBy(z => z.Value)
