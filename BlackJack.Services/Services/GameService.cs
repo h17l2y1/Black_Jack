@@ -194,7 +194,7 @@ namespace BlackJackServices.Services
 				.GroupBy(x => x.PlayerId)
 				.Select(x => new
 				{
-					Name = x.Key,
+					Id = x.Key,
 					Total = x.Sum(f => f.Value),
 					Move = x.Sum(t => t.Move)
 				})
@@ -205,14 +205,14 @@ namespace BlackJackServices.Services
 				if (item.Total < 17)
 				{
 					var player = new List<Player>();
-					player.Add(botList.Single(t => t.Id == item.Name));
+					player.Add(botList.Single(t => t.Id == item.Id));
 					await AddCard(item.Move, gameId, player);
 
 					playersCount = botsCardMoveList
 					.GroupBy(x => x.PlayerId)
 					.Select(x => new
 					{
-						Name = x.Key,
+						Id = x.Key,
 						Total = x.Sum(f => f.Value),
 						Move = x.Sum(t => t.Move)
 					})
@@ -220,6 +220,18 @@ namespace BlackJackServices.Services
 				}
 			}
 		}
+
+		private void test()
+		{
+
+		}
+
+
+
+
+
+
+
 
 		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
         {

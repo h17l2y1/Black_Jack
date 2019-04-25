@@ -4,6 +4,7 @@ import { ResponseGetGameStatisticView } from '../models/Statistic/ResponseGetGam
 import { RequestGetGameStatisticView } from '../models/Statistic/RequestGetGameStatisticView';
 import { RequestPaginationStatisticView } from '../models/Statistic/RequestPaginationStatisticView';
 import { ResponsePaginationStatisticView } from '../models/Statistic/ResponsePaginationStatisticView';
+import { RequestGetUserStatStatisticView } from '../models/Statistic/RequestGetUserStatStatisticView';
 
 
 @Injectable({
@@ -21,7 +22,10 @@ export class StatisticService {
 
   getPage(model: RequestPaginationStatisticView){
     return this.http.post<ResponsePaginationStatisticView>(this.rootUrl + 'api/Statistic/Pagination', model);
+  }
 
+  getUserPage(model: RequestGetUserStatStatisticView){
+    return this.http.post<ResponsePaginationStatisticView>(this.rootUrl + 'api/Statistic/GetUserStat', model);
   }
 
 }

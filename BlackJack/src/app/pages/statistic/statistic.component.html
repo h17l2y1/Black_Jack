@@ -1,7 +1,7 @@
 <br><br><br>
   <button class="btn btn-primary" (click)="onBack()">Back</button>
 <br>
- pwigdciewgcrier
+
 <!-- Game -->
 <div class="gameStat" *ngIf="isGame">
   <div class="gameProp">GameId: {{gameRes.gameId}}</div>
@@ -40,21 +40,26 @@
   </div>
 </div>
 
-<!-- select -->
-<select [(ngModel)]="pageNumber.size" (click)="getStat()">
+<select [(ngModel)]="totalPage.size" [(ngModel)]="userPage.size" (change)="onFirst()">
   <option>3</option>
   <option>5</option>
   <option>10</option>
 </select>
+<br><br>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">@</span>
+  </div>
+  <input [(ngModel)]="userPage.userName" (ngModelChange)="statistic()" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+</div>
 
-<!-- table -->
 <table class="table">  
   <thead>  
     <tr>  
         <th>UserName</th>  
         <th>Winner</th>  
         <th>Score</th>  
-        <th>GameId</th>  
+        <th>GameId</th>
     </tr>  
   </thead>  
   <tbody>
@@ -67,7 +72,6 @@
   </tbody>
 </table>
 
-<!-- manage -->
 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mr-2" role="group" aria-label="First group">
       <button (click)="onFirst()" class="btn btn-secondary">First</button>
@@ -79,3 +83,51 @@
       <button  (click)="onLast()"  class="btn btn-secondary">Last</button>
     </div>
   </div>
+
+
+<!-- 
+<form [formGroup]="statisticForm" (change)="statistic()">
+    <select formControlName="Size" >
+        <option>3</option>
+        <option>5</option>
+        <option>10</option>
+      </select>
+      <br><br>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">@</span>
+        </div>
+        <input formControlName="Name" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+      
+      <table class="table">  
+        <thead>  
+          <tr>  
+              <th>UserName</th>  
+              <th>Winner</th>  
+              <th>Score</th>  
+              <th>GameId</th>
+          </tr>  
+        </thead>  
+        <tbody>
+          <tr *ngFor="let item of newPage.page" (click)="onGame(item.gameId)">  
+            <td>{{item.userName}}</td>  
+            <td>{{item.winner}}</td>  
+            <td>{{item.score}}</td>  
+            <td>{{item.gameId}}</td>  
+          </tr>  
+        </tbody>
+      </table>
+      
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+            <button formControlName="First" (click)="onFirst()" class="btn btn-secondary">First</button>
+            <button formControlName="Previous" (click)="onStatPrevious()"  class="btn btn-secondary"><</button>
+            <button (click)="onStatPrevious()" class="btn btn-secondary">{{newPage.pageNumber -1}}</button>
+            <button class="btn btn-secondary">{{newPage.pageNumber}}</button>
+            <button (click)="onStatNext()" class="btn btn-secondary">{{newPage.pageNumber +1}}</button>
+            <button formControlName="Next" (click)="onStatNext()" class="btn btn-secondary">></button>
+            <button formControlName="Last" (click)="onLast()"  class="btn btn-secondary">Last</button>
+          </div>
+        </div>
+</form> -->

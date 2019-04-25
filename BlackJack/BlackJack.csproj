@@ -11,12 +11,16 @@
 
   <ItemGroup>
     <Compile Remove="%2a%2a\**" />
+    <Compile Remove="e2e\**" />
     <Compile Remove="node_modules1\**" />
     <Content Remove="%2a%2a\**" />
+    <Content Remove="e2e\**" />
     <Content Remove="node_modules1\**" />
     <EmbeddedResource Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="e2e\**" />
     <EmbeddedResource Remove="node_modules1\**" />
     <None Remove="%2a%2a\**" />
+    <None Remove="e2e\**" />
     <None Remove="node_modules1\**" />
   </ItemGroup>
 

@@ -20,13 +20,8 @@ namespace BlackJack.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            if (ModelState.IsValid)
-            {
-                var player = await _service.GetById(id);
-                return Ok(player);
-            }
-            throw new ModelNotValidException("Id error");
-
+            var player = await _service.GetById(id);
+            return Ok(player);
         }
 
         [HttpGet]
@@ -46,7 +41,7 @@ namespace BlackJack.Controllers
             }
             throw new ModelNotValidException("RequestSignUpAccountView");
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
         {

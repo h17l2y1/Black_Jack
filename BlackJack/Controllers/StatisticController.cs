@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
-    //[ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [ApiController]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticService _service;
@@ -39,8 +39,17 @@ namespace BlackJack.Controllers
                 return Ok(data);
             }
             throw new ModelNotValidException("RequestPaginationStatisticView");
+        }
 
-
+        [HttpPost]
+        public async Task<IActionResult> GetUserStat([FromBody] RequestGetUserStatStatisticView model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userStat = await _service.GetUserStat(model.Page, model.Size, model.UserName);
+                return Ok(userStat);
+            }
+            throw new ModelNotValidException("RequestGetUserStatStatisticView");
         }
     }
 }

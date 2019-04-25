@@ -6,7 +6,8 @@ node_modules
 e2e
 types
 BlackJack/Views/
+dist
 
 # Files
 BlackJack.csproj.user
-
+package-lock.json

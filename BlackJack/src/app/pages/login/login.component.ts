@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   signUpmodel = new RequestSignUpAccountView;
   namesModel = new ResponseGetUsersAccountView;
-  myFirstReactiveForm: FormGroup;
+  loginForm: FormGroup;
   temp: string = null;
   isLoginNull = false;
 
@@ -41,23 +41,23 @@ export class LoginComponent implements OnInit {
   }
 
   initForm(){
-    this.myFirstReactiveForm = this.fb.group({
-     Name: [this.temp, Validators.required]
+    this.loginForm = this.fb.group({
+     Name: [this.temp]
     });
   }
 
   onLogin(){
-    if (this.myFirstReactiveForm.value.Name == null) {
+    if (this.loginForm.value.Name == null) {
       this.isLoginNull = true;
     }
-    if (this.myFirstReactiveForm.value.Name != null) {
+    if (this.loginForm.value.Name != null) {
       this.isLoginNull = false;
       this.logining();
     }
   }
 
   logining(){
-    this.signUpmodel.userName = this.myFirstReactiveForm.value.Name;
+    this.signUpmodel.userName = this.loginForm.value.Name;
     this.service.login(this.signUpmodel).subscribe(
       (res:any)=>{
         localStorage.setItem('token', res.token);

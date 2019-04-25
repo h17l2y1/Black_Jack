@@ -10,15 +10,15 @@ using System.Linq;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
-    public class StatisticDapperRepository : MainGameDapperRepository<Statistic>, IStatisticRepository
-    {
-        public StatisticDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
-        {
-        }
+	public class StatisticDapperRepository : MainGameDapperRepository<Statistic>, IStatisticRepository
+	{
+		public StatisticDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
+		{
+		}
 
-        public List<Statistic> GetGames(int from, int size)
-        {
-            var sql = $@"
+		public List<Statistic> GetAllGames(int from, int size)
+		{
+			var sql = $@"
                     SELECT 
 		                AspNetUsers.UserName,
 		                GameUsers.Winner, 
@@ -44,16 +44,16 @@ namespace BlackJackDataAccess.Repositories.Dapper
                         {from} Row 
                     FETCH NEXT {size} ROWS ONLY";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var games = connection.Query<Statistic>(sql).ToList();
-                return games;
-            }
-        }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var games = connection.Query<Statistic>(sql).ToList();
+				return games;
+			}
+		}
 
-        public int Count()
-        {
-            var sql = $@"
+		public int Count()
+		{
+			var sql = $@"
                     SELECT COUNT(*) AS total FROM 
                     (
                     SELECT 
@@ -76,14 +76,81 @@ namespace BlackJackDataAccess.Repositories.Dapper
                     group by
 		                CardMoves.GameId, AspNetUsers.UserName, GameUsers.Winner
 		                ) AS total;";
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var dbCount = connection.Query<int>(sql).ToList();
-                var count = dbCount[0];
-                return count;
-            }
-        }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var dbCount = connection.Query<int>(sql).ToList();
+				var count = dbCount[0];
+				return count;
+			}
+		}
 
+		public List<Statistic> GetUserGames(int from, int size, string userName)
+		{
+			var sql = $@"
+                    SELECT 
+		                AspNetUsers.UserName,
+		                GameUsers.Winner, 
+		                Sum(Value) as Score,
+		                CardMoves.GameId
+                    FROM 
+		                Games
+                    Inner JOIN 
+		                (Select * From GameUsers ) 
+		                as GameUsers ON Games.Id = GameUsers.GameId 
+                    Inner JOIN 
+		                CardMoves ON Games.Id = CardMoves.GameId And 
+		                PlayerId = GameUsers.UserId
+                    Inner JOIN 
+		                AspNetUsers ON AspNetUsers.Id = UserId
+                    WHERE  		
+		                CardMoves.Role = 'User' and AspNetUsers.UserName = '{userName}'
+                    group by
+		                CardMoves.GameId, AspNetUsers.UserName, GameUsers.Winner
+                    Order By 
+                        CardMoves.GameId 
+                    OFFSET 
+                        {from} Row 
+                    FETCH NEXT {size} ROWS ONLY";
 
-    }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var games = connection.Query<Statistic>(sql).ToList();
+				return games;
+			}
+		}
+
+		public int UserCount(string userName)
+		{
+			var sql = $@"
+                    SELECT COUNT(*) AS total FROM 
+                    (
+                    SELECT 
+		                AspNetUsers.UserName,
+		                GameUsers.Winner, 
+		                Sum(Value) as Score,
+		                CardMoves.GameId
+                    FROM 
+		                Games
+                    Inner JOIN 
+		                (Select * From GameUsers ) 
+		                as GameUsers ON Games.Id = GameUsers.GameId 
+                    Inner JOIN 
+		                CardMoves ON Games.Id = CardMoves.GameId And 
+		                PlayerId = GameUsers.UserId
+                    Inner JOIN 
+		                AspNetUsers ON AspNetUsers.Id = UserId
+                    WHERE  		
+		                CardMoves.Role = 'User' and AspNetUsers.UserName = '{userName}'
+                    group by
+		                CardMoves.GameId, AspNetUsers.UserName, GameUsers.Winner
+		                ) AS total;";
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var dbCount = connection.Query<int>(sql).ToList();
+				var count = dbCount[0];
+				return count;
+			}
+		}
+	}
+
 }
