@@ -1,0 +1,12 @@
+#Folders
+.vs/
+**/bin/
+**/obj/
+node_modules
+e2e
+types
+BlackJack/Views/
+
+# Files
+BlackJack.csproj.user
+
