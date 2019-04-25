@@ -3,7 +3,6 @@ using BlackJackDataAccess.Domain;
 using BlackJackDataAccess.Repositories;
 using BlackJackEntities.Entities;
 using BlackJackServices;
-using BlackJackServices.Services.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

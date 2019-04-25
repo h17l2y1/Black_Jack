@@ -1,7 +1,6 @@
 ﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
-using BlackJackServices.Services.Auth;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using BlackJackViewModels.Account;
