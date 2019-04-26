@@ -12,6 +12,11 @@ namespace BlackJackDataAccess.Repositories.EF6
 
 		}
 
+		public Task<int> CountElements()
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public Task<List<Statistic>> GetAllGames(int from, int size)
 		{
 			throw new System.NotImplementedException();
@@ -23,11 +28,6 @@ namespace BlackJackDataAccess.Repositories.EF6
 		}
 
 		public Task<int> UserCount(string userName)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		Task<int> IStatisticRepository.CountElements()
 		{
 			throw new System.NotImplementedException();
 		}

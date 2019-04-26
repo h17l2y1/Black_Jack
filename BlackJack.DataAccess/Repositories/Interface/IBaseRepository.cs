@@ -9,34 +9,13 @@ namespace BlackJackDataAccess.Repositories.Interface
     {
         TEntity Get(string id);
 
-        IQueryable<TEntity> GetAll();
+		Task Add(TEntity item);
 
-        IQueryable<TEntity> Find(Func<TEntity, bool> predicate);
+		void Remove(string id);
 
-        TEntity Single();
+		void Update(TEntity item);
 
-        TEntity SingleOrDefault();
+		IQueryable<TEntity> GetAll();
 
-        TEntity Single(Func<TEntity, bool> predicate);
-
-        TEntity SingleOrDefault(Func<TEntity, bool> predicate);
-
-        TEntity First();
-
-        TEntity FirstOrDefault();
-
-        TEntity First(Func<TEntity, bool> predicate);
-
-        TEntity FirstOrDefault(Func<TEntity, bool> predicate);
-
-        Task Add(TEntity item);
-
-        Task AddRange(List<TEntity> item);
-
-        void Remove(string id);
-
-        void Update(TEntity item);
-
-        int Count();
     }
 }

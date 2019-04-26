@@ -14,92 +14,34 @@ namespace BlackJackDataAccess
             _context = context;
         }
 
-        public IQueryable<TEntity> GetAll()
-        {
-            return _context.Set<TEntity>().AsQueryable();
-        }
-
-        public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
-        {
-            return _context.Set<TEntity>().Where(predicate).AsQueryable();
-        }
-
         public TEntity Get(string id)
         {
             return _context.Set<TEntity>().Find(id);
         }
-
-        public TEntity Single()
-        {
-            return _context.Set<TEntity>().Single();
-        }
-
-        public TEntity Single(Func<TEntity, bool> predicate)
-        {
-            return _context.Set<TEntity>().Single();
-        }
-
-        public TEntity SingleOrDefault()
-        {
-            return _context.Set<TEntity>().SingleOrDefault();
-        }
-
-        public TEntity SingleOrDefault(Func<TEntity, bool> predicate)
-        {
-            return _context.Set<TEntity>().SingleOrDefault();
-        }
-
-        public TEntity First()
-        {
-            return _context.Set<TEntity>().First();
-        }
-
-        public TEntity FirstOrDefault()
-        {
-            return _context.Set<TEntity>().FirstOrDefault();
-        }
-
-        public TEntity First(Func<TEntity, bool> predicate)
-        {
-            return _context.Set<TEntity>().First();
-        }
-
-        public TEntity FirstOrDefault(Func<TEntity, bool> predicate)
-        {
-            return _context.Set<TEntity>().FirstOrDefault();
-        }
-
-        public async Task Add(TEntity entity)
-        {
-            await _context.Set<TEntity>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddRange(List<TEntity> entity)
-        {
-            await _context.Set<TEntity>().AddRangeAsync(entity);
+		
+		public async Task Add(TEntity entity)
+		{
+			await _context.Set<TEntity>().AddAsync(entity);
 			await _context.SaveChangesAsync();
 		}
 
 		public void Update(TEntity entity)
-        {
-            var putEntity = entity;
-            _context.Set<TEntity>().Update(entity);
-            _context.SaveChangesAsync();
-        }
+		{
+			var putEntity = entity;
+			_context.Set<TEntity>().Update(entity);
+			_context.SaveChangesAsync();
+		}
 
-        public void Remove(string id)
-        {
-            _context.Set<TEntity>().Remove(Get(id));
-            _context.SaveChanges();
-        }
+		public void Remove(string id)
+		{
+			_context.Set<TEntity>().Remove(Get(id));
+			_context.SaveChanges();
+		}
 
-        public int Count()
-        {
-            return _context.Set<TEntity>().ToList().Count();
-        }
-
-        private bool _disposed = false;        protected virtual void Dispose(bool disposing)        {            if (!this._disposed)            {                if (disposing)                {                    _context.Dispose();                }            }            this._disposed = true;        }        public void Dispose()        {            Dispose(true);            GC.SuppressFinalize(this);        }
+		public IQueryable<TEntity> GetAll()
+		{
+			return _context.Set<TEntity>().AsQueryable();
+		}
 
     }
 }

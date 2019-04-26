@@ -49,14 +49,6 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-        public async Task AddRange(List<TEntity> list)
-        {
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-				await connection.InsertAsync(list);
-            }
-        }
-
         public void Update(TEntity item)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
@@ -65,7 +57,7 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-        public IQueryable<TEntity> GetAll()
+		public IQueryable<TEntity> GetAll()
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
@@ -73,105 +65,5 @@ namespace BlackJackDataAccess.Repositories
             }
         }
 
-        public TEntity First()
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QueryFirst<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity First(Func<TEntity, bool> predicate)
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QueryFirst<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity FirstOrDefault()
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QueryFirstOrDefault<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity FirstOrDefault(Func<TEntity, bool> predicate)
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QueryFirstOrDefault<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity Single()
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var result = connection.QuerySingle<TEntity>(sql);
-                return result;
-            }
-        }
-
-        public TEntity Single(Func<TEntity, bool> predicate)
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QuerySingle<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity SingleOrDefault()
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QuerySingleOrDefault<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public TEntity SingleOrDefault(Func<TEntity, bool> predicate)
-        {
-            var sql = $"SELECT * FROM {_tableName}";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var order = connection.QuerySingleOrDefault<TEntity>(sql);
-                return order;
-            }
-        }
-
-        public int Count()
-        {
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                return connection.GetAll<TEntity>().AsQueryable().Count();
-            }
-        }
-
-		public IQueryable<TEntity> Find(Func<TEntity, bool> predicate)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

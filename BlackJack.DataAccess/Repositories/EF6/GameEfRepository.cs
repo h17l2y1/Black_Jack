@@ -8,7 +8,6 @@ namespace BlackJackDataAccess.Repositories
     {
         public GameEfRepository(ApplicationContext context) : base(context)
         {
-
         }
 
         public async Task AddGame(Game game)
