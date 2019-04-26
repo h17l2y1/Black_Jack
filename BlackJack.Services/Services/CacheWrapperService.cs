@@ -15,6 +15,12 @@ namespace BlackJackServices
 			_cache = cache;
 		}
 
+		public void RemoveFromCache(string key)
+		{
+			_cache.Remove(key);
+		}
+
+
 		public void SaveToCache(string key, Deck data)
 		{
 			if (!_cache.TryGetValue(key, out data))
@@ -36,10 +42,6 @@ namespace BlackJackServices
 			return data;
 		}
 
-		public void RemoveFromCache(string key)
-		{
-			_cache.Remove(key);
-		}
 
 	}
 
