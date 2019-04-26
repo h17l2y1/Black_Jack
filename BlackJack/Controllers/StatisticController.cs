@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[ApiController]
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticService _service;
