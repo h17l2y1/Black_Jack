@@ -166,11 +166,8 @@ namespace BlackJackServices.Services
 
 		private Card GetCard(string gameId)
 		{
-			var a = _cache.GetFromCache(gameId);
-
-			var tempDeck = _cache.GetFromCache(gameId) ?? _deck;
-			_deck = tempDeck;
-
+			var deckFromCahe = _cache.GetFromCache(gameId);
+			_deck = deckFromCahe;
 			Card card = _deck.GetCard();
 			SaveToCache(gameId, _deck);
 

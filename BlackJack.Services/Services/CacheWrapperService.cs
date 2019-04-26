@@ -19,15 +19,14 @@ namespace BlackJackServices
 		{
 			_cache.Remove(key);
 		}
-
-
+		
 		public void SaveToCache(string key, Deck data)
 		{
+			Deck deck = data;
 			if (!_cache.TryGetValue(key, out data))
 			{
-				var cacheEntryOptions = new MemoryCacheEntryOptions()
-					.SetSlidingExpiration(TimeSpan.FromHours(1));
-
+				data = deck;
+				var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
 				_cache.Set(key, data, cacheEntryOptions);
 			}
 		}
