@@ -28,13 +28,19 @@ namespace BlackJackDataAccess.Repositories
             return list;
         }
 
-        public async Task<GameUsers> GetWinner(string playerId, string gameId)
+        public async Task<GameUsers> GetFutureWinner(string playerId, string gameId)
         {
             var winner = await _context.GameUsers.SingleOrDefaultAsync(t => t.UserId == playerId && t.GameId == gameId);
             return winner;
         }
 
-        public async Task UpdateWinner(GameUsers player)
+		public async Task<GameUsers> GetWinner(string gameId)
+		{
+			var winner = await _context.GameUsers.SingleOrDefaultAsync(t => t.Winner == true && t.GameId == gameId);
+			return winner;
+		}
+
+		public async Task UpdateWinner(GameUsers player)
         {
             _context.GameUsers.Update(player);
 			await _context.SaveChangesAsync();

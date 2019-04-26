@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators  } from '@angular/forms';
 import { AccountService } from '../../../shared/services/account.service';
 import { Router } from '@angular/router';
-import { RequestSignUpAccountView } from '../../../shared/models/Account/RequestSignUpAccountView';
-import { ResponseGetUsersAccountView } from '../../../shared/models/Account/ResponseGetUsersAccountView';
+import { RequestSignUpAccountView } from '../../../shared/models/Account/requestSignUpAccountView';
+import { ResponseGetUsersAccountView } from '../../../shared/models/Account/responseGetUsersAccountView';
 
 @Component({
   selector: 'app-login',

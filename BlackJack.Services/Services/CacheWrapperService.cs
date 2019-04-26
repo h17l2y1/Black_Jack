@@ -34,10 +34,10 @@ namespace BlackJackServices
 		public Deck GetFromCache(string key)
 		{
 			Deck data = _cache.Get<Deck>(key);
-			//if (data == null)
-			//{
-			//	throw new CacheNotFoundException();
-			//}
+			if (data == null)
+			{
+				throw new CacheNotFoundException();
+			}
 			return data;
 		}
 

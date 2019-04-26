@@ -131,9 +131,9 @@ module.exports.InvalidTokenError = InvalidTokenError;
 
 /***/ }),
 
-/***/ "./src/shared/models/Account/ResponseSignUpAccountView.ts":
+/***/ "./src/shared/models/Account/responseSignUpAccountView.ts":
 /*!****************************************************************!*\
-  !*** ./src/shared/models/Account/ResponseSignUpAccountView.ts ***!
+  !*** ./src/shared/models/Account/responseSignUpAccountView.ts ***!
   \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {

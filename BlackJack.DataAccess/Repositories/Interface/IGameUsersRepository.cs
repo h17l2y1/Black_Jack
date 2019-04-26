@@ -10,9 +10,11 @@ namespace BlackJackDataAccess.Repositories.Interface
 
         Task<List<string>> GetBotsIdList(string userId, string gameId);
 
-        Task<GameUsers> GetWinner(string playerId, string gameId);
+        Task<GameUsers> GetFutureWinner(string playerId, string gameId);
 
         Task UpdateWinner(GameUsers player);
 
-    }
+		Task<GameUsers> GetWinner(string gameId);
+
+	}
 }

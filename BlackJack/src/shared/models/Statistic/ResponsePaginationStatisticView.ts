@@ -1,4 +1,4 @@
-import { StatisticStatisticView } from "./StatisticStatisticView";
+import { StatisticStatisticView } from "./statisticStatisticView";
 
 export class ResponsePaginationStatisticView {
     page: Array<StatisticStatisticView>;

@@ -1,11 +1,8 @@
-import { PlayerStatisticView } from './PlayerStatisticView';
-
-import { ResponseWinnerGameView } from '../Game/ResponseWinnerGameView';
+import { PlayerStatisticView } from './playerStatisticView';
 
 export class ResponseGetGameStatisticView {
     gameId: string;
     bots: Array<PlayerStatisticView>;
     user: PlayerStatisticView;
-    cardsleft: number;
-    winner: ResponseWinnerGameView;
+    winner: string;
 }

@@ -261,7 +261,7 @@ namespace BlackJackServices.Services
 
 			foreach (var winner in winners)
 			{
-				var player = await _gameUsersRepository.GetWinner(winner.PlayerId, gameId);
+				var player = await _gameUsersRepository.GetFutureWinner(winner.PlayerId, gameId);
 				if (player == null)
 				{
 					throw new GameUserNotFoundException();
@@ -344,6 +344,17 @@ namespace BlackJackServices.Services
 			return score;
 		}
 
+		private ResponseCardGameView CardMapper(Card card)
+		{
+			var response = new ResponseCardGameView
+			{
+				Ranks = card.Rank.ToString(),
+				Suit = card.Suit.ToString(),
+				Value = card.Value
+			};
+			return response;
+		}
+
 		private async Task<ResponseStopGameView> CreateStopGameModel(string userId, string gameId, List<object> winner)
 		{
 			List<Player> botList = await GetBotsFromGame(userId, gameId);
@@ -358,17 +369,6 @@ namespace BlackJackServices.Services
 			gameModel.Winner = winner;
 
 			return gameModel;
-		}
-
-		private ResponseCardGameView CardMapper(Card card)
-		{
-			var response = new ResponseCardGameView
-			{
-				Ranks = card.Rank.ToString(),
-				Suit = card.Suit.ToString(),
-				Value = card.Value
-			};
-			return response;
 		}
 
 	}

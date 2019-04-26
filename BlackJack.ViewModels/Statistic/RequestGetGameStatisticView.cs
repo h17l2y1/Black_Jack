@@ -7,6 +7,6 @@ namespace BlackJackViewModels.Statistic
 		[Required]
 		public string GameId { get; set; }
 		[Required]
-		public string PlayerId { get; set; }
+		public string UserName { get; set; }
     }
 }

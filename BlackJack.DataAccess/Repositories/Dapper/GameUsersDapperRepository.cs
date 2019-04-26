@@ -65,7 +65,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
-        public async Task<GameUsers> GetWinner(string playerId, string gameId)
+        public async Task<GameUsers> GetFutureWinner(string playerId, string gameId)
         {
             var sql = $@"
                         SELECT * 
@@ -92,6 +92,19 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
+		public async Task<GameUsers> GetWinner(string gameId)
+		{
+			var sql = $@"
+                        SELECT * 
+                        FROM GameUsers
+                        WHERE GameId = '{gameId}' and Winner = 1";
 
-    }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var winner = await connection.QuerySingleAsync<GameUsers>(sql);
+				return winner;
+			}
+		}
+
+	}
 }

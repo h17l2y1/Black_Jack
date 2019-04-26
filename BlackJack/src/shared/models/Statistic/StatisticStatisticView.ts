@@ -1,6 +1,6 @@
 export class StatisticStatisticView {
-    UserName :string;
-    Winner :string;
-    Score :string;
-    GameId:string;
+    userName :string;
+    winner :string;
+    score :string;
+    gameId:string;
 }

@@ -5,14 +5,14 @@ import { FormGroup } from '@angular/forms';
 
 import { AccountService } from '../../../shared/services/account.service';
 import { GameService } from '../../../shared/services/game.service';
-import { ResponseSignUpAccountView } from '../../../shared/models/Account/ResponseSignUpAccountView';
-import { RequestStartGameView } from '../../../shared/models/Game/RequestStartGameView';
-import { ResponseStartGameView } from '../../../shared/models/Game/ResponseStartGameView';
-import { RequestGetCardGameView } from '../../../shared/models/Game/RequestGetCardGameView';
-import { ResponseCardGameView } from '../../../shared/models/Game/ResponseCardGameView';
-import { RequestStopGameView } from '../../../shared/models/Game/RequestStopGameView';
-import { ResponseStopGameView } from '../../../shared/models/Game/ResponseStopGameView';
-import { ResponseWinnerGameView } from '../../../shared/models/Game/ResponseWinnerGameView';
+import { ResponseSignUpAccountView } from '../../../shared/models/Account/responseSignUpAccountView';
+import { RequestStartGameView } from '../../../shared/models/Game/requestStartGameView';
+import { ResponseStartGameView } from '../../../shared/models/Game/responseStartGameView';
+import { RequestGetCardGameView } from '../../../shared/models/Game/requestGetCardGameView';
+import { ResponseCardGameView } from '../../../shared/models/Game/responseCardGameView';
+import { RequestStopGameView } from '../../../shared/models/Game/requestStopGameView';
+import { ResponseStopGameView } from '../../../shared/models/Game/responseStopGameView';
+import { ResponseWinnerGameView } from '../../../shared/models/Game/responseWinnerGameView';
 
 
 @Component({ 

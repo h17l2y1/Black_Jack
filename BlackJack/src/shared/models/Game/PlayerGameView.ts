@@ -1,4 +1,4 @@
-import { ResponseCardGameView } from './ResponseCardGameView';
+import { ResponseCardGameView } from './responseCardGameView';
 
 export class PlayerGameView {
     name: string;

@@ -24,7 +24,7 @@ namespace BlackJack.Controllers
         {
             if (ModelState.IsValid)
             {
-                var game = await _service.GetGame(model.GameId, model.PlayerId);
+                var game = await _service.GetGame(model.GameId, model.UserName);
                 return Ok(game);
             }
             throw new ModelNotValidException("RequestGetGameStatisticView");

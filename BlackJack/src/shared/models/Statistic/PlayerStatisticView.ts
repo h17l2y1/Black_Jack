@@ -1,4 +1,4 @@
-import { ResponseCardStatisticView } from './ResponseCardStatisticView';
+import { ResponseCardStatisticView } from './responseCardStatisticView';
 
 export class PlayerStatisticView {
     name: string;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as jwt_decode from "jwt-decode";
 import { AccountService } from '../../../shared/services/account.service';
-import { ResponseSignUpAccountView } from '../../../shared/models/Account/ResponseSignUpAccountView';
+import { ResponseSignUpAccountView } from '../../../shared/models/Account/responseSignUpAccountView';
 
 
 @Component({

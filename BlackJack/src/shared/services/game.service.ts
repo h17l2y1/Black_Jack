@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RequestStartGameView } from '../models/Game/RequestStartGameView';
-import { RequestGetCardGameView } from '../models/Game/RequestGetCardGameView';
-import { ResponseStartGameView } from '../models/Game/ResponseStartGameView';
-import { ResponseCardGameView } from '../models/Game/ResponseCardGameView';
-import { RequestStopGameView } from '../models/Game/RequestStopGameView';
-import { ResponseStopGameView } from '../models/Game/ResponseStopGameView';
+import { RequestStartGameView } from '../models/Game/requestStartGameView';
+import { RequestGetCardGameView } from '../models/Game/requestGetCardGameView';
+import { ResponseStartGameView } from '../models/Game/responseStartGameView';
+import { ResponseCardGameView } from '../models/Game/responseCardGameView';
+import { RequestStopGameView } from '../models/Game/requestStopGameView';
+import { ResponseStopGameView } from '../models/Game/responseStopGameView';
 
 @Injectable({
   providedIn: 'root'

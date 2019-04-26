@@ -51,6 +51,16 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
+		public async Task<Player> GetByName(string userName)
+		{
+			var sql = $@"SELECT * FROM AspNetUsers WHERE UserName='{userName}'";
 
-    }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var dilaer = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
+				return dilaer;
+			}
+		}
+
+	}
 }

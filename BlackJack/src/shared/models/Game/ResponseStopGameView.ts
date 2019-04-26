@@ -1,5 +1,5 @@
-import { PlayerGameView } from './PlayerGameView';
-import { ResponseWinnerGameView } from './ResponseWinnerGameView';
+import { PlayerGameView } from './playerGameView';
+import { ResponseWinnerGameView } from './responseWinnerGameView';
 
 export class ResponseStopGameView {
     gameId: string;

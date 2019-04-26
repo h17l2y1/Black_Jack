@@ -35,5 +35,12 @@ namespace BlackJackDataAccess.Repositories
 				.ToListAsync();
 			return listBots;
         }
-    }
+
+		public async Task<Player> GetByName(string userName)
+		{
+			var listBots = await _context.Users
+				.SingleOrDefaultAsync(t => t.UserName == userName);
+			return listBots;
+		}
+	}
 }

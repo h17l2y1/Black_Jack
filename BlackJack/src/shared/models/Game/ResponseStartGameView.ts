@@ -1,4 +1,4 @@
-import { PlayerGameView } from './PlayerGameView';
+import { PlayerGameView } from './playerGameView';
 
 export class ResponseStartGameView {
     gameId: string;

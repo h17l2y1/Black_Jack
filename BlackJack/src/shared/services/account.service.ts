@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { RequestSignUpAccountView } from '../models/Account/RequestSignUpAccountView';
-import { ResponseSignUpAccountView } from '../models/Account/ResponseSignUpAccountView';
-import { ResponseGetUsersAccountView } from '../models/Account/ResponseGetUsersAccountView';
+import { RequestSignUpAccountView } from '../models/Account/requestSignUpAccountView';
+import { ResponseSignUpAccountView } from '../models/Account/responseSignUpAccountView';
+import { ResponseGetUsersAccountView } from '../models/Account/responseGetUsersAccountView';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +15,6 @@ export class AccountService {
   router: any;
 
   constructor(private http:HttpClient) { }
-
-  public signUp(user : RequestSignUpAccountView){
-    return this.http.post(this.rootUrl + 'api/Account/SignUp', user);
-  }
 
   public login(user : RequestSignUpAccountView){
     return this.http.post(this.rootUrl + 'api/Account/Login', user);

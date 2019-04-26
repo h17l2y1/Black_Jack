@@ -79,9 +79,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = (await connection.QueryAsync<int>(sql)).ToList();
-				var count = dbCount[0];
-				return count;
+				var dbCount = (await connection.QuerySingleAsync<int>(sql));
+				return dbCount;
 			}
 		}
 
@@ -147,9 +146,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = (await connection.QueryAsync<int>(sql)).ToList();
-				var count = dbCount[0];
-				return count;
+				var dbCount = (await connection.QuerySingleAsync<int>(sql));
+				return dbCount;
 			}
 		}
 	}

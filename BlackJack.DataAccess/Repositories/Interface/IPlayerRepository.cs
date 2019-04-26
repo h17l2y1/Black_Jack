@@ -6,7 +6,9 @@ namespace BlackJackDataAccess.Repositories.Interface
 {
     public interface IPlayerRepository : IMainGameRepository<Player>
     {
-        Task<List<Player>> FindBots();
+		Task<Player> GetByName(string userName);
+
+		Task<List<Player>> FindBots();
 
         Task<Player> FindDialer();
 

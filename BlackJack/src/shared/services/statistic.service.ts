@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ResponseGetGameStatisticView } from '../models/Statistic/ResponseGetGameStatisticView';
-import { RequestGetGameStatisticView } from '../models/Statistic/RequestGetGameStatisticView';
-import { RequestPaginationStatisticView } from '../models/Statistic/RequestPaginationStatisticView';
-import { ResponsePaginationStatisticView } from '../models/Statistic/ResponsePaginationStatisticView';
-import { RequestGetUserStatStatisticView } from '../models/Statistic/RequestGetUserStatStatisticView';
+import { ResponseGetGameStatisticView } from '../models/Statistic/responseGetGameStatisticView';
+import { RequestGetGameStatisticView } from '../models/Statistic/requestGetGameStatisticView';
+import { RequestPaginationStatisticView } from '../models/Statistic/requestPaginationStatisticView';
+import { ResponsePaginationStatisticView } from '../models/Statistic/responsePaginationStatisticView';
+import { RequestGetUserStatStatisticView } from '../models/Statistic/requestGetUserStatStatisticView';
 
 
 @Injectable({
@@ -17,6 +17,7 @@ export class StatisticService {
   constructor(private http:HttpClient) { }
 
   getGame(model : RequestGetGameStatisticView){
+    debugger
     return this.http.post<ResponseGetGameStatisticView>(this.rootUrl + 'api/Statistic/GetGame', model);
   }
 
