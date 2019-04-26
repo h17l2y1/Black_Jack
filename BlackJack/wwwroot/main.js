@@ -218,6 +218,7 @@ var app_component_1 = __webpack_require__(/*! ./app.component */ "./src/app/app.
 var account_service_1 = __webpack_require__(/*! ../shared/services/account.service */ "./src/shared/services/account.service.ts");
 var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var auth_interceptor_1 = __webpack_require__(/*! ./auth/auth.interceptor */ "./src/app/auth/auth.interceptor.ts");
+var common_1 = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -234,6 +235,9 @@ var AppModule = /** @class */ (function () {
                 forms_1.FormsModule,
             ],
             providers: [
+                {
+                    provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy
+                },
                 account_service_1.AccountService, {
                     provide: http_1.HTTP_INTERCEPTORS,
                     useClass: auth_interceptor_1.AuthInterceptor,

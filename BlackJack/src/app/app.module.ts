@@ -7,6 +7,10 @@ import { AccountService } from '../shared/services/account.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+
+
+
 @NgModule({
    declarations: [
       AppComponent,
@@ -19,6 +23,9 @@ import { AuthInterceptor } from './auth/auth.interceptor';
       FormsModule,
    ],
    providers: [
+      {
+         provide: LocationStrategy, useClass: HashLocationStrategy
+      },
       AccountService, {
          provide: HTTP_INTERCEPTORS,
          useClass: AuthInterceptor,
