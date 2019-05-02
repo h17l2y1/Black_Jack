@@ -99,7 +99,7 @@ namespace BlackJackServices.Services
 			players.Add(dialer);
 			for (int i = 0; i < countBots; i++)
 			{
-				players.Add(botsList.FindAll(t => t.UserName != "Dialer")[i]);
+				players.Add(botsList[i]);
 			}
 
 			return players;

@@ -15,7 +15,6 @@ namespace BlackJackDataAccess.Repositories.Dapper
     {
         public PlayerDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
         {
-
         }
 
         public async Task<List<Player>> FindBots()
@@ -31,7 +30,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
         public async Task<Player> FindDialer()
         {
-            var sql = $@"SELECT * FROM AspNetUsers WHERE UserName='Dialer'";
+            var sql = $@"SELECT * FROM AspNetUsers WHERE Role='Dialer'";
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {

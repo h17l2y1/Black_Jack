@@ -43,7 +43,7 @@ namespace BlackJackDataAccess
             playerList.Add(new Player()
             {
                 UserName = "Dialer",
-                Role = "Bot"
+                Role = "Dialer"
             });
 
             for (int i = 1; i < 6; i++)
