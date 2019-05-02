@@ -137,7 +137,7 @@ namespace BlackJackServices.Services
 		private async Task<Card> AddCard(int moveInt, string gameId, List<Player> playersList)
 		{
 			var listCardMoves = new List<CardMove>();
-			var card1 = new Card();
+			var newCard = new Card();
 			foreach (var player in playersList)
 			{
 				Card card = GetCard(gameId);
@@ -152,10 +152,10 @@ namespace BlackJackServices.Services
 					Move = moveInt
 				};
 				listCardMoves.Add(move);
-				card1 = card;
+				newCard = card;
+				await _cardMoveRepository.AddCardToPlayer(move);
 			}
-			await _cardMoveRepository.AddCardToPlayer(listCardMoves);
-			return card1;
+			return newCard;
 		}
 
 		private Card GetCard(string gameId)

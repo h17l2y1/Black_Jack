@@ -7,12 +7,12 @@ namespace BlackJackDataAccess
 {
     public class ApplicationContext : IdentityDbContext<Player>
     {
-		private readonly int suitCount = 4;
-		private readonly int rankCount = 15;
-		private readonly int minTenRank = 10;
-		private readonly int maxTenRank = 14;
-		private readonly int numbersRank = 11;
-		private readonly int aceRank = 14;
+		private readonly int _suitCount = 4;
+		private readonly int _rankCount = 15;
+		private readonly int _minTenRank = 10;
+		private readonly int _maxTenRank = 14;
+		private readonly int _numbersRank = 11;
+		private readonly int _aceRank = 14;
 
 		public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
@@ -60,9 +60,9 @@ namespace BlackJackDataAccess
         private List<Card> CreateDeck()
         {
             var listCard = new List<Card>();
-            for (int i = 0; i < suitCount; i++)
+            for (int i = 0; i < _suitCount; i++)
             {
-                for (int j = 2; j < rankCount; j++)
+                for (int j = 2; j < _rankCount; j++)
                 {
                     listCard.Add(new Card()
                     {
@@ -70,15 +70,15 @@ namespace BlackJackDataAccess
                         Rank = (Ranks)j
                     });
 
-                    if (j < numbersRank)
+                    if (j < _numbersRank)
                     {
                         listCard[listCard.Count - 1].Value = j;
                     }
-                    if (j >= minTenRank && j < maxTenRank)
+                    if (j >= _minTenRank && j < _maxTenRank)
                     {
                         listCard[listCard.Count - 1].Value = 10;
                     }
-                    if (j == aceRank)
+                    if (j == _aceRank)
                     {
                         listCard[listCard.Count - 1].Value = 11;
                     }

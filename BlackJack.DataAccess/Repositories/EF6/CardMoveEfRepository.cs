@@ -21,9 +21,9 @@ namespace BlackJackDataAccess.Repositories
             return countMove;
         }
 
-        public async Task AddCardToPlayer(List<CardMove> list)
+        public async Task AddCardToPlayer(CardMove move)
         {
-            await _context.CardMoves.AddRangeAsync(list);
+            await _context.CardMoves.AddAsync(move);
 			await _context.SaveChangesAsync();
 		}
 
