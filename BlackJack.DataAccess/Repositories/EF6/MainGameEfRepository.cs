@@ -1,41 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace BlackJackDataAccess
 {
-    public class MainGameEfRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
-    {
-        protected ApplicationContext _context;
+	public class MainGameEfRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
+	{
+		protected ApplicationContext _context;
 
-        public MainGameEfRepository(ApplicationContext context)
-        {
-            _context = context;
-        }
-
-        public TEntity Get(string id)
-        {
-            return _context.Set<TEntity>().Find(id);
-        }
-		
-		public async Task Add(TEntity entity)
+		public MainGameEfRepository(ApplicationContext context)
 		{
-			await _context.Set<TEntity>().AddAsync(entity);
-			await _context.SaveChangesAsync();
+			_context = context;
 		}
 
-		public void Update(TEntity entity)
+		public TEntity Get(string id)
 		{
-			var putEntity = entity;
-			_context.Set<TEntity>().Update(entity);
-			_context.SaveChangesAsync();
-		}
-
-		public void Remove(string id)
-		{
-			_context.Set<TEntity>().Remove(Get(id));
-			_context.SaveChanges();
+			return _context.Set<TEntity>().Find(id);
 		}
 
 		public IQueryable<TEntity> GetAll()
@@ -43,5 +21,5 @@ namespace BlackJackDataAccess
 			return _context.Set<TEntity>().AsQueryable();
 		}
 
-    }
+	}
 }

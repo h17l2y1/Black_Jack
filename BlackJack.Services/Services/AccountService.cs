@@ -70,7 +70,7 @@ namespace BlackJackServices.Services
 			return response;
 		}
 
-		public async Task<string> Logining(string userName)
+		public async Task<ResponseTokenAccountView> Logining(string userName)
 		{
 			Player user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			if (user == null)
@@ -79,7 +79,10 @@ namespace BlackJackServices.Services
 				user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			}
 			var identity = GetIdentity(user);
-			var token = GetTokenString(identity);
+			var token = new ResponseTokenAccountView
+			{
+				Token = GetTokenString(identity)
+			};
 			return token;
 		}
 

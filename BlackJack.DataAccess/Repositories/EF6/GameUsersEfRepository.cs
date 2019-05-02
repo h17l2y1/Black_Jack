@@ -13,9 +13,9 @@ namespace BlackJackDataAccess.Repositories
         {
         }
 
-        public async Task AddPlayersToGame(List<GameUsers> list)
+        public async Task AddPlayerToGame(GameUsers player)
         {
-            await _context.GameUsers.AddRangeAsync(list);
+            await _context.GameUsers.AddAsync(player);
 			await _context.SaveChangesAsync();
 		}
 

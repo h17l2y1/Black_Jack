@@ -7,6 +7,7 @@ import { RequestGetGameStatisticView } from '../../../shared/models/Statistic/re
 import { ResponsePaginationStatisticView } from '../../../shared/models/Statistic/responsePaginationStatisticView';
 import { RequestPaginationStatisticView } from '../../../shared/models/Statistic/requestPaginationStatisticView';
 import { RequestGetUserStatStatisticView } from '../../../shared/models/Statistic/requestGetUserStatStatisticView';
+import { ResponseCardStatisticView } from '../../../shared/models/Statistic/responseCardStatisticView';
 
 @Component({
   selector: 'app-statistic',
@@ -28,6 +29,8 @@ export class StatisticComponent implements OnInit {
   isUser: boolean = false;
   isUserNotFound: boolean = false;
   statisticForm: FormGroup;
+  cards: Array<ResponseCardStatisticView> = null;
+
   constructor(private router: Router, private service: StatisticService, private fb: FormBuilder) { }
 
   ngOnInit() {

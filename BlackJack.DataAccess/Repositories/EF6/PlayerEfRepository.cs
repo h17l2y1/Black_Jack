@@ -9,14 +9,18 @@ namespace BlackJackDataAccess.Repositories
 {
     public class PlayerEfRepository : MainGameEfRepository<Player>, IPlayerRepository
     {
-        public PlayerEfRepository(ApplicationContext context) : base(context)
+		private readonly string dilaer = "Dialer";
+		private readonly string bot = "Bot";
+		private readonly string user = "User";
+
+		public PlayerEfRepository(ApplicationContext context) : base(context)
         {
         }
 
         public async Task<List<Player>> FindBots()
         {
             var listBots = await _context.Users
-                .Where(t => t.Role == "Bot")
+                .Where(t => t.Role == bot)
                 .ToListAsync();
             return listBots;
         }
@@ -24,14 +28,14 @@ namespace BlackJackDataAccess.Repositories
         public async Task<Player> FindDialer()
         {
             var listBots = await _context.Users
-                .SingleOrDefaultAsync(t => t.UserName == "Dialer");
+                .SingleOrDefaultAsync(t => t.UserName == dilaer);
             return listBots;
         }
 
         public async Task<List<Player>> GetAllUsers()
         {
             var listBots = await _context.Users
-                .Where(t => t.Role == "User")
+                .Where(t => t.Role == user)
 				.ToListAsync();
 			return listBots;
         }

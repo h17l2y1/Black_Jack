@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import * as jwt_decode from "jwt-decode";
 import { FormGroup } from '@angular/forms';
 
 import { AccountService } from '../../../shared/services/account.service';
@@ -34,8 +33,8 @@ export class GameComponent implements OnInit {
   stopModel = new RequestStopGameView;
   stopGameModel = new ResponseStopGameView;
   winnerModel = new ResponseWinnerGameView;
-  constructor(private router: Router, private accountService: AccountService,
-  private gameService: GameService) { }
+
+  constructor(private router: Router, private accountService: AccountService, private gameService: GameService) { }
 
   ngOnInit() {
     this.getUserData();
@@ -81,17 +80,11 @@ export class GameComponent implements OnInit {
   }
 
   getUserData() {
-    var userId = this.getUserId()
+    var userId = this.accountService.getUserId()
     this.accountService.get(userId)
       .subscribe((response) => {
         this.userModel = response;
       });
-  }
-
-  getUserId() {
-    var token = localStorage.getItem('token');
-    var tokenClaims = jwt_decode(token, "");
-    return tokenClaims.UserId;
   }
 
 }

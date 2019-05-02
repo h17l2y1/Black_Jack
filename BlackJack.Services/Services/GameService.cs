@@ -39,7 +39,7 @@ namespace BlackJackServices.Services
 		{
 			var game = new Game();
 			await _gameRepository.AddGame(game);
-			SaveToCache(game.Id, _deck);
+			_cache.SaveToCache(game.Id, _deck);
 
 			List<Player> playersList = await GetPlayers(userId, game.Id, countBots);
 			await StartGame(userId, game.Id, playersList);
@@ -76,11 +76,6 @@ namespace BlackJackServices.Services
 
 
 		// Start
-
-		private void SaveToCache(string gameId, Deck deck)
-		{
-			_cache.SaveToCache(gameId, deck);
-		}
 
 		private async Task<List<Player>> GetPlayers(string userId, string gameId, int countBots)
 		{
@@ -126,9 +121,8 @@ namespace BlackJackServices.Services
 					GameId = gameId,
 					UserId = player.Id
 				};
-				list.Add(newGameUser);
+				await _gameUsersRepository.AddPlayerToGame(newGameUser);
 			}
-			await _gameUsersRepository.AddPlayersToGame(list);
 		}
 
 		private async Task FirstMove(string userId, string gameId, List<Player> playersList)
@@ -169,7 +163,7 @@ namespace BlackJackServices.Services
 			var deckFromCahe = _cache.GetFromCache(gameId);
 			_deck = deckFromCahe;
 			Card card = _deck.GetCard();
-			SaveToCache(gameId, _deck);
+			_cache.SaveToCache(gameId, _deck);
 
 			return card;
 		}

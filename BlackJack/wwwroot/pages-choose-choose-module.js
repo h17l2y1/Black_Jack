@@ -70,9 +70,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-var jwt_decode = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
 var account_service_1 = __webpack_require__(/*! ../../../shared/services/account.service */ "./src/shared/services/account.service.ts");
 var responseSignUpAccountView_1 = __webpack_require__(/*! ../../../shared/models/Account/responseSignUpAccountView */ "./src/shared/models/Account/responseSignUpAccountView.ts");
+var jwt_decode = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
 var ChooseComponent = /** @class */ (function () {
     function ChooseComponent(router, accountService) {
         this.router = router;
@@ -83,21 +83,15 @@ var ChooseComponent = /** @class */ (function () {
         this.getUserData();
     };
     ChooseComponent.prototype.getUserData = function () {
-        var _this = this;
-        var userId = this.getUserId();
-        this.accountService.get(userId)
-            .subscribe(function (response) {
-            _this.userModel = response;
-        });
-    };
-    ChooseComponent.prototype.getUserId = function () {
         var token = localStorage.getItem('token');
         var tokenClaims = jwt_decode(token, "");
-        return tokenClaims.UserId;
+        this.userModel.userId = tokenClaims.UserId;
+        this.userModel.userName = tokenClaims.UserName;
+        this.userModel.role = tokenClaims.Role;
+        this.userModel.points = "100";
     };
     ChooseComponent.prototype.onLogout = function () {
-        localStorage.removeItem('token');
-        // this.router.navigate(['login']);
+        this.accountService.logout();
     };
     ChooseComponent = __decorate([
         core_1.Component({

@@ -17,7 +17,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
         {
         }
 
-        public async Task AddPlayersToGame(List<GameUsers> list)
+        public async Task AddPlayerToGame(GameUsers player)
         {
             var sql = $@"
                         INSERT INTO GameUsers(Id, CreationDate, UserId, Winner, GameId) 
@@ -25,10 +25,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    await connection.QueryAsync(sql, list[i]);
-                }
+				await connection.QueryAsync(sql, player);
             }
         }
 

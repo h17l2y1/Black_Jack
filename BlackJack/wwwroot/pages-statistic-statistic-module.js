@@ -103,6 +103,7 @@ var StatisticComponent = /** @class */ (function () {
         this.isPrevious = true;
         this.isUser = false;
         this.isUserNotFound = false;
+        this.cards = null;
     }
     StatisticComponent.prototype.ngOnInit = function () {
         this.statistic();

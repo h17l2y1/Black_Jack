@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace BlackJackDataAccess.Repositories.Interface
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
-    {
-        TEntity Get(string id);
-
-		Task Add(TEntity item);
-
-		void Remove(string id);
-
-		void Update(TEntity item);
+	public interface IBaseRepository<TEntity> where TEntity : class
+	{
+		TEntity Get(string id);
 
 		IQueryable<TEntity> GetAll();
-
-    }
+	}
 }

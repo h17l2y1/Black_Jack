@@ -37,7 +37,7 @@ namespace BlackJack.Controllers
             if (ModelState.IsValid)
             {
                 var token = await _service.Logining(model.UserName);
-                return Ok(new { token });
+                return Ok(token);
             }
             throw new ModelNotValidException("RequestSignUpAccountView");
         }

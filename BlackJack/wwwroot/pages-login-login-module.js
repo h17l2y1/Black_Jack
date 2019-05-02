@@ -3322,12 +3322,8 @@ var LoginComponent = /** @class */ (function () {
         }
     };
     LoginComponent.prototype.logining = function () {
-        var _this = this;
         this.signUpmodel.userName = this.loginForm.value.Name;
-        this.service.login(this.signUpmodel).subscribe(function (res) {
-            localStorage.setItem('token', res.token);
-            _this.router.navigateByUrl('choose');
-        });
+        this.service.login(this.signUpmodel);
     };
     LoginComponent = __decorate([
         core_1.Component({

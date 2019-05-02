@@ -81,7 +81,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-var jwt_decode = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
 var account_service_1 = __webpack_require__(/*! ../../../shared/services/account.service */ "./src/shared/services/account.service.ts");
 var game_service_1 = __webpack_require__(/*! ../../../shared/services/game.service */ "./src/shared/services/game.service.ts");
 var responseSignUpAccountView_1 = __webpack_require__(/*! ../../../shared/models/Account/responseSignUpAccountView */ "./src/shared/models/Account/responseSignUpAccountView.ts");
@@ -152,16 +151,11 @@ var GameComponent = /** @class */ (function () {
     };
     GameComponent.prototype.getUserData = function () {
         var _this = this;
-        var userId = this.getUserId();
+        var userId = this.accountService.getUserId();
         this.accountService.get(userId)
             .subscribe(function (response) {
             _this.userModel = response;
         });
-    };
-    GameComponent.prototype.getUserId = function () {
-        var token = localStorage.getItem('token');
-        var tokenClaims = jwt_decode(token, "");
-        return tokenClaims.UserId;
     };
     GameComponent = __decorate([
         core_1.Component({
@@ -169,8 +163,7 @@ var GameComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./game.component.html */ "./src/app/pages/game/game.component.html"),
             styles: [__webpack_require__(/*! ./game.component.css */ "./src/app/pages/game/game.component.css")]
         }),
-        __metadata("design:paramtypes", [router_1.Router, account_service_1.AccountService,
-            game_service_1.GameService])
+        __metadata("design:paramtypes", [router_1.Router, account_service_1.AccountService, game_service_1.GameService])
     ], GameComponent);
     return GameComponent;
 }());

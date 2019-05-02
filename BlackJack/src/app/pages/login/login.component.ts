@@ -58,12 +58,7 @@ export class LoginComponent implements OnInit {
 
   logining(){
     this.signUpmodel.userName = this.loginForm.value.Name;
-    this.service.login(this.signUpmodel).subscribe(
-      (res:any)=>{
-        localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('choose');
-      }
-    );
+    this.service.login(this.signUpmodel);
   }
 }
 

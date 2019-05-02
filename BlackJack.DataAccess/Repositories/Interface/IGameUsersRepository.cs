@@ -6,7 +6,7 @@ namespace BlackJackDataAccess.Repositories.Interface
 {
     public interface IGameUsersRepository : IMainGameRepository<GameUsers>
     {
-        Task AddPlayersToGame(List<GameUsers> list);
+        Task AddPlayerToGame(GameUsers player);
 
         Task<List<string>> GetBotsIdList(string userId, string gameId);
 

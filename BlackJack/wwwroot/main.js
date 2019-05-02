@@ -383,13 +383,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var environment_1 = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+var jwt_decode = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
+var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var AccountService = /** @class */ (function () {
-    function AccountService(http) {
+    function AccountService(http, router) {
         this.http = http;
+        this.router = router;
         this.rootUrl = environment_1.environment.apiUrl;
     }
     AccountService.prototype.login = function (user) {
-        return this.http.post(this.rootUrl + 'Account/Login', user);
+        var _this = this;
+        var token = this.http.post(this.rootUrl + 'Account/Login', user);
+        token.subscribe(function (response) {
+            localStorage.setItem('token', response.token);
+            _this.router.navigateByUrl('choose');
+        });
     };
     AccountService.prototype.get = function (userId) {
         return this.http.get(this.rootUrl + 'Account/Get/' + userId);
@@ -397,11 +405,19 @@ var AccountService = /** @class */ (function () {
     AccountService.prototype.getNames = function () {
         return this.http.get(this.rootUrl + 'Account/GetUsers/');
     };
+    AccountService.prototype.getUserId = function () {
+        var token = localStorage.getItem('token');
+        var tokenClaims = jwt_decode(token, "");
+        return tokenClaims.UserId;
+    };
+    AccountService.prototype.logout = function () {
+        localStorage.removeItem('token');
+    };
     AccountService = __decorate([
         core_1.Injectable({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [http_1.HttpClient])
+        __metadata("design:paramtypes", [http_1.HttpClient, router_1.Router])
     ], AccountService);
     return AccountService;
 }());
