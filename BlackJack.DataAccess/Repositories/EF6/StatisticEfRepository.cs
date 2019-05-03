@@ -22,7 +22,7 @@ namespace BlackJackDataAccess.Repositories.EF6
 				.Where(w => w.CardMoves.Any(s => s.Role == "User"))
 				.ToListAsync();
 
-				var result = list.Select(s =>
+			var result = list.Select(s =>
 				{
 					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
 
@@ -49,7 +49,7 @@ namespace BlackJackDataAccess.Repositories.EF6
 				.Include(t => t.GameUsers)
 					.ThenInclude(r => r.User)
 				.Include(x => x.CardMoves)
-				.Where(w => w.GameUsers.Any(p => p.User.Role == "User"))
+				.Where(w => w.CardMoves.Any(s => s.Role == "User"))
 				.ToListAsync();
 
 			var result = list.Select(s =>
@@ -80,18 +80,19 @@ namespace BlackJackDataAccess.Repositories.EF6
 				.Where(w => w.GameUsers.Any(p => p.User.Role == "User" && p.User.UserName == userName))
 				.ToListAsync();
 
-				var result = list.Select(s =>
+			var result = list.Select(s =>
+			{
+				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+
+				var stat = new Statistic
 				{
-					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
-					var stat = new Statistic
-					{
-						UserName = user.User.UserName,
-						Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
-						Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
-						GameId = s.Id
-					};
-					return stat;
-				})
+					UserName = user.User.UserName,
+					Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
+					Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
+					GameId = s.Id
+				};
+				return stat;
+			})
 				.OrderBy(o => o.GameId)
 				.Skip(from)
 				.Take(size)

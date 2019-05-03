@@ -44,8 +44,8 @@ namespace BlackJack
 
             services.Service();
 
-            //services.EfRepository();
-            services.DapperRepository();
+            services.EfRepository();
+            //services.DapperRepository();
 
             services.AddMemoryCache();
             services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
