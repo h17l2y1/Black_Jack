@@ -11,7 +11,7 @@ namespace BlackJackEntities.Entities
         public int Points { get; set; }
         public string Role { get; set; }
 
-        [NotMapped]
+		[NotMapped]
         [Computed]
         public virtual ICollection<Game> Games { get; set; }
     }

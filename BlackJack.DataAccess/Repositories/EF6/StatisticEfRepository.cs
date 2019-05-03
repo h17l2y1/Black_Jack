@@ -11,27 +11,121 @@ namespace BlackJackDataAccess.Repositories.EF6
 	{
 		public StatisticEfRepository(ApplicationContext context) : base(context)
 		{
-
 		}
 
-		public Task<int> CountElements()
+		public async Task<List<Statistic>> GetAllGames(int from, int size)
 		{
-			throw new System.NotImplementedException();
+			var list = await _context.Games
+				.Include(t => t.GameUsers)
+					.ThenInclude(r => r.User)
+				.Include(x => x.CardMoves)
+				.Where(w => w.CardMoves.Any(s => s.Role == "User"))
+				.ToListAsync();
+
+				var result = list.Select(s =>
+				{
+					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+
+					var stat = new Statistic
+					{
+						UserName = user.User.UserName,
+						Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
+						Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
+						GameId = s.Id
+					};
+					return stat;
+				})
+				.OrderBy(o => o.GameId)
+				.Skip(from)
+				.Take(size)
+				.ToList();
+
+			return result;
 		}
 
-		public Task<List<Statistic>> GetAllGames(int from, int size)
+		public async Task<int> CountElements()
 		{
-			throw new System.NotImplementedException();
+			var list = await _context.Games
+				.Include(t => t.GameUsers)
+					.ThenInclude(r => r.User)
+				.Include(x => x.CardMoves)
+				.Where(w => w.GameUsers.Any(p => p.User.Role == "User"))
+				.ToListAsync();
+
+			var result = list.Select(s =>
+			{
+				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+				var stat = new Statistic
+				{
+					UserName = user.User.UserName,
+					Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
+					Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
+					GameId = s.Id
+				};
+				return stat;
+			})
+			.OrderBy(o => o.GameId)
+			.ToList()
+			.Count;
+
+			return result;
 		}
 
-		public Task<List<Statistic>> GetUserGames(int from, int size, string userName)
+		public async Task<List<Statistic>> GetUserGames(int from, int size, string userName)
 		{
-			throw new System.NotImplementedException();
+			var list = await _context.Games
+				.Include(t => t.GameUsers)
+					.ThenInclude(r => r.User)
+				.Include(x => x.CardMoves)
+				.Where(w => w.GameUsers.Any(p => p.User.Role == "User" && p.User.UserName == userName))
+				.ToListAsync();
+
+				var result = list.Select(s =>
+				{
+					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+					var stat = new Statistic
+					{
+						UserName = user.User.UserName,
+						Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
+						Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
+						GameId = s.Id
+					};
+					return stat;
+				})
+				.OrderBy(o => o.GameId)
+				.Skip(from)
+				.Take(size)
+				.ToList();
+
+			return result;
 		}
 
-		public Task<int> UserCount(string userName)
+		public async Task<int> UserCount(string userName)
 		{
-			throw new System.NotImplementedException();
+			var list = await _context.Games
+				.Include(t => t.GameUsers)
+					.ThenInclude(r => r.User)
+				.Include(x => x.CardMoves)
+				.Where(w => w.GameUsers.Any(p => p.User.Role == "User" && p.User.UserName == userName))
+				.ToListAsync();
+
+			var result = list.Select(s =>
+			{
+				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+				var stat = new Statistic
+				{
+					UserName = user.User.UserName,
+					Winner = s.GameUsers.FirstOrDefault(gu => gu.UserId == user.UserId).Winner,
+					Score = s.CardMoves.Where(w => w.PlayerId == user.UserId).Sum(p => p.Value),
+					GameId = s.Id
+				};
+				return stat;
+			})
+			.OrderBy(o => o.GameId)
+			.ToList()
+			.Count;
+
+			return result;
 		}
 	}
 }
