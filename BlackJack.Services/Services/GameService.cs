@@ -248,7 +248,7 @@ namespace BlackJackServices.Services
 
 			var winnersList = new List<object>();   //  <--- Winner/s
 			var winners = playersCount
-				.Where(x => x.Value < 21)
+				.Where(x => x.Value < 22)
 				.MaxBy(z => z.Value)
 				.ToList();
 			winnersList.AddRange(winners);
