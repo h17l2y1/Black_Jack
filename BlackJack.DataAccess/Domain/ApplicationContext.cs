@@ -1,12 +1,19 @@
 ﻿using BlackJackEntities.Entities;
+using BlackJackEntities.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace BlackJackDataAccess
 {
     public class ApplicationContext : IdentityDbContext<Player>
     {
+		private static readonly string[] _players = Enum.GetNames(typeof(Players));
+		private readonly string _dilaer = _players[0];
+		private readonly string _bot = _players[1];
+		private readonly string _user = _players[2];
+
 		private readonly int _suitCount = 4;
 		private readonly int _rankCount = 15;
 		private readonly int _minTenRank = 10;
@@ -42,17 +49,17 @@ namespace BlackJackDataAccess
 
             playerList.Add(new Player()
             {
-                UserName = "Dialer",
-                Role = "Dialer"
-            });
+                UserName = _dilaer,
+                Role = _dilaer
+			});
 
             for (int i = 1; i < 6; i++)
             {
                 playerList.Add(new Player()
                 {
-                    UserName = $"Bot_{i}",
-                    Role = "Bot"
-                });
+                    UserName = $"{_bot}_{i}",
+                    Role = _bot
+				});
             }
             return playerList;
         }
