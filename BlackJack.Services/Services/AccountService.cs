@@ -1,6 +1,7 @@
 ﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using BlackJackEntities.Enums;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using BlackJackViewModels.Account;
@@ -35,7 +36,7 @@ namespace BlackJackServices.Services
 
 		public async Task<ResponseGetUsersAccount> GetUsers()
 		{
-			var users = await _playerRepository.GetAllUsers();
+			var users = await _playerRepository.FindAnyBodyAsync(Players.User.ToString());
 			var list = new List<string>();
 			foreach (var item in users)
 			{
@@ -51,7 +52,7 @@ namespace BlackJackServices.Services
 			{
 				UserName = userName,
 				Points = 100,
-				Role = "User"
+				Role = Players.User.ToString()
 			};
 			await _userManager.CreateAsync(user);
 

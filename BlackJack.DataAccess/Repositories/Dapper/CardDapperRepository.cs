@@ -1,7 +1,7 @@
-﻿using BlackJackDataAccess.Domain;
-using BlackJackDataAccess.Repositories.Interface;
+﻿using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using Microsoft.Extensions.Options;
+using BlackJackDataAccess.Domain;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {

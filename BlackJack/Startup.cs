@@ -1,6 +1,3 @@
-using BlackJackDataAccess;
-using BlackJackDataAccess.Domain;
-using BlackJackDataAccess.Repositories;
 using BlackJackEntities.Entities;
 using BlackJackServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,12 +34,9 @@ namespace BlackJack
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                     .Build();
-
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value));
-            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
-            services.Service();
+            services.Service(configuration, Configuration);
 
             services.EfRepository();
             //services.DapperRepository();
@@ -82,7 +76,6 @@ namespace BlackJack
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             });
-            services.AddIdentity<Player, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

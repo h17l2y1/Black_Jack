@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlackJack.DataAccess\BlackJackDataAccess.csproj" />
     <ProjectReference Include="..\BlackJack.Services\BlackJackServices.csproj" />
     <ProjectReference Include="..\BlackJack.ViewModels\BlackJackViewModels.csproj" />
   </ItemGroup>

@@ -17,16 +17,16 @@ namespace BlackJackDataAccess.Repositories.Dapper
         {
         }
 
-        public async Task<List<Player>> FindBots()
-        {
-            var sql = $@"SELECT * FROM AspNetUsers WHERE Role='Bot'";
+		public async Task<List<Player>> FindAnyBodyAsync(string role)
+		{
+			var sql = $@"SELECT * FROM AspNetUsers WHERE Role='{role}'";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var botList = (await connection.QueryAsync<Player>(sql)).ToList();
-                return botList;
-            }
-        }
+			using (IDbConnection connection = new SqlConnection(_connectionString))
+			{
+				var users = (await connection.QueryAsync<Player>(sql)).ToList();
+				return users;
+			}
+		}
 
         public async Task<Player> FindDialer()
         {
@@ -36,17 +36,6 @@ namespace BlackJackDataAccess.Repositories.Dapper
             {
 				var dilaer = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
 				return dilaer;
-            }
-        }
-
-        public async Task<List<Player>> GetAllUsers()
-        {
-            var sql = $@"SELECT * FROM AspNetUsers WHERE Role='User'";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var users = (await connection.QueryAsync<Player>(sql)).ToList();
-                return users;
             }
         }
 

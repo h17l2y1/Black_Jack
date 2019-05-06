@@ -8,10 +8,8 @@ namespace BlackJackDataAccess.Repositories.Interface
     {
 		Task<Player> GetByName(string userName);
 
-		Task<List<Player>> FindBots();
+		Task<Player> FindDialer();
 
-        Task<Player> FindDialer();
-
-        Task<List<Player>> GetAllUsers();
+		Task<List<Player>> FindAnyBodyAsync(string role);
     }
 }

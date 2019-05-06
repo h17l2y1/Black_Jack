@@ -1,8 +1,7 @@
-﻿
-namespace BlackJackDataAccess.Domain
+﻿namespace BlackJackDataAccess.Domain
 {
-    public class ConnectionStrings
-    {
-        public string DefaultConnection { get; set; }
-    }
+	public class ConnectionStrings
+	{
+		public string DefaultConnection { get; set; }
+	}
 }

@@ -29,7 +29,7 @@ namespace BlackJackDataAccess.Repositories.EF6
 
 			var result = list.Select(s =>
 				{
-					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+					var user = s.GameUsers.FirstOrDefault(p => p.User.Role == Players.User.ToString());
 
 					var stat = new Statistic
 					{
@@ -59,7 +59,7 @@ namespace BlackJackDataAccess.Repositories.EF6
 
 			var result = list.Select(s =>
 			{
-				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == Players.User.ToString());
 				var stat = new Statistic
 				{
 					UserName = user.User.UserName,
@@ -87,7 +87,7 @@ namespace BlackJackDataAccess.Repositories.EF6
 
 			var result = list.Select(s =>
 			{
-				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == "User");
+				var user = s.GameUsers.FirstOrDefault(p => p.User.Role == Players.User.ToString());
 
 				var stat = new Statistic
 				{

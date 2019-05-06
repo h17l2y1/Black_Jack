@@ -1,6 +1,7 @@
 ﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using BlackJackEntities.Enums;
 using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
@@ -80,7 +81,7 @@ namespace BlackJackServices.Services
 		private async Task<List<Player>> GetPlayers(string userId, string gameId, int countBots)
 		{
 			var players = new List<Player>();
-			List<Player> botsList = await _playerRepository.FindBots();
+			List<Player> botsList = await _playerRepository.FindAnyBodyAsync(Players.Bot.ToString());
 			if (botsList == null)
 			{
 				throw new NotFoundException("Bots not Found");
