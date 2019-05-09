@@ -1,0 +1,122 @@
+
+Start game
+<div class="selector">
+  <div class="userLine">
+    Bots Count 
+    <select [(ngModel)]="startGameModel.countBots" >
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+    <button class="btn btn-success" (click)="onStart()">Start</button> 
+    <a class="btn btn-primary" routerLink="/choose">Back</a>
+  </div> 
+
+
+</div><br/><br/><br/>
+
+<div class="game" *ngIf="isStop">  
+    <div class="player" *ngFor="let item of winnerModel">
+      Name: {{item.name}}
+      Value: {{item.value}}
+    </div>
+</div><br>
+
+
+<div class="game" *ngIf="isNewGame">
+  <div class="player" *ngIf="gameModel.user">
+      <div class="playerProp">Name: {{gameModel.user.name}}</div>
+      <div class="playerProp">
+          <div class="card" *ngFor="let card of gameModel.user.cards">
+            <div class="cardProp">Rank: {{card.rank}}</div>
+            <div class="cardProp">Suit: {{card.suit}}</div>
+            <div class="cardProp">Value: {{card.value}}</div>
+          </div>
+      </div>
+      <div class="playerProp">
+        <div class="">Score: {{gameModel.user.score}}</div>
+        <div class="gameButtons">
+          <button class="btStart" [disabled]="isStop" (click)="onAddCard()">Add Card</button> 
+          <button class="btStop" [disabled]="isStop" (click)="onStopGame()">Stop</button> 
+       </div>
+      </div>
+  </div>
+  
+  <div class="player" *ngFor="let bot of gameModel.bots">
+    <div class="playerProp">Name: {{bot.name}}</div>
+    <div class="playerProp">
+        <div class="card" *ngFor="let card of bot.cards">
+            <div class="cardProp">Rank: {{card.rank}}</div>
+            <div class="cardProp">Suit: {{card.suit}}</div>
+            <div class="cardProp">Value: {{card.value}}</div>
+        </div>
+    </div>
+    <div class="playerProp">Score: {{bot.score}}</div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- newGame
+<div class="game">
+    <div class="player" *ngIf="userPlayer">
+        <div class="playerProp">Name: {{userPlayer.name}}</div>
+        <div class="playerProp">{{userPlayer.card}}
+            <div class="card" *ngFor="let card of userPlayer.cards">
+                <div class="cardProp">Rank: {{card.ranks}}</div>
+                <div class="cardProp">Suit: {{card.suit}}</div>
+                <div class="cardProp">Value: {{card.value}}</div>
+            </div>
+        </div>
+        <div class="playerProp">Score: {{userPlayer.score}}</div>
+    </div>
+  <div class="player" *ngFor="let bot of bots">
+    <div class="playerProp">Name: {{bot.name}}</div>
+    <div class="playerProp">{{bot.card}}
+        <div class="card" *ngFor="let card of bot.cards">
+            <div class="cardProp">Rank: {{card.ranks}}</div>
+            <div class="cardProp">Suit: {{card.suit}}</div>
+            <div class="cardProp">Value: {{card.value}}</div>
+        </div>
+    </div>
+    <div class="playerProp">Score: {{bot.score}}</div>
+  </div>
+
+  <div class="addCard">
+      <button (click)="addCard()">Add Card</button> 
+  </div>
+</div> -->

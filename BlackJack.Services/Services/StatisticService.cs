@@ -1,7 +1,6 @@
 ﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
-using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
@@ -58,7 +57,7 @@ namespace BlackJackServices
 			List<Statistic> page = await _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
 			if (page == null)
 			{
-				throw new StatisticDataNotFound("Page not found");
+				throw new NotFoundException("Page not found");
 			}
 			PageInfo info = await GetAllPageInfo(pageNumber, pageSize);
 			GetPaginationStatisticViewItem response = CreateModel(page, info);
@@ -70,7 +69,7 @@ namespace BlackJackServices
 			List<Statistic> page = await _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
 			if (page.Count == 0)
 			{
-				throw new StatisticDataNotFound("Page not found");
+				throw new NotFoundException("Page not found");
 			}
 			PageInfo info = await GetUserPageInfo(pageNumber, pageSize, userName);
 			GetUserPageStatisticViewItem response = UserCreateModel(page, info);
@@ -98,7 +97,7 @@ namespace BlackJackServices
 				PageNumber = pageNumber,
 				ItemsOnPage = pageSize,
 				TotalItems = totalItem,
-				TotalPages = GetTotalPages(totalItem,pageSize)
+				TotalPages = GetTotalPages(totalItem, pageSize)
 			};
 			return info;
 		}
@@ -209,7 +208,7 @@ namespace BlackJackServices
 
 			foreach (var move in playerMoves)
 			{
-				cardsList.Add( await _cardRepository.Get(move.CardId));
+				cardsList.Add(await _cardRepository.Get(move.CardId));
 			}
 
 			var userView = new PlayerGetGameStatisticViewItem();

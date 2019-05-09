@@ -1,10 +1,12 @@
 ﻿using BlackJackDataAccess;
+using BlackJackDataAccess.Domain;
 using BlackJackEntities.Entities;
 using BlackJackServices.Jwt;
 using BlackJackServices.Services;
 using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,8 @@ namespace BlackJackServices
 	{
 		public static void Service(this IServiceCollection services, IConfiguration сonfiguration)
 		{
+			services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(сonfiguration.GetSection("ConnectionStrings:DefaultConnection").Value));
+			services.Configure<ConnectionStrings>(x => сonfiguration.GetSection("ConnectionStrings").Bind(x));
 
 			services.AddIdentity<Player, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 

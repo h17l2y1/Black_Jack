@@ -1,0 +1,51 @@
+.games{
+    padding: 5px;
+    margin: 10px;
+    background-color: burlywood;
+    width: 300px;
+}
+
+.players{
+    background-color: darkgray;
+}
+
+.gamesStat{
+    background-color: bisque;
+}
+
+.gameProp{
+    background-color: cornsilk;
+    margin: 5px;
+}
+
+.playerProp{
+    display: flex;
+    padding: 5px;
+    background-color: coral
+}
+
+.cardss{
+    display: flex;
+}
+
+.card{
+    display: flex;
+    color: white;
+    background-color: rgb(70, 109, 109);
+    margin: 10px;
+    padding: 10px;
+}
+
+.cardProp{
+    margin: 5px;
+}
+
+#pl{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+
+.bot{
+    padding: 10px;
+}
