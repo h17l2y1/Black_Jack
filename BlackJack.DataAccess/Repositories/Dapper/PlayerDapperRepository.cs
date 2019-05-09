@@ -4,50 +4,33 @@ using BlackJackEntities.Entities;
 using Dapper;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
-    public class PlayerDapperRepository : MainGameDapperRepository<Player>, IPlayerRepository
-    {
-        public PlayerDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
-        {
-        }
+	public class PlayerDapperRepository : MainGameDapperRepository<Player>, IPlayerRepository
+	{
+		public PlayerDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
+		{
+		}
 
 		public async Task<List<Player>> GetByRole(string role)
 		{
 			var sql = $@"SELECT * FROM AspNetUsers WHERE Role='{role}'";
-
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var users = (await connection.QueryAsync<Player>(sql)).ToList();
-				return users;
-			}
+			return (await Connection.QueryAsync<Player>(sql)).ToList();
 		}
 
-        public async Task<Player> GetDialer()
-        {
-            var sql = $@"SELECT * FROM AspNetUsers WHERE Role='Dialer'";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-				var result = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
-				return result;
-            }
-        }
+		public async Task<Player> GetDialer()
+		{
+			var sql = $@"SELECT * FROM AspNetUsers WHERE Role='Dialer'";
+			return (await Connection.QuerySingleOrDefaultAsync<Player>(sql));
+		}
 
 		public async Task<Player> GetByUserName(string userName)
 		{
 			var sql = $@"SELECT * FROM AspNetUsers WHERE UserName='{userName}'";
-
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var result = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
-				return result;
-			}
+			return (await Connection.QuerySingleOrDefaultAsync<Player>(sql));
 		}
 
 	}

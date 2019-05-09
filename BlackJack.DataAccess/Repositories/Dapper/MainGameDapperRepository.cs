@@ -1,8 +1,6 @@
 ﻿using BlackJackDataAccess.Domain;
 using Dapper.Contrib.Extensions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;

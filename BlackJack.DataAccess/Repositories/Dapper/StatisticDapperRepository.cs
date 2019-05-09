@@ -4,8 +4,6 @@ using BlackJackEntities.Entities;
 using Dapper;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,11 +43,9 @@ namespace BlackJackDataAccess.Repositories.Dapper
                         {offset} Row 
                     FETCH NEXT {size} ROWS ONLY";
 
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var result = (await connection.QueryAsync<Statistic>(sql)).ToList();
-				return result;
-			}
+
+			return (await Connection.QueryAsync<Statistic>(sql)).ToList();
+
 		}
 
 		public async Task<int> CountElements()
@@ -77,11 +73,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
                     group by
 		                CardMoves.GameId, AspNetUsers.UserName, GameUsers.Winner
 		                ) AS total;";
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var result = (await connection.QuerySingleAsync<int>(sql));
-				return result;
-			}
+
+			return await Connection.QuerySingleAsync<int>(sql);
 		}
 
 		public async Task<List<Statistic>> GetUserGames(int offset, int size, string userName)
@@ -112,11 +105,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
                         {offset} Row 
                     FETCH NEXT {size} ROWS ONLY";
 
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var result = (await connection.QueryAsync<Statistic>(sql)).ToList();
-				return result;
-			}
+			return (await Connection.QueryAsync<Statistic>(sql)).ToList();
 		}
 
 		public async Task<int> CountUsers(string userName)
@@ -144,11 +133,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
                     group by
 		                CardMoves.GameId, AspNetUsers.UserName, GameUsers.Winner
 		                ) AS total;";
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				var result = (await connection.QuerySingleAsync<int>(sql));
-				return result;
-			}
+
+			return (await Connection.QuerySingleAsync<int>(sql));
 		}
 	}
 
