@@ -58,7 +58,7 @@ namespace BlackJackServices
 			List<Statistic> page = await _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
 			if (page == null)
 			{
-				throw new NotFoundException("Page not found");
+				throw new StatisticDataNotFound("Page not found");
 			}
 			PageInfo info = await GetAllPageInfo(pageNumber, pageSize);
 			GetPaginationStatisticViewItem response = CreateModel(page, info);
@@ -70,7 +70,7 @@ namespace BlackJackServices
 			List<Statistic> page = await _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
 			if (page.Count == 0)
 			{
-				throw new NotFoundException("Page not found");
+				throw new StatisticDataNotFound("Page not found");
 			}
 			PageInfo info = await GetUserPageInfo(pageNumber, pageSize, userName);
 			GetUserPageStatisticViewItem response = UserCreateModel(page, info);
