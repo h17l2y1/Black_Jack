@@ -11,17 +11,37 @@
 
   <ItemGroup>
     <Compile Remove="%2a%2a\**" />
+    <Compile Remove="AppClient\bin\**" />
+    <Compile Remove="AppClient\dist\**" />
+    <Compile Remove="AppClient\src\**" />
+    <Compile Remove="AppClient\wwwroot\**" />
     <Compile Remove="e2e\**" />
     <Compile Remove="node_modules1\**" />
+    <Compile Remove="src\**" />
     <Content Remove="%2a%2a\**" />
+    <Content Remove="AppClient\bin\**" />
+    <Content Remove="AppClient\dist\**" />
+    <Content Remove="AppClient\src\**" />
+    <Content Remove="AppClient\wwwroot\**" />
     <Content Remove="e2e\**" />
     <Content Remove="node_modules1\**" />
+    <Content Remove="src\**" />
     <EmbeddedResource Remove="%2a%2a\**" />
+    <EmbeddedResource Remove="AppClient\bin\**" />
+    <EmbeddedResource Remove="AppClient\dist\**" />
+    <EmbeddedResource Remove="AppClient\src\**" />
+    <EmbeddedResource Remove="AppClient\wwwroot\**" />
     <EmbeddedResource Remove="e2e\**" />
     <EmbeddedResource Remove="node_modules1\**" />
+    <EmbeddedResource Remove="src\**" />
     <None Remove="%2a%2a\**" />
+    <None Remove="AppClient\bin\**" />
+    <None Remove="AppClient\dist\**" />
+    <None Remove="AppClient\src\**" />
+    <None Remove="AppClient\wwwroot\**" />
     <None Remove="e2e\**" />
     <None Remove="node_modules1\**" />
+    <None Remove="src\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +62,10 @@
     <None Update="C:\Users\Anuitex - 79\.nuget\packages\nlog.config\4.6.2\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppClient\" />
   </ItemGroup>
 
 </Project>

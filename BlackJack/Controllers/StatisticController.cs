@@ -48,7 +48,8 @@ namespace BlackJack.Controllers
                 var userStat = await _service.GetUserStat(page, size, userName);
                 return Ok(userStat);
             }
-            throw new ModelNotValidException("GetUserStat/ url error");
+            return BadRequest("GetUserStat/ url error");
+            //throw new ModelNotValidException("GetUserStat/ url error");
         }
 
     }

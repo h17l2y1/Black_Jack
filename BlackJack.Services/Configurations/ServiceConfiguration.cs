@@ -1,12 +1,11 @@
 ﻿using BlackJackDataAccess;
-using BlackJackDataAccess.Domain;
 using BlackJackEntities.Entities;
+using BlackJackEntities.Enums;
 using BlackJackServices.Jwt;
 using BlackJackServices.Services;
 using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,14 +20,17 @@ namespace BlackJackServices
 	{
 		public static void Service(this IServiceCollection services, IConfiguration сonfiguration)
 		{
-			services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(сonfiguration.GetSection("ConnectionStrings:DefaultConnection").Value));
-			services.Configure<ConnectionStrings>(x => сonfiguration.GetSection("ConnectionStrings").Bind(x));
+			string orm = сonfiguration.GetSection("Orm").Value;
+			if (orm == OrmType.Entity.ToString())
+			{
+				services.EfRepository(сonfiguration);
+			}
+			if (orm == OrmType.Dapper.ToString())
+			{
+				services.DapperRepository(сonfiguration);
+			}
 
 			services.AddIdentity<Player, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
-
-			//services.EfRepository(сonfiguration);
-			services.DapperRepository(сonfiguration);
-
 
 			ServiceSettings(services, сonfiguration);
 			JwtSettings(services, сonfiguration);
@@ -63,7 +65,6 @@ namespace BlackJackServices
 
 		private static void ServiceSettings(IServiceCollection services, IConfiguration сonfiguration)
 		{
-
 			services.AddScoped<ICacheWrapperService, CacheWrapperService>();
 			services.AddScoped<IStatisticService, StatisticService>();
 			services.AddScoped<IAccountService, AccountService>();
