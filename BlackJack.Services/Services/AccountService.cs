@@ -2,6 +2,7 @@
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using BlackJackEntities.Enums;
+using BlackJackServices.Jwt;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using BlackJackViewModels.Account;
@@ -25,18 +26,21 @@ namespace BlackJackServices.Services
 		private readonly AuthOptions _authOptions;
 		private readonly IPlayerRepository _playerRepository;
 		private readonly IMappingService _mappingService;
+		private readonly IJwtTokenProvider _jwtTokenProvider;
 
 		public AccountService(IOptions<AuthOptions> authOptions,
 							  IPlayerRepository playerRepository,
 							  UserManager<Player> userManager,
 							  SignInManager<Player> signInManager,
-							  IMappingService mappingService)
+							  IMappingService mappingService,
+							  IJwtTokenProvider jwtTokenProvider)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_authOptions = authOptions.Value;
 			_playerRepository = playerRepository;
 			_mappingService = mappingService;
+			_jwtTokenProvider = jwtTokenProvider;
 		}
 
 		public async Task<GetUsersAccountView> GetUsers()
@@ -84,45 +88,11 @@ namespace BlackJackServices.Services
 				await SignUp(userName);
 				user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			}
-			var identity = GetIdentity(user);
 			var token = new TokenAccountView
 			{
-				Token = GetTokenString(identity)
+				Token = _jwtTokenProvider.GetTokenString(user)
 			};
 			return token;
 		}
-
-		private string GetTokenString(ClaimsIdentity identity)
-		{
-			var jwt = GetToken(identity);
-			var stringToken = new JwtSecurityTokenHandler().WriteToken(jwt);
-			return stringToken;
-		}
-
-		private JwtSecurityToken GetToken(ClaimsIdentity identity)
-		{
-			var key = Encoding.ASCII.GetBytes(_authOptions.Key);
-			var jwt = new JwtSecurityToken(
-				issuer: _authOptions.Issuer,
-				audience: _authOptions.Audience,
-				claims: identity.Claims,
-				expires: DateTime.UtcNow.AddDays(_authOptions.LifeTime),
-				signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-				);
-			return jwt;
-		}
-
-		private ClaimsIdentity GetIdentity(Player user)
-		{
-			var claimsList = new List<Claim>
-				{
-					new Claim("UserName", user.UserName),
-					new Claim("UserId",user.Id),
-					new Claim("Role", user.Role)
-				};
-			ClaimsIdentity claimsIdentity = new ClaimsIdentity(claimsList, "Token");
-			return claimsIdentity;
-		}
-
 	}
 }

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 
 namespace BlackJack
 {
@@ -24,11 +23,10 @@ namespace BlackJack
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                    .Build();
-
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //        .SetBasePath(Directory.GetCurrentDirectory())
+            //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+            //        .Build();
 
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 

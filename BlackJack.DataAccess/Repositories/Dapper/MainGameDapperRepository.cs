@@ -36,8 +36,23 @@ namespace BlackJackDataAccess.Repositories
 
 		public async Task Add(TEntity item)
 		{
-
 			await Connection.InsertAsync(item);
+		}
+
+		public async Task AddRange(List<TEntity> entity)
+		{
+			await Connection.InsertAsync(entity);
+		}
+
+		public async Task Update(TEntity entity)
+		{
+			 Connection.Update(entity);
+		}
+
+		public async Task Remove(string id)
+		{
+			var entity = await Connection.GetAsync<TEntity>(id);
+			Connection.Delete(entity);
 		}
 	}
 }

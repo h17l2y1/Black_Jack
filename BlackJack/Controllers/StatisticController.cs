@@ -1,6 +1,5 @@
 using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
-using BlackJackViewModels.Statistic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
-    [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[ApiController]
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticService _service;
