@@ -1,10 +1,12 @@
-﻿using BlackJack.Exceptions;
+﻿using AutoMapper;
+using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using BlackJackEntities.Enums;
-using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
+using BlackJackViewModels.Game.GetCard;
+using BlackJackViewModels.Game.Stop;
 using MoreLinq;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +23,15 @@ namespace BlackJackServices.Services
 		private readonly IPlayerRepository _playerRepository;
 		private readonly ICardRepository _cardRepository;
 		private readonly IGameRepository _gameRepository;
+		private readonly IMappingService _mappingService;
 
-		public GameService(
-			ICacheWrapperService cache, IGameUsersRepository gameUsersRepository, ICardMoveRepository cardMoveRepository,
-			IPlayerRepository playerRepository, ICardRepository cardRepository, IGameRepository gameRepository
+		public GameService(ICacheWrapperService cache,
+						   IGameUsersRepository gameUsersRepository,
+						   ICardMoveRepository cardMoveRepository,
+						   IPlayerRepository playerRepository,
+						   ICardRepository cardRepository,
+						   IGameRepository gameRepository,
+						   IMappingService mappingService
 			)
 		{
 			_cache = cache;
@@ -33,46 +40,57 @@ namespace BlackJackServices.Services
 			_playerRepository = playerRepository;
 			_cardRepository = cardRepository;
 			_gameRepository = gameRepository;
-			_deck = new Deck(_cardRepository.GetAll().ToList());
+			_mappingService = mappingService;
 		}
 
-		public async Task<ResponseStartGameView> Start(string userId, int countBots)
+		public async Task<StartGameResponseViewItem> Start(string userId, int countBots)
 		{
+			IEnumerable<Card> deck = await _cardRepository.GetAll();
+			_deck = new Deck(deck);
 			var game = new Game();
-			await _gameRepository.AddGame(game);
+			await _gameRepository.Add(game);
 			_cache.SaveToCache(game.Id, _deck);
 
 			List<Player> playersList = await GetPlayers(userId, game.Id, countBots);
 			await StartGame(userId, game.Id, playersList);
 
-			ResponseStartGameView gameModel = await CreateStartGameModel(userId, game.Id);
-			return gameModel;
+			Player user = await _playerRepository.Get(userId);
+
+			int cardLeft = _deck.CardsLeft();
+			List<Player> botPlayerList = await GetBotsFromGame(user.Id, game.Id);
+
+			StartGameResponseViewItem response = await CreateStartView(user, game.Id, cardLeft, botPlayerList);
+			return response;
 		}
 
-		public async Task<ResponseCardGameView> AddOneCard(string userId, string gameId)
+		public async Task<GetCardStartView> AddOneCard(string userId, string gameId)
 		{
-			// list because AddCard takes List<Player>
 			var player = new List<Player>();
-			Player user = _playerRepository.Get(userId);
+			Player user = await _playerRepository.Get(userId);
 			player.Add(user);
 
 			int move = _cardMoveRepository.CountMove(gameId, user.UserName);
 			if (move == 0)
 			{
-				throw new MoveNotFoundException();
+				throw new NotFoundException();
 			}
 			Card card = await AddCard(move, gameId, player);
-			ResponseCardGameView response = CardMapper(card);
+			GetCardStartView response = CreateCardView(card);
 
 			return response;
 		}
 
-		public async Task<ResponseStopGameView> Stop(string userId, string gameId)
+		public async Task<StopGameResponseViewItem> Stop(string userId, string gameId)
 		{
 			await AddOtherCardToBots(userId, gameId);
 			var winner = await SearchWinner(gameId);
-			var stopModel = await CreateStopGameModel(userId, gameId, winner);
-			return stopModel;
+			Player user = await _playerRepository.Get(userId);
+
+			int cardLeft = _deck.CardsLeft();
+			List<Player> botPlayerList = await GetBotsFromGame(user.Id, gameId);
+
+			var response = await CreateStopView(user, gameId, winner, cardLeft, botPlayerList);
+			return response;
 		}
 
 
@@ -81,17 +99,17 @@ namespace BlackJackServices.Services
 		private async Task<List<Player>> GetPlayers(string userId, string gameId, int countBots)
 		{
 			var players = new List<Player>();
-			List<Player> botsList = await _playerRepository.FindAnyBodyAsync(Players.Bot.ToString());
+			List<Player> botsList = await _playerRepository.GetByRole(PlayersType.Bot.ToString());
 			if (botsList == null)
 			{
 				throw new NotFoundException("Bots not Found");
 			}
-			Player user = _playerRepository.Get(userId);
+			Player user = await _playerRepository.Get(userId);
 			if (user == null)
 			{
 				throw new NotFoundException("User not Found");
 			}
-			Player dialer = await _playerRepository.FindDialer();
+			Player dialer = await _playerRepository.GetDialer();
 			if (dialer == null)
 			{
 				throw new NotFoundException("Dialer not Found");
@@ -114,15 +132,15 @@ namespace BlackJackServices.Services
 
 		private async Task AddPlayersToGame(List<Player> playersList, string gameId)
 		{
-			var list = new List<GameUsers>();
+			var list = new List<GameUser>();
 			foreach (var player in playersList)
 			{
-				var newGameUser = new GameUsers
+				var newGameUser = new GameUser
 				{
 					GameId = gameId,
 					UserId = player.Id
 				};
-				await _gameUsersRepository.AddPlayerToGame(newGameUser);
+				await _gameUsersRepository.Add(newGameUser);
 			}
 		}
 
@@ -154,7 +172,7 @@ namespace BlackJackServices.Services
 				};
 				listCardMoves.Add(move);
 				newCard = card;
-				await _cardMoveRepository.AddCardToPlayer(move);
+				await _cardMoveRepository.Add(move);
 			}
 			return newCard;
 		}
@@ -192,7 +210,7 @@ namespace BlackJackServices.Services
 
 		private async Task<List<InGame>> InGameMapper(string userId, string gameId)
 		{
-			List<CardMove> botsCardMoveList = await _cardMoveRepository.BotsCardMoveList(gameId, userId);
+			List<CardMove> botsCardMoveList = await _cardMoveRepository.GetByGameIdAndUserId(gameId, userId);
 			if (botsCardMoveList == null)
 			{
 				throw new NotFoundException("AddOtherCardToBots()");
@@ -211,43 +229,55 @@ namespace BlackJackServices.Services
 			return playersCount;
 		}
 
-		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
+		private async Task<List<Player>> GetBotsFromGame2(string userId, string gameId)
 		{
 			var botsList = new List<Player>();
 
-			// id bots from game
-			var botsIdList = await _gameUsersRepository.GetBotsIdList(userId, gameId);
+			List<string> botsIdList = await _gameUsersRepository.GetBotsByUserIdAndGameId(userId, gameId);
 			if (botsIdList == null)
 			{
 				throw new NotFoundException();
 			}
 
-			// bots from game
+			var result = botsIdList
+			.Select(x => _playerRepository.Get(x).Result)
+			.ToList();
+
+			return botsList;
+		}
+
+		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
+		{
+			var botsList = new List<Player>();
+
+			var botsIdList = await _gameUsersRepository.GetBotsByUserIdAndGameId(userId, gameId);
+			if (botsIdList == null)
+			{
+				throw new NotFoundException();
+			}
+
 			foreach (var id in botsIdList)
 			{
-				botsList.Add(_playerRepository.Get(id));
+				botsList.Add(await _playerRepository.Get(id));
 			}
 			return botsList;
 		}
 
-		private async Task<List<object>> SearchWinner(string gameId)
+		private async Task<List<Winner>> SearchWinner(string gameId)
 		{
-			var cardMoveList = await _cardMoveRepository.GetMovesFromGame(gameId);
+			var cardMoveList = await _cardMoveRepository.GetByGameId(gameId);
 			if (cardMoveList == null)
 			{
-				throw new MoveNotFoundException();
+				throw new NotFoundException();
 			}
-			var playersCount = cardMoveList
-				.GroupBy(x => x.PlayerId)
-				.Select(x => new
-				{
-					PlayerId = x.Key,
-					Name = _playerRepository.Get(x.Key).UserName,
-					Value = x.Sum(f => f.Value)
-				})
-				.OrderBy(x => x.Value);
 
-			var winnersList = new List<object>();   //  <--- Winner/s
+			var playersCount = cardMoveList
+				.GroupBy(r => r.PlayerId)
+				.Select(x => GetWinners(x.Key, x.Sum(f => f.Value)).Result)
+				.OrderBy(t => t.Value)
+				.ToList();
+
+			var winnersList = new List<Winner>();
 			var winners = playersCount
 				.Where(x => x.Value < 22)
 				.MaxBy(z => z.Value)
@@ -256,10 +286,10 @@ namespace BlackJackServices.Services
 
 			foreach (var winner in winners)
 			{
-				var player = await _gameUsersRepository.GetFutureWinner(winner.PlayerId, gameId);
+				GameUser player = await _gameUsersRepository.GetFutureWinnerByPlayerIdAndGameId(winner.PlayerId, gameId);
 				if (player == null)
 				{
-					throw new GameUserNotFoundException();
+					throw new NotFoundException();
 				}
 				player.Winner = true;
 				await _gameUsersRepository.UpdateWinner(player);
@@ -267,103 +297,70 @@ namespace BlackJackServices.Services
 			return winnersList;
 		}
 
-
-
-		// View models
-
-		private async Task<ResponseStartGameView> CreateStartGameModel(string userId, string gameId)
+		private async Task<Winner> GetWinners(string key, int value)
 		{
-			List<Player> botList = await GetBotsFromGame(userId, gameId);
-			Player user = _playerRepository.Get(userId);
-			List<CardMove> moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
-
-			var gameModel = new ResponseStartGameView();
-			gameModel.GameId = gameId;
-			gameModel.User = CreatePlayer(user, moveList);
-			gameModel.Bots.AddRange(GetBots(botList, moveList));
-			gameModel.Cardsleft = _deck.CardsLeft();
-			return gameModel;
-		}
-
-		private List<PlayerGameView> GetBots(List<Player> botList, List<CardMove> moveList)
-		{
-			var list = new List<PlayerGameView>();
-			foreach (var bot in botList)
+			Player player = await _playerRepository.Get(key);
+			var winnerList = new Winner
 			{
-				list.Add(CreatePlayer(bot, moveList));
-			}
-			return list;
+				Name = player.UserName,
+				PlayerId = player.Id,
+				Value = value
+			};
+			return winnerList;
 		}
 
-		private PlayerGameView CreatePlayer(Player player, List<CardMove> moveList)
+		private int GetScore(Player player, List<CardMove> moveList)
 		{
-			var playerMoves = moveList.Where(t => t.PlayerId == player.Id).ToList();
-			var cardsList = new List<Card>();
+			List<CardMove> cards = GetPlayerMoves(player, moveList);
 
-			foreach (var move in playerMoves)
-			{
-				cardsList.Add(_cardRepository.Get(move.CardId));
-			}
-
-			var userView = new PlayerGameView();
-			userView.Name = player.UserName;
-			userView.Cards.AddRange(GetCardView(cardsList));
-			userView.Score = GetScore(playerMoves);
-
-			return userView;
-		}
-
-		private List<ResponseCardGameView> GetCardView(List<Card> cards)
-		{
-			var listCardView = new List<ResponseCardGameView>();
-			foreach (var card in cards)
-			{
-				var cardModel = new ResponseCardGameView
-				{
-					Ranks = card.Rank.ToString(),
-					Suit = card.Suit.ToString(),
-					Value = card.Value
-				};
-				listCardView.Add(cardModel);
-			}
-			return listCardView;
-		}
-
-		private int GetScore(List<CardMove> cards)
-		{
 			int score = 0;
 			foreach (var card in cards)
 			{
 				score += card.Value;
 			}
+
 			return score;
 		}
 
-		private ResponseCardGameView CardMapper(Card card)
+		private List<CardMove> GetPlayerMoves(Player player, List<CardMove> moveList)
 		{
-			var response = new ResponseCardGameView
-			{
-				Ranks = card.Rank.ToString(),
-				Suit = card.Suit.ToString(),
-				Value = card.Value
-			};
-			return response;
+			List<CardMove> playerMoves = moveList
+				.Where(t => t.PlayerId == player.Id)
+				.ToList();
+			return playerMoves;
 		}
 
-		private async Task<ResponseStopGameView> CreateStopGameModel(string userId, string gameId, List<object> winner)
+		private List<Card> GetCardList(Player player, List<CardMove> moveList)
 		{
-			List<Player> botList = await GetBotsFromGame(userId, gameId);
-			Player user = _playerRepository.Get(userId);
-			List<CardMove> moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
+			List<CardMove> playerMoves = GetPlayerMoves(player, moveList);
 
-			var gameModel = new ResponseStopGameView();
-			gameModel.GameId = gameId;
-			gameModel.User = CreatePlayer(user, moveList);
-			gameModel.Bots.AddRange(GetBots(botList, moveList));
-			gameModel.Cardsleft = _deck.CardsLeft();
-			gameModel.Winner = winner;
+			List<Card> cardList = playerMoves
+				.Select(x => _cardRepository
+				.Get(x.CardId)
+				.Result)
+				.ToList();
+			return cardList;
+		}
 
-			return gameModel;
+
+		// View
+
+		private GetCardStartView CreateCardView(Card card)
+		{
+			var model = _mappingService.StartOneCardMapper(card);
+			return model;
+		}
+
+		private async Task<StartGameResponseViewItem> CreateStartView(Player user, string gameId, int cardLeft, List<Player> botPlayerList)
+		{
+			var model = await _mappingService.CreateStartGameModel(user, gameId, botPlayerList, cardLeft);
+			return model;
+		}
+
+		private async Task<StopGameResponseViewItem> CreateStopView(Player user, string gameId, List<Winner> winner, int cardLeft, List<Player> botPlayerList)
+		{
+			var model = await _mappingService.CreateStopGameModel(user, gameId, winner, botPlayerList, cardLeft);
+			return model;
 		}
 
 	}

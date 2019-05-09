@@ -6,13 +6,13 @@ namespace BlackJackServices.Services.Interfaces
 {
 	public interface IAccountService
 	{
-		Task<ResponseGetUsersAccount> GetUsers();
+		Task<GetUsersAccountView> GetUsers();
 
-		Task<ResponseSignUpAccountView> SignUp(string userName);
+		Task<SignUpAccountResponseView> SignUp(string userName);
 
-		Task<ResponseGetAccountView> GetById(string id);
+		Task<GetAccountResponseView> GetById(string id);
 
-		Task<ResponseTokenAccountView> Logining(string userName);
+		Task<TokenAccountView> LogIn(string userName);
 
 	}
 }

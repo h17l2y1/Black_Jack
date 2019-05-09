@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess
 {
@@ -11,15 +12,26 @@ namespace BlackJackDataAccess
 			_context = context;
 		}
 
-		public TEntity Get(string id)
+		public async Task<TEntity> Get(string id)
 		{
-			return _context.Set<TEntity>().Find(id);
+			return await _context.Set<TEntity>().FindAsync(id);
 		}
 
-		public IQueryable<TEntity> GetAll()
+		// ??
+		public async Task<IEnumerable<TEntity>> GetAll()
 		{
-			return _context.Set<TEntity>().AsQueryable();
+			return _context.Set<TEntity>();
 		}
 
+		//public IEnumerable<TEntity> GetAllOld()
+		//{
+		//	return _context.Set<TEntity>();
+		//}
+
+		public async Task Add(TEntity entity)
+		{
+			await _context.Set<TEntity>().AddAsync(entity);
+			await _context.SaveChangesAsync();
+		}
 	}
 }

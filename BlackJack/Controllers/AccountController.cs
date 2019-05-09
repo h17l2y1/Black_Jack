@@ -32,18 +32,18 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogIn([FromBody] RequestSignUpAccountView model)
+        public async Task<IActionResult> LogIn([FromBody] SignUpAccountRequestView model)
         {
             if (ModelState.IsValid)
             {
-                var token = await _service.Logining(model.UserName);
+                var token = await _service.LogIn(model.UserName);
                 return Ok(token);
             }
             throw new ModelNotValidException("RequestSignUpAccountView");
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] RequestSignUpAccountView model)
+        public async Task<IActionResult> SignUp([FromBody] SignUpAccountRequestView model)
         {
             if (ModelState.IsValid)
             {

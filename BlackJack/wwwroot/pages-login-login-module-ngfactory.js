@@ -517,7 +517,7 @@ exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "./node
 Object.defineProperty(exports, "__esModule", { value: true });
 var canReportError_1 = __webpack_require__(/*! ./util/canReportError */ "./node_modules/rxjs/internal/util/canReportError.js");
 var toSubscriber_1 = __webpack_require__(/*! ./util/toSubscriber */ "./node_modules/rxjs/internal/util/toSubscriber.js");
-var observable_1 = __webpack_require__(/*! ../internal/symbol/observable */ "./node_modules/rxjs/internal/symbol/observable.js");
+var observable_1 = __webpack_require__(/*! ./symbol/observable */ "./node_modules/rxjs/internal/symbol/observable.js");
 var pipe_1 = __webpack_require__(/*! ./util/pipe */ "./node_modules/rxjs/internal/util/pipe.js");
 var config_1 = __webpack_require__(/*! ./config */ "./node_modules/rxjs/internal/config.js");
 var Observable = (function () {
@@ -537,7 +537,7 @@ var Observable = (function () {
         var operator = this.operator;
         var sink = toSubscriber_1.toSubscriber(observerOrNext, error, complete);
         if (operator) {
-            operator.call(sink, this.source);
+            sink.add(operator.call(sink, this.source));
         }
         else {
             sink.add(this.source || (config_1.config.useDeprecatedSynchronousErrorHandling && !sink.syncErrorThrowable) ?
@@ -699,7 +699,6 @@ var Subscriber = (function (_super) {
         _this.syncErrorThrown = false;
         _this.syncErrorThrowable = false;
         _this.isStopped = false;
-        _this._parentSubscription = null;
         switch (arguments.length) {
             case 0:
                 _this.destination = Observer_1.empty;
@@ -770,15 +769,12 @@ var Subscriber = (function (_super) {
         this.unsubscribe();
     };
     Subscriber.prototype._unsubscribeAndRecycle = function () {
-        var _a = this, _parent = _a._parent, _parents = _a._parents;
-        this._parent = null;
-        this._parents = null;
+        var _parentOrParents = this._parentOrParents;
+        this._parentOrParents = null;
         this.unsubscribe();
         this.closed = false;
         this.isStopped = false;
-        this._parent = _parent;
-        this._parents = _parents;
-        this._parentSubscription = null;
+        this._parentOrParents = _parentOrParents;
         return this;
     };
     return Subscriber;
@@ -936,100 +932,116 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var isArray_1 = __webpack_require__(/*! ./util/isArray */ "./node_modules/rxjs/internal/util/isArray.js");
 var isObject_1 = __webpack_require__(/*! ./util/isObject */ "./node_modules/rxjs/internal/util/isObject.js");
 var isFunction_1 = __webpack_require__(/*! ./util/isFunction */ "./node_modules/rxjs/internal/util/isFunction.js");
-var tryCatch_1 = __webpack_require__(/*! ./util/tryCatch */ "./node_modules/rxjs/internal/util/tryCatch.js");
-var errorObject_1 = __webpack_require__(/*! ./util/errorObject */ "./node_modules/rxjs/internal/util/errorObject.js");
 var UnsubscriptionError_1 = __webpack_require__(/*! ./util/UnsubscriptionError */ "./node_modules/rxjs/internal/util/UnsubscriptionError.js");
 var Subscription = (function () {
     function Subscription(unsubscribe) {
         this.closed = false;
-        this._parent = null;
-        this._parents = null;
+        this._parentOrParents = null;
         this._subscriptions = null;
         if (unsubscribe) {
             this._unsubscribe = unsubscribe;
         }
     }
     Subscription.prototype.unsubscribe = function () {
-        var hasErrors = false;
         var errors;
         if (this.closed) {
             return;
         }
-        var _a = this, _parent = _a._parent, _parents = _a._parents, _unsubscribe = _a._unsubscribe, _subscriptions = _a._subscriptions;
+        var _a = this, _parentOrParents = _a._parentOrParents, _unsubscribe = _a._unsubscribe, _subscriptions = _a._subscriptions;
         this.closed = true;
-        this._parent = null;
-        this._parents = null;
+        this._parentOrParents = null;
         this._subscriptions = null;
-        var index = -1;
-        var len = _parents ? _parents.length : 0;
-        while (_parent) {
-            _parent.remove(this);
-            _parent = ++index < len && _parents[index] || null;
+        if (_parentOrParents instanceof Subscription) {
+            _parentOrParents.remove(this);
+        }
+        else if (_parentOrParents !== null) {
+            for (var index = 0; index < _parentOrParents.length; ++index) {
+                var parent_1 = _parentOrParents[index];
+                parent_1.remove(this);
+            }
         }
         if (isFunction_1.isFunction(_unsubscribe)) {
-            var trial = tryCatch_1.tryCatch(_unsubscribe).call(this);
-            if (trial === errorObject_1.errorObject) {
-                hasErrors = true;
-                errors = errors || (errorObject_1.errorObject.e instanceof UnsubscriptionError_1.UnsubscriptionError ?
-                    flattenUnsubscriptionErrors(errorObject_1.errorObject.e.errors) : [errorObject_1.errorObject.e]);
+            try {
+                _unsubscribe.call(this);
+            }
+            catch (e) {
+                errors = e instanceof UnsubscriptionError_1.UnsubscriptionError ? flattenUnsubscriptionErrors(e.errors) : [e];
             }
         }
         if (isArray_1.isArray(_subscriptions)) {
-            index = -1;
-            len = _subscriptions.length;
+            var index = -1;
+            var len = _subscriptions.length;
             while (++index < len) {
                 var sub = _subscriptions[index];
                 if (isObject_1.isObject(sub)) {
-                    var trial = tryCatch_1.tryCatch(sub.unsubscribe).call(sub);
-                    if (trial === errorObject_1.errorObject) {
-                        hasErrors = true;
+                    try {
+                        sub.unsubscribe();
+                    }
+                    catch (e) {
                         errors = errors || [];
-                        var err = errorObject_1.errorObject.e;
-                        if (err instanceof UnsubscriptionError_1.UnsubscriptionError) {
-                            errors = errors.concat(flattenUnsubscriptionErrors(err.errors));
+                        if (e instanceof UnsubscriptionError_1.UnsubscriptionError) {
+                            errors = errors.concat(flattenUnsubscriptionErrors(e.errors));
                         }
                         else {
-                            errors.push(err);
+                            errors.push(e);
                         }
                     }
                 }
             }
         }
-        if (hasErrors) {
+        if (errors) {
             throw new UnsubscriptionError_1.UnsubscriptionError(errors);
         }
     };
     Subscription.prototype.add = function (teardown) {
-        if (!teardown || (teardown === Subscription.EMPTY)) {
-            return Subscription.EMPTY;
-        }
-        if (teardown === this) {
-            return this;
-        }
         var subscription = teardown;
         switch (typeof teardown) {
             case 'function':
                 subscription = new Subscription(teardown);
             case 'object':
-                if (subscription.closed || typeof subscription.unsubscribe !== 'function') {
+                if (subscription === this || subscription.closed || typeof subscription.unsubscribe !== 'function') {
                     return subscription;
                 }
                 else if (this.closed) {
                     subscription.unsubscribe();
                     return subscription;
                 }
-                else if (typeof subscription._addParent !== 'function') {
+                else if (!(subscription instanceof Subscription)) {
                     var tmp = subscription;
                     subscription = new Subscription();
                     subscription._subscriptions = [tmp];
                 }
                 break;
-            default:
+            default: {
+                if (!teardown) {
+                    return Subscription.EMPTY;
+                }
                 throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
+            }
         }
-        var subscriptions = this._subscriptions || (this._subscriptions = []);
-        subscriptions.push(subscription);
-        subscription._addParent(this);
+        var _parentOrParents = subscription._parentOrParents;
+        if (_parentOrParents === null) {
+            subscription._parentOrParents = this;
+        }
+        else if (_parentOrParents instanceof Subscription) {
+            if (_parentOrParents === this) {
+                return subscription;
+            }
+            subscription._parentOrParents = [_parentOrParents, this];
+        }
+        else if (_parentOrParents.indexOf(this) === -1) {
+            _parentOrParents.push(this);
+        }
+        else {
+            return subscription;
+        }
+        var subscriptions = this._subscriptions;
+        if (subscriptions === null) {
+            this._subscriptions = [subscription];
+        }
+        else {
+            subscriptions.push(subscription);
+        }
         return subscription;
     };
     Subscription.prototype.remove = function (subscription) {
@@ -1039,18 +1051,6 @@ var Subscription = (function () {
             if (subscriptionIndex !== -1) {
                 subscriptions.splice(subscriptionIndex, 1);
             }
-        }
-    };
-    Subscription.prototype._addParent = function (parent) {
-        var _a = this, _parent = _a._parent, _parents = _a._parents;
-        if (!_parent || _parent === parent) {
-            this._parent = parent;
-        }
-        else if (!_parents) {
-            this._parents = [parent];
-        }
-        else if (_parents.indexOf(parent) === -1) {
-            _parents.push(parent);
         }
     };
     Subscription.EMPTY = (function (empty) {
@@ -1109,15 +1109,8 @@ exports.config = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
-var isPromise_1 = __webpack_require__(/*! ../util/isPromise */ "./node_modules/rxjs/internal/util/isPromise.js");
-var isArrayLike_1 = __webpack_require__(/*! ../util/isArrayLike */ "./node_modules/rxjs/internal/util/isArrayLike.js");
-var isInteropObservable_1 = __webpack_require__(/*! ../util/isInteropObservable */ "./node_modules/rxjs/internal/util/isInteropObservable.js");
-var isIterable_1 = __webpack_require__(/*! ../util/isIterable */ "./node_modules/rxjs/internal/util/isIterable.js");
-var fromArray_1 = __webpack_require__(/*! ./fromArray */ "./node_modules/rxjs/internal/observable/fromArray.js");
-var fromPromise_1 = __webpack_require__(/*! ./fromPromise */ "./node_modules/rxjs/internal/observable/fromPromise.js");
-var fromIterable_1 = __webpack_require__(/*! ./fromIterable */ "./node_modules/rxjs/internal/observable/fromIterable.js");
-var fromObservable_1 = __webpack_require__(/*! ./fromObservable */ "./node_modules/rxjs/internal/observable/fromObservable.js");
 var subscribeTo_1 = __webpack_require__(/*! ../util/subscribeTo */ "./node_modules/rxjs/internal/util/subscribeTo.js");
+var scheduled_1 = __webpack_require__(/*! ../scheduled/scheduled */ "./node_modules/rxjs/internal/scheduled/scheduled.js");
 function from(input, scheduler) {
     if (!scheduler) {
         if (input instanceof Observable_1.Observable) {
@@ -1125,70 +1118,18 @@ function from(input, scheduler) {
         }
         return new Observable_1.Observable(subscribeTo_1.subscribeTo(input));
     }
-    if (input != null) {
-        if (isInteropObservable_1.isInteropObservable(input)) {
-            return fromObservable_1.fromObservable(input, scheduler);
-        }
-        else if (isPromise_1.isPromise(input)) {
-            return fromPromise_1.fromPromise(input, scheduler);
-        }
-        else if (isArrayLike_1.isArrayLike(input)) {
-            return fromArray_1.fromArray(input, scheduler);
-        }
-        else if (isIterable_1.isIterable(input) || typeof input === 'string') {
-            return fromIterable_1.fromIterable(input, scheduler);
-        }
+    else {
+        return scheduled_1.scheduled(input, scheduler);
     }
-    throw new TypeError((input !== null && typeof input || input) + ' is not observable');
 }
 exports.from = from;
 //# sourceMappingURL=from.js.map
 
 /***/ }),
 
-/***/ "./node_modules/rxjs/internal/observable/fromArray.js":
-/*!************************************************************!*\
-  !*** ./node_modules/rxjs/internal/observable/fromArray.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
-var Subscription_1 = __webpack_require__(/*! ../Subscription */ "./node_modules/rxjs/internal/Subscription.js");
-var subscribeToArray_1 = __webpack_require__(/*! ../util/subscribeToArray */ "./node_modules/rxjs/internal/util/subscribeToArray.js");
-function fromArray(input, scheduler) {
-    if (!scheduler) {
-        return new Observable_1.Observable(subscribeToArray_1.subscribeToArray(input));
-    }
-    else {
-        return new Observable_1.Observable(function (subscriber) {
-            var sub = new Subscription_1.Subscription();
-            var i = 0;
-            sub.add(scheduler.schedule(function () {
-                if (i === input.length) {
-                    subscriber.complete();
-                    return;
-                }
-                subscriber.next(input[i++]);
-                if (!subscriber.closed) {
-                    sub.add(this.schedule());
-                }
-            }));
-            return sub;
-        });
-    }
-}
-exports.fromArray = fromArray;
-//# sourceMappingURL=fromArray.js.map
-
-/***/ }),
-
-/***/ "./node_modules/rxjs/internal/observable/fromIterable.js":
+/***/ "./node_modules/rxjs/internal/scheduled/scheduleArray.js":
 /*!***************************************************************!*\
-  !*** ./node_modules/rxjs/internal/observable/fromIterable.js ***!
+  !*** ./node_modules/rxjs/internal/scheduled/scheduleArray.js ***!
   \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1198,63 +1139,91 @@ exports.fromArray = fromArray;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
 var Subscription_1 = __webpack_require__(/*! ../Subscription */ "./node_modules/rxjs/internal/Subscription.js");
-var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ "./node_modules/rxjs/internal/symbol/iterator.js");
-var subscribeToIterable_1 = __webpack_require__(/*! ../util/subscribeToIterable */ "./node_modules/rxjs/internal/util/subscribeToIterable.js");
-function fromIterable(input, scheduler) {
-    if (!input) {
-        throw new Error('Iterable cannot be null');
-    }
-    if (!scheduler) {
-        return new Observable_1.Observable(subscribeToIterable_1.subscribeToIterable(input));
-    }
-    else {
-        return new Observable_1.Observable(function (subscriber) {
-            var sub = new Subscription_1.Subscription();
-            var iterator;
-            sub.add(function () {
-                if (iterator && typeof iterator.return === 'function') {
-                    iterator.return();
-                }
-            });
-            sub.add(scheduler.schedule(function () {
-                iterator = input[iterator_1.iterator]();
-                sub.add(scheduler.schedule(function () {
-                    if (subscriber.closed) {
-                        return;
-                    }
-                    var value;
-                    var done;
-                    try {
-                        var result = iterator.next();
-                        value = result.value;
-                        done = result.done;
-                    }
-                    catch (err) {
-                        subscriber.error(err);
-                        return;
-                    }
-                    if (done) {
-                        subscriber.complete();
-                    }
-                    else {
-                        subscriber.next(value);
-                        this.schedule();
-                    }
-                }));
-            }));
-            return sub;
-        });
-    }
+function scheduleArray(input, scheduler) {
+    return new Observable_1.Observable(function (subscriber) {
+        var sub = new Subscription_1.Subscription();
+        var i = 0;
+        sub.add(scheduler.schedule(function () {
+            if (i === input.length) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(input[i++]);
+            if (!subscriber.closed) {
+                sub.add(this.schedule());
+            }
+        }));
+        return sub;
+    });
 }
-exports.fromIterable = fromIterable;
-//# sourceMappingURL=fromIterable.js.map
+exports.scheduleArray = scheduleArray;
+//# sourceMappingURL=scheduleArray.js.map
 
 /***/ }),
 
-/***/ "./node_modules/rxjs/internal/observable/fromObservable.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/rxjs/internal/observable/fromObservable.js ***!
-  \*****************************************************************/
+/***/ "./node_modules/rxjs/internal/scheduled/scheduleIterable.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/rxjs/internal/scheduled/scheduleIterable.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
+var Subscription_1 = __webpack_require__(/*! ../Subscription */ "./node_modules/rxjs/internal/Subscription.js");
+var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ "./node_modules/rxjs/internal/symbol/iterator.js");
+function scheduleIterable(input, scheduler) {
+    if (!input) {
+        throw new Error('Iterable cannot be null');
+    }
+    return new Observable_1.Observable(function (subscriber) {
+        var sub = new Subscription_1.Subscription();
+        var iterator;
+        sub.add(function () {
+            if (iterator && typeof iterator.return === 'function') {
+                iterator.return();
+            }
+        });
+        sub.add(scheduler.schedule(function () {
+            iterator = input[iterator_1.iterator]();
+            sub.add(scheduler.schedule(function () {
+                if (subscriber.closed) {
+                    return;
+                }
+                var value;
+                var done;
+                try {
+                    var result = iterator.next();
+                    value = result.value;
+                    done = result.done;
+                }
+                catch (err) {
+                    subscriber.error(err);
+                    return;
+                }
+                if (done) {
+                    subscriber.complete();
+                }
+                else {
+                    subscriber.next(value);
+                    this.schedule();
+                }
+            }));
+        }));
+        return sub;
+    });
+}
+exports.scheduleIterable = scheduleIterable;
+//# sourceMappingURL=scheduleIterable.js.map
+
+/***/ }),
+
+/***/ "./node_modules/rxjs/internal/scheduled/scheduleObservable.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/rxjs/internal/scheduled/scheduleObservable.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1264,35 +1233,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
 var Subscription_1 = __webpack_require__(/*! ../Subscription */ "./node_modules/rxjs/internal/Subscription.js");
 var observable_1 = __webpack_require__(/*! ../symbol/observable */ "./node_modules/rxjs/internal/symbol/observable.js");
-var subscribeToObservable_1 = __webpack_require__(/*! ../util/subscribeToObservable */ "./node_modules/rxjs/internal/util/subscribeToObservable.js");
-function fromObservable(input, scheduler) {
-    if (!scheduler) {
-        return new Observable_1.Observable(subscribeToObservable_1.subscribeToObservable(input));
-    }
-    else {
-        return new Observable_1.Observable(function (subscriber) {
-            var sub = new Subscription_1.Subscription();
-            sub.add(scheduler.schedule(function () {
-                var observable = input[observable_1.observable]();
-                sub.add(observable.subscribe({
-                    next: function (value) { sub.add(scheduler.schedule(function () { return subscriber.next(value); })); },
-                    error: function (err) { sub.add(scheduler.schedule(function () { return subscriber.error(err); })); },
-                    complete: function () { sub.add(scheduler.schedule(function () { return subscriber.complete(); })); },
-                }));
+function scheduleObservable(input, scheduler) {
+    return new Observable_1.Observable(function (subscriber) {
+        var sub = new Subscription_1.Subscription();
+        sub.add(scheduler.schedule(function () {
+            var observable = input[observable_1.observable]();
+            sub.add(observable.subscribe({
+                next: function (value) { sub.add(scheduler.schedule(function () { return subscriber.next(value); })); },
+                error: function (err) { sub.add(scheduler.schedule(function () { return subscriber.error(err); })); },
+                complete: function () { sub.add(scheduler.schedule(function () { return subscriber.complete(); })); },
             }));
-            return sub;
-        });
-    }
+        }));
+        return sub;
+    });
 }
-exports.fromObservable = fromObservable;
-//# sourceMappingURL=fromObservable.js.map
+exports.scheduleObservable = scheduleObservable;
+//# sourceMappingURL=scheduleObservable.js.map
 
 /***/ }),
 
-/***/ "./node_modules/rxjs/internal/observable/fromPromise.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/rxjs/internal/observable/fromPromise.js ***!
-  \**************************************************************/
+/***/ "./node_modules/rxjs/internal/scheduled/schedulePromise.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/rxjs/internal/scheduled/schedulePromise.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1301,28 +1264,62 @@ exports.fromObservable = fromObservable;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
 var Subscription_1 = __webpack_require__(/*! ../Subscription */ "./node_modules/rxjs/internal/Subscription.js");
-var subscribeToPromise_1 = __webpack_require__(/*! ../util/subscribeToPromise */ "./node_modules/rxjs/internal/util/subscribeToPromise.js");
-function fromPromise(input, scheduler) {
-    if (!scheduler) {
-        return new Observable_1.Observable(subscribeToPromise_1.subscribeToPromise(input));
-    }
-    else {
-        return new Observable_1.Observable(function (subscriber) {
-            var sub = new Subscription_1.Subscription();
-            sub.add(scheduler.schedule(function () { return input.then(function (value) {
-                sub.add(scheduler.schedule(function () {
-                    subscriber.next(value);
-                    sub.add(scheduler.schedule(function () { return subscriber.complete(); }));
-                }));
-            }, function (err) {
-                sub.add(scheduler.schedule(function () { return subscriber.error(err); }));
-            }); }));
-            return sub;
-        });
-    }
+function schedulePromise(input, scheduler) {
+    return new Observable_1.Observable(function (subscriber) {
+        var sub = new Subscription_1.Subscription();
+        sub.add(scheduler.schedule(function () { return input.then(function (value) {
+            sub.add(scheduler.schedule(function () {
+                subscriber.next(value);
+                sub.add(scheduler.schedule(function () { return subscriber.complete(); }));
+            }));
+        }, function (err) {
+            sub.add(scheduler.schedule(function () { return subscriber.error(err); }));
+        }); }));
+        return sub;
+    });
 }
-exports.fromPromise = fromPromise;
-//# sourceMappingURL=fromPromise.js.map
+exports.schedulePromise = schedulePromise;
+//# sourceMappingURL=schedulePromise.js.map
+
+/***/ }),
+
+/***/ "./node_modules/rxjs/internal/scheduled/scheduled.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/rxjs/internal/scheduled/scheduled.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var scheduleObservable_1 = __webpack_require__(/*! ./scheduleObservable */ "./node_modules/rxjs/internal/scheduled/scheduleObservable.js");
+var schedulePromise_1 = __webpack_require__(/*! ./schedulePromise */ "./node_modules/rxjs/internal/scheduled/schedulePromise.js");
+var scheduleArray_1 = __webpack_require__(/*! ./scheduleArray */ "./node_modules/rxjs/internal/scheduled/scheduleArray.js");
+var scheduleIterable_1 = __webpack_require__(/*! ./scheduleIterable */ "./node_modules/rxjs/internal/scheduled/scheduleIterable.js");
+var isInteropObservable_1 = __webpack_require__(/*! ../util/isInteropObservable */ "./node_modules/rxjs/internal/util/isInteropObservable.js");
+var isPromise_1 = __webpack_require__(/*! ../util/isPromise */ "./node_modules/rxjs/internal/util/isPromise.js");
+var isArrayLike_1 = __webpack_require__(/*! ../util/isArrayLike */ "./node_modules/rxjs/internal/util/isArrayLike.js");
+var isIterable_1 = __webpack_require__(/*! ../util/isIterable */ "./node_modules/rxjs/internal/util/isIterable.js");
+function scheduled(input, scheduler) {
+    if (input != null) {
+        if (isInteropObservable_1.isInteropObservable(input)) {
+            return scheduleObservable_1.scheduleObservable(input, scheduler);
+        }
+        else if (isPromise_1.isPromise(input)) {
+            return schedulePromise_1.schedulePromise(input, scheduler);
+        }
+        else if (isArrayLike_1.isArrayLike(input)) {
+            return scheduleArray_1.scheduleArray(input, scheduler);
+        }
+        else if (isIterable_1.isIterable(input) || typeof input === 'string') {
+            return scheduleIterable_1.scheduleIterable(input, scheduler);
+        }
+    }
+    throw new TypeError((input !== null && typeof input || input) + ' is not observable');
+}
+exports.scheduled = scheduled;
+//# sourceMappingURL=scheduled.js.map
 
 /***/ }),
 
@@ -1437,21 +1434,6 @@ exports.canReportError = canReportError;
 
 /***/ }),
 
-/***/ "./node_modules/rxjs/internal/util/errorObject.js":
-/*!********************************************************!*\
-  !*** ./node_modules/rxjs/internal/util/errorObject.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorObject = { e: {} };
-//# sourceMappingURL=errorObject.js.map
-
-/***/ }),
-
 /***/ "./node_modules/rxjs/internal/util/hostReportError.js":
 /*!************************************************************!*\
   !*** ./node_modules/rxjs/internal/util/hostReportError.js ***!
@@ -1463,7 +1445,7 @@ exports.errorObject = { e: {} };
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function hostReportError(err) {
-    setTimeout(function () { throw err; });
+    setTimeout(function () { throw err; }, 0);
 }
 exports.hostReportError = hostReportError;
 //# sourceMappingURL=hostReportError.js.map
@@ -1567,7 +1549,7 @@ exports.isIterable = isIterable;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function isObject(x) {
-    return x != null && typeof x === 'object';
+    return x !== null && typeof x === 'object';
 }
 exports.isObject = isObject;
 //# sourceMappingURL=isObject.js.map
@@ -1585,7 +1567,7 @@ exports.isObject = isObject;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function isPromise(value) {
-    return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
+    return !!value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
 }
 exports.isPromise = isPromise;
 //# sourceMappingURL=isPromise.js.map
@@ -1653,7 +1635,6 @@ exports.pipeFromArray = pipeFromArray;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Observable_1 = __webpack_require__(/*! ../Observable */ "./node_modules/rxjs/internal/Observable.js");
 var subscribeToArray_1 = __webpack_require__(/*! ./subscribeToArray */ "./node_modules/rxjs/internal/util/subscribeToArray.js");
 var subscribeToPromise_1 = __webpack_require__(/*! ./subscribeToPromise */ "./node_modules/rxjs/internal/util/subscribeToPromise.js");
 var subscribeToIterable_1 = __webpack_require__(/*! ./subscribeToIterable */ "./node_modules/rxjs/internal/util/subscribeToIterable.js");
@@ -1664,19 +1645,7 @@ var isObject_1 = __webpack_require__(/*! ./isObject */ "./node_modules/rxjs/inte
 var iterator_1 = __webpack_require__(/*! ../symbol/iterator */ "./node_modules/rxjs/internal/symbol/iterator.js");
 var observable_1 = __webpack_require__(/*! ../symbol/observable */ "./node_modules/rxjs/internal/symbol/observable.js");
 exports.subscribeTo = function (result) {
-    if (result instanceof Observable_1.Observable) {
-        return function (subscriber) {
-            if (result._isScalar) {
-                subscriber.next(result.value);
-                subscriber.complete();
-                return undefined;
-            }
-            else {
-                return result.subscribe(subscriber);
-            }
-        };
-    }
-    else if (result && typeof result[observable_1.observable] === 'function') {
+    if (!!result && typeof result[observable_1.observable] === 'function') {
         return subscribeToObservable_1.subscribeToObservable(result);
     }
     else if (isArrayLike_1.isArrayLike(result)) {
@@ -1685,7 +1654,7 @@ exports.subscribeTo = function (result) {
     else if (isPromise_1.isPromise(result)) {
         return subscribeToPromise_1.subscribeToPromise(result);
     }
-    else if (result && typeof result[iterator_1.iterator] === 'function') {
+    else if (!!result && typeof result[iterator_1.iterator] === 'function') {
         return subscribeToIterable_1.subscribeToIterable(result);
     }
     else {
@@ -1713,9 +1682,7 @@ exports.subscribeToArray = function (array) { return function (subscriber) {
     for (var i = 0, len = array.length; i < len && !subscriber.closed; i++) {
         subscriber.next(array[i]);
     }
-    if (!subscriber.closed) {
-        subscriber.complete();
-    }
+    subscriber.complete();
 }; };
 //# sourceMappingURL=subscribeToArray.js.map
 
@@ -1836,36 +1803,6 @@ function toSubscriber(nextOrObserver, error, complete) {
 }
 exports.toSubscriber = toSubscriber;
 //# sourceMappingURL=toSubscriber.js.map
-
-/***/ }),
-
-/***/ "./node_modules/rxjs/internal/util/tryCatch.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/rxjs/internal/util/tryCatch.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var errorObject_1 = __webpack_require__(/*! ./errorObject */ "./node_modules/rxjs/internal/util/errorObject.js");
-var tryCatchTarget;
-function tryCatcher() {
-    try {
-        return tryCatchTarget.apply(this, arguments);
-    }
-    catch (e) {
-        errorObject_1.errorObject.e = e;
-        return errorObject_1.errorObject;
-    }
-}
-function tryCatch(fn) {
-    tryCatchTarget = fn;
-    return tryCatcher;
-}
-exports.tryCatch = tryCatch;
-//# sourceMappingURL=tryCatch.js.map
 
 /***/ }),
 

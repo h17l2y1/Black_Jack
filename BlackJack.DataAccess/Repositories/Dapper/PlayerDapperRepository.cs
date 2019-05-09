@@ -17,7 +17,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
         {
         }
 
-		public async Task<List<Player>> FindAnyBodyAsync(string role)
+		public async Task<List<Player>> GetByRole(string role)
 		{
 			var sql = $@"SELECT * FROM AspNetUsers WHERE Role='{role}'";
 
@@ -28,25 +28,25 @@ namespace BlackJackDataAccess.Repositories.Dapper
 			}
 		}
 
-        public async Task<Player> FindDialer()
+        public async Task<Player> GetDialer()
         {
             var sql = $@"SELECT * FROM AspNetUsers WHERE Role='Dialer'";
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-				var dilaer = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
-				return dilaer;
+				var result = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
+				return result;
             }
         }
 
-		public async Task<Player> GetByName(string userName)
+		public async Task<Player> GetByUserName(string userName)
 		{
 			var sql = $@"SELECT * FROM AspNetUsers WHERE UserName='{userName}'";
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dilaer = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
-				return dilaer;
+				var result = (await connection.QuerySingleOrDefaultAsync<Player>(sql));
+				return result;
 			}
 		}
 

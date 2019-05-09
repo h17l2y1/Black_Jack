@@ -30,7 +30,7 @@ Start game
       <div class="playerProp">Name: {{gameModel.user.name}}</div>
       <div class="playerProp">
           <div class="card" *ngFor="let card of gameModel.user.cards">
-            <div class="cardProp">Rank: {{card.ranks}}</div>
+            <div class="cardProp">Rank: {{card.rank}}</div>
             <div class="cardProp">Suit: {{card.suit}}</div>
             <div class="cardProp">Value: {{card.value}}</div>
           </div>
@@ -48,7 +48,7 @@ Start game
     <div class="playerProp">Name: {{bot.name}}</div>
     <div class="playerProp">
         <div class="card" *ngFor="let card of bot.cards">
-            <div class="cardProp">Rank: {{card.ranks}}</div>
+            <div class="cardProp">Rank: {{card.rank}}</div>
             <div class="cardProp">Suit: {{card.suit}}</div>
             <div class="cardProp">Value: {{card.value}}</div>
         </div>

@@ -1,14 +1,15 @@
 ﻿using BlackJackViewModels.Game;
+using BlackJackViewModels.Game.GetCard;
 using System.Threading.Tasks;
 
 namespace BlackJackServices.Services.Interfaces
 {
     public interface IGameService
     {
-        Task<ResponseStartGameView> Start(string userId, int countBots);
+        Task<StartGameResponseViewItem> Start(string userId, int countBots);
 
-        Task<ResponseCardGameView> AddOneCard(string userId, string gameId);
+        Task<GetCardStartView> AddOneCard(string userId, string gameId);
 
-        Task<ResponseStopGameView> Stop(string userId, string gameId);
+        Task<StopGameResponseViewItem> Stop(string userId, string gameId);
     }
 }

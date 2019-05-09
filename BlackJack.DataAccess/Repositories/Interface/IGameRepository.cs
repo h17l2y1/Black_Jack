@@ -5,6 +5,5 @@ namespace BlackJackDataAccess.Repositories.Interface
 {
     public interface IGameRepository : IMainGameRepository<Game>
     {
-        Task AddGame(Game game);
     }
 }

@@ -74,6 +74,8 @@ export class GameComponent implements OnInit {
     this.gameService.start(this.startGameModel)
       .subscribe((response) => {
         this.gameModel = response;
+        console.log(response);
+        console.log(this.gameModel);
       });
     this.getUserData();
     this.isNewGame = true;

@@ -15,32 +15,26 @@ namespace BlackJackDataAccess.Repositories
 
         public int CountMove(string gameId, string playerName)
         {
-            var countMove = _context.CardMoves
+            var result = _context.CardMoves
                 .Where(t => t.GameId == gameId && t.Name == playerName).Count();
 
-            return countMove;
+            return result;
         }
 
-        public async Task AddCardToPlayer(CardMove move)
+		public async Task<List<CardMove>> GetByGameId(string gameId)
         {
-            await _context.CardMoves.AddAsync(move);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task<List<CardMove>> GetMovesFromGame(string gameId)
-        {
-            var listCard = await _context.CardMoves
+            var result = await _context.CardMoves
                 .Where(t => t.GameId == gameId)
                 .ToListAsync();
-            return listCard;
+            return result;
         }
 
-        public async Task<List<CardMove>> BotsCardMoveList(string gameId, string userId)
+        public async Task<List<CardMove>> GetByGameIdAndUserId(string gameId, string userId)
         {
-            var cardMovelist = await _context.CardMoves
+            var result = await _context.CardMoves
                .Where(t => t.GameId == gameId && t.PlayerId != userId)
 			.ToListAsync();
-			return cardMovelist;
+			return result;
         }
 
     }

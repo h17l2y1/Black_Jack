@@ -12,7 +12,7 @@ namespace BlackJackEntities.Entities
 		public virtual ICollection<Player> Users { get; set; }
 
 		[Computed]
-		public virtual ICollection<GameUsers> GameUsers { get; set; }
+		public virtual ICollection<GameUser> GameUsers { get; set; }
 
 		public Game()
         {

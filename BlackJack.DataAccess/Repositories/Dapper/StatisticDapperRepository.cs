@@ -17,7 +17,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		{
 		}
 
-		public async Task<List<Statistic>> GetAllGames(int from, int size)
+		public async Task<List<Statistic>> GetAllGames(int offset, int size)
 		{
 			var sql = $@"
                     SELECT 
@@ -42,13 +42,13 @@ namespace BlackJackDataAccess.Repositories.Dapper
                     Order By 
                         CardMoves.GameId 
                     OFFSET 
-                        {from} Row 
+                        {offset} Row 
                     FETCH NEXT {size} ROWS ONLY";
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var games = (await connection.QueryAsync<Statistic>(sql)).ToList();
-				return games;
+				var result = (await connection.QueryAsync<Statistic>(sql)).ToList();
+				return result;
 			}
 		}
 
@@ -79,12 +79,12 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = (await connection.QuerySingleAsync<int>(sql));
-				return dbCount;
+				var result = (await connection.QuerySingleAsync<int>(sql));
+				return result;
 			}
 		}
 
-		public async Task<List<Statistic>> GetUserGames(int from, int size, string userName)
+		public async Task<List<Statistic>> GetUserGames(int offset, int size, string userName)
 		{
 			var sql = $@"
                     SELECT 
@@ -109,17 +109,17 @@ namespace BlackJackDataAccess.Repositories.Dapper
                     Order By 
                         CardMoves.GameId 
                     OFFSET 
-                        {from} Row 
+                        {offset} Row 
                     FETCH NEXT {size} ROWS ONLY";
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var games = (await connection.QueryAsync<Statistic>(sql)).ToList();
-				return games;
+				var result = (await connection.QueryAsync<Statistic>(sql)).ToList();
+				return result;
 			}
 		}
 
-		public async Task<int> UserCount(string userName)
+		public async Task<int> CountUsers(string userName)
 		{
 			var sql = $@"
                     SELECT COUNT(*) AS total FROM 
@@ -146,8 +146,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 		                ) AS total;";
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var dbCount = (await connection.QuerySingleAsync<int>(sql));
-				return dbCount;
+				var result = (await connection.QuerySingleAsync<int>(sql));
+				return result;
 			}
 		}
 	}

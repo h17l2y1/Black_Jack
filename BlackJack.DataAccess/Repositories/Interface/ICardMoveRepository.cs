@@ -8,11 +8,9 @@ namespace BlackJackDataAccess.Repositories.Interface
     {
         int CountMove(string gameId, string playerName);
 
-        Task AddCardToPlayer(CardMove move);
+        Task<List<CardMove>> GetByGameId(string gameId);
 
-        Task<List<CardMove>> GetMovesFromGame(string gameId);
-
-        Task<List<CardMove>> BotsCardMoveList(string gameId, string userId);
+        Task<List<CardMove>> GetByGameIdAndUserId(string gameId, string userId);
 
     }
 }

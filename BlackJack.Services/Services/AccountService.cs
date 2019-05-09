@@ -24,54 +24,59 @@ namespace BlackJackServices.Services
 		private readonly SignInManager<Player> _signInManager;
 		private readonly AuthOptions _authOptions;
 		private readonly IPlayerRepository _playerRepository;
+		private readonly IMappingService _mappingService;
 
-		public AccountService(IOptions<AuthOptions> authOptions, IPlayerRepository playerRepository,
-							  UserManager<Player> userManager, SignInManager<Player> signInManager)
+		public AccountService(IOptions<AuthOptions> authOptions,
+							  IPlayerRepository playerRepository,
+							  UserManager<Player> userManager,
+							  SignInManager<Player> signInManager,
+							  IMappingService mappingService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_authOptions = authOptions.Value;
 			_playerRepository = playerRepository;
+			_mappingService = mappingService;
 		}
 
-		public async Task<ResponseGetUsersAccount> GetUsers()
+		public async Task<GetUsersAccountView> GetUsers()
 		{
-			var users = await _playerRepository.FindAnyBodyAsync(Players.User.ToString());
-			var list = new List<string>();
-			foreach (var item in users)
-			{
-				list.Add(item.UserName);
-			}
-			var response = new ResponseGetUsersAccount(list);
+			var users = await _playerRepository.GetByRole(PlayersType.User.ToString());
+
+			var userNames = users
+			.Select(x => x.UserName)
+			.ToList();
+			var response = new GetUsersAccountView(userNames);
+
 			return response;
 		}
 
-		public async Task<ResponseSignUpAccountView> SignUp(string userName)
+		public async Task<SignUpAccountResponseView> SignUp(string userName)
 		{
 			Player user = new Player
 			{
 				UserName = userName,
 				Points = 100,
-				Role = Players.User.ToString()
+				Role = PlayersType.User.ToString()
 			};
 			await _userManager.CreateAsync(user);
 
-			var response = Mapper(user, new ResponseSignUpAccountView());
+			var response = _mappingService.AccountMapper(user, new SignUpAccountResponseView());
 			return response;
 		}
 
-		public async Task<ResponseGetAccountView> GetById(string id)
+		public async Task<GetAccountResponseView> GetById(string id)
 		{
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
 				throw new NotFoundException();
 			}
-			var response = Mapper(user, new ResponseGetAccountView());
+			var response = _mappingService.AccountMapper(user, new GetAccountResponseView());
 			return response;
 		}
 
-		public async Task<ResponseTokenAccountView> Logining(string userName)
+		public async Task<TokenAccountView> LogIn(string userName)
 		{
 			Player user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			if (user == null)
@@ -80,7 +85,7 @@ namespace BlackJackServices.Services
 				user = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
 			}
 			var identity = GetIdentity(user);
-			var token = new ResponseTokenAccountView
+			var token = new TokenAccountView
 			{
 				Token = GetTokenString(identity)
 			};
@@ -117,17 +122,6 @@ namespace BlackJackServices.Services
 				};
 			ClaimsIdentity claimsIdentity = new ClaimsIdentity(claimsList, "Token");
 			return claimsIdentity;
-		}
-
-		private T Mapper<T>(Player player, T view) where T : PlayerAccountView
-		{
-			var response = view;
-			view.UserId = player.Id;
-			view.UserName = player.UserName;
-			view.Points = player.Points;
-			view.Role = player.Role;
-
-			return response;
 		}
 
 	}

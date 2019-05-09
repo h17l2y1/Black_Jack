@@ -19,37 +19,38 @@ namespace BlackJack.Controllers
             _service = service;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetGame([FromBody] RequestGetGameStatisticView model)
+        [HttpGet("{userName}")]
+        public async Task<IActionResult> GetGame(string userName, string gameId)
         {
             if (ModelState.IsValid)
             {
-                var game = await _service.GetGame(model.GameId, model.UserName);
+                var game = await _service.GetGame(gameId, userName);
                 return Ok(game);
             }
-            throw new ModelNotValidException("RequestGetGameStatisticView");
+            throw new ModelNotValidException("GetGame/ url error");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Pagination([FromBody] RequestPaginationStatisticView model)
+        [HttpGet("{page}")]
+        public async Task<IActionResult> GetPagination(int page, int size)
         {
             if (ModelState.IsValid)
             {
-                var data = await _service.GetPagination(model.Page, model.Size);
+                var data = await _service.GetPagination(page, size);
                 return Ok(data);
             }
-            throw new ModelNotValidException("RequestPaginationStatisticView");
+            throw new ModelNotValidException("Pagination/ url error");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetUserStat([FromBody] RequestGetUserStatStatisticView model)
+        [HttpGet("{page}")]
+        public async Task<IActionResult> GetUserStat(int page, int size, string userName)
         {
             if (ModelState.IsValid)
             {
-                var userStat = await _service.GetUserStat(model.Page, model.Size, model.UserName);
+                var userStat = await _service.GetUserStat(page, size, userName);
                 return Ok(userStat);
             }
-            throw new ModelNotValidException("RequestGetUserStatStatisticView");
+            throw new ModelNotValidException("GetUserStat/ url error");
         }
+
     }
 }

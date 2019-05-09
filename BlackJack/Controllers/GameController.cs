@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
-    //[ApiController]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [ApiController]
     public class GameController : ControllerBase
     {
         private readonly IGameService _service;
@@ -21,7 +21,7 @@ namespace BlackJack.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> StartGame([FromBody] RequestStartGameView model)
+        public async Task<IActionResult> StartGame([FromBody] StartGameRequestView model)
         {
             if (ModelState.IsValid)
             {
@@ -31,19 +31,19 @@ namespace BlackJack.Controllers
             throw new ModelNotValidException("RequestStartGameView");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetCard([FromBody] RequestGetCardGameView model)
+        [HttpGet("{UserId}")]
+        public async Task<IActionResult> GetCard(string userId, string gameId)
         {
             if (ModelState.IsValid)
             {
-                var card = await _service.AddOneCard(model.UserId, model.GameId);
+                var card = await _service.AddOneCard(userId, gameId);
                 return Ok(card);
             }
-            throw new ModelNotValidException("RequestGetCardGameView");
+            throw new ModelNotValidException("url error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Stop([FromBody] RequestStopGameView model)
+        public async Task<IActionResult> Stop([FromBody] StopGameRequestView model)
         {
             if (ModelState.IsValid)
             {

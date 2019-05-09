@@ -6,38 +6,38 @@ using System.Linq;
 
 namespace BlackJackServices.Services
 {
-    public class Deck : IDeck
-    {
-        protected List<Card> CardList { get; set; }
+	public class Deck : IDeck
+	{
+		protected List<Card> CardList { get; set; }
 
-        public Deck(List<Card> list)
-        {
-            CardList = new List<Card>();
-            Shuffle(list);
-        }
+		public Deck(IEnumerable<Card> list)
+		{
+			CardList = new List<Card>();
+			Shuffle(list);
+		}
 
-        public Card GetCard()
-        {
-            var card = CardList[0];
-            RemoveCard();
-            return card;
-        }
+		private void Shuffle(IEnumerable<Card> list)
+		{
+			CardList = list.OrderBy(a => Guid.NewGuid()).ToList();
+		}
 
-        private void Shuffle(List<Card> list)
-        {
-            CardList = list.OrderBy(a => Guid.NewGuid()).ToList();
-        }
+		public Card GetCard()
+		{
+			var card = CardList.FirstOrDefault();
+			RemoveCard();
+			return card;
+		}
 
-        private void RemoveCard()
-        {
-            CardList.RemoveAt(0);
-        }
+		private void RemoveCard()
+		{
+			CardList.RemoveAt(0);
+		}
 
-        public int CardsLeft()
-        {
-            var cardLeft = CardList.Count;
-            return cardLeft;
-        }
+		public int CardsLeft()
+		{
+			var cardLeft = CardList.Count;
+			return cardLeft;
+		}
 
-    }
+	}
 }

@@ -11,25 +11,13 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Dapper
 {
-    public class GameUsersDapperRepository : MainGameDapperRepository<GameUsers>, IGameUsersRepository
+    public class GameUsersDapperRepository : MainGameDapperRepository<GameUser>, IGameUsersRepository
     {
         public GameUsersDapperRepository(IOptions<ConnectionStrings> connectionConfig) : base(connectionConfig)
         {
         }
 
-        public async Task AddPlayerToGame(GameUsers player)
-        {
-            var sql = $@"
-                        INSERT INTO GameUsers(Id, CreationDate, UserId, Winner, GameId) 
-                        VALUES(@Id, @CreationDate, @UserId, @Winner, @GameId)";
-
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-				await connection.QueryAsync(sql, player);
-            }
-        }
-
-        public async Task<List<string>> GetBotsIdList(string userId, string gameId)
+        public async Task<List<string>> GetBotsByUserIdAndGameId(string userId, string gameId)
         {
             var sql = $@"
                         SELECT UserId FROM GameUsers
@@ -37,8 +25,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-				var list = (await connection.QueryAsync<string>(sql)).ToList();
-				return list;
+				var result = (await connection.QueryAsync<string>(sql)).ToList();
+				return result;
             }
         }
 
@@ -47,22 +35,22 @@ namespace BlackJackDataAccess.Repositories.Dapper
             var sql = $"SELECT * FROM GameUsers WHERE GameId = '{ gameId }'";
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-				var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
-				return list;
+				var result = (await connection.QueryAsync<CardMove>(sql)).ToList();
+				return result;
             }
         }
 
-        public async Task<List<GameUsers>> GetGameUserFromGame(string gameId)
+        public async Task<List<GameUser>> GetGameUserFromGame(string gameId)
         {
             var sql = $"SELECT * FROM GameUsers WHERE GameId = '{ gameId }'";
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-				var order = (await connection.QueryAsync<GameUsers>(sql)).ToList();
-				return order;
+				var result = (await connection.QueryAsync<GameUser>(sql)).ToList();
+				return result;
             }
         }
 
-        public async Task<GameUsers> GetFutureWinner(string playerId, string gameId)
+        public async Task<GameUser> GetFutureWinnerByPlayerIdAndGameId(string playerId, string gameId)
         {
             var sql = $@"
                         SELECT * 
@@ -71,12 +59,12 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var winner = await connection.QuerySingleAsync<GameUsers>(sql);
-                return winner;
+                var result = await connection.QuerySingleAsync<GameUser>(sql);
+                return result;
             }
         }
 
-        public async Task UpdateWinner(GameUsers player)
+        public async Task UpdateWinner(GameUser player)
         {
             var sql = $@"
                         UPDATE GameUsers 
@@ -89,7 +77,7 @@ namespace BlackJackDataAccess.Repositories.Dapper
             }
         }
 
-		public async Task<GameUsers> GetWinner(string gameId)
+		public async Task<GameUser> GetWinnerByGameId(string gameId)
 		{
 			var sql = $@"
                         SELECT * 
@@ -98,8 +86,8 @@ namespace BlackJackDataAccess.Repositories.Dapper
 
 			using (IDbConnection connection = new SqlConnection(_connectionString))
 			{
-				var winner = await connection.QuerySingleAsync<GameUsers>(sql);
-				return winner;
+				var result = await connection.QuerySingleAsync<GameUser>(sql);
+				return result;
 			}
 		}
 

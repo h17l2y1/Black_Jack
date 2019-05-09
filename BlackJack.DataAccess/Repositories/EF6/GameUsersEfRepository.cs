@@ -7,40 +7,34 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories
 {
-    public class GameUsersEfRepository : MainGameEfRepository<GameUsers>, IGameUsersRepository
+    public class GameUsersEfRepository : MainGameEfRepository<GameUser>, IGameUsersRepository
     {
         public GameUsersEfRepository(ApplicationContext context) : base(context)
         {
         }
 
-        public async Task AddPlayerToGame(GameUsers player)
+		public async Task<List<string>> GetBotsByUserIdAndGameId(string userId, string gameId)
         {
-            await _context.GameUsers.AddAsync(player);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task<List<string>> GetBotsIdList(string userId, string gameId)
-        {
-            var list = await _context.GameUsers
+            var result = await _context.GameUsers
                .Where(t => t.GameId == gameId && t.UserId != userId)
                .Select(x => x.UserId)
                .ToListAsync();
-            return list;
+            return result;
         }
 
-        public async Task<GameUsers> GetFutureWinner(string playerId, string gameId)
+        public async Task<GameUser> GetFutureWinnerByPlayerIdAndGameId(string playerId, string gameId)
         {
-            var winner = await _context.GameUsers.SingleOrDefaultAsync(t => t.UserId == playerId && t.GameId == gameId);
-            return winner;
+            var result = await _context.GameUsers.SingleOrDefaultAsync(t => t.UserId == playerId && t.GameId == gameId);
+            return result;
         }
 
-		public async Task<GameUsers> GetWinner(string gameId)
+		public async Task<GameUser> GetWinnerByGameId(string gameId)
 		{
-			var winner = await _context.GameUsers.SingleOrDefaultAsync(t => t.Winner == true && t.GameId == gameId);
-			return winner;
+			var result = await _context.GameUsers.SingleOrDefaultAsync(t => t.Winner == true && t.GameId == gameId);
+			return result;
 		}
 
-		public async Task UpdateWinner(GameUsers player)
+		public async Task UpdateWinner(GameUser player)
         {
             _context.GameUsers.Update(player);
 			await _context.SaveChangesAsync();

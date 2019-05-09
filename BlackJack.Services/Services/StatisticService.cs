@@ -5,6 +5,7 @@ using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
+using BlackJackViewModels.Statistic.GetUserPage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,27 +33,27 @@ namespace BlackJackServices
 			_cardRepository = cardRepository;
 		}
 
-		public async Task<ResponseGetGameStatisticView> GetGame(string gameId, string userName)
+		public async Task<GetGameStatisticViewItem> GetGame(string gameId, string userName)
 		{
-			Player user = await _playerRepository.GetByName(userName);
+			Player user = await _playerRepository.GetByUserName(userName);
 			List<Player> botList = await GetBotsFromGame(user.Id, gameId);
-			List<CardMove> moveList = await _cardMoveRepository.GetMovesFromGame(gameId);
-			var userModel = CreatePlayer(user, moveList);
-			var botsModel = GetBots(botList, moveList);
-			var win = await _gameUsersRepository.GetWinner(gameId);
-			var winner = _playerRepository.Get(win.UserId);
+			List<CardMove> moveList = await _cardMoveRepository.GetByGameId(gameId);
+			var userModel = await CreatePlayer(user, moveList);
+			var botsModel = await GetBots(botList, moveList);
+			var win = await _gameUsersRepository.GetWinnerByGameId(gameId);
+			var winner = await _playerRepository.Get(win.UserId);
 
-			var gameModel = new ResponseGetGameStatisticView
+			var response = new GetGameStatisticViewItem
 			{
 				GameId = gameId,
 				User = userModel,
 				Bots = botsModel,
 				Winner = winner.UserName
 			};
-			return gameModel;
+			return response;
 		}
 
-		public async Task<ResponsePaginationStatisticView> GetPagination(int pageNumber, int pageSize)
+		public async Task<GetPaginationStatisticViewItem> GetPagination(int pageNumber, int pageSize)
 		{
 			List<Statistic> page = await _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
 			if (page == null)
@@ -60,11 +61,11 @@ namespace BlackJackServices
 				throw new StatisticDataNotFound("Page not found");
 			}
 			PageInfo info = await GetAllPageInfo(pageNumber, pageSize);
-			ResponsePaginationStatisticView model = CreateModel(page, info);
-			return model;
+			GetPaginationStatisticViewItem response = CreateModel(page, info);
+			return response;
 		}
 
-		public async Task<ResponsePaginationStatisticView> GetUserStat(int pageNumber, int pageSize, string userName)
+		public async Task<GetUserPageStatisticViewItem> GetUserStat(int pageNumber, int pageSize, string userName)
 		{
 			List<Statistic> page = await _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
 			if (page.Count == 0)
@@ -72,14 +73,13 @@ namespace BlackJackServices
 				throw new StatisticDataNotFound("Page not found");
 			}
 			PageInfo info = await GetUserPageInfo(pageNumber, pageSize, userName);
-			ResponsePaginationStatisticView model = CreateModel(page, info);
-			return model;
+			GetUserPageStatisticViewItem response = UserCreateModel(page, info);
+			return response;
 		}
-
 
 		private async Task<PageInfo> GetUserPageInfo(int pageNumber, int pageSize, string userName)
 		{
-			int totalItem = await _statisticRepository.UserCount(userName);
+			int totalItem = await _statisticRepository.CountUsers(userName);
 			var info = GetPageInfo(pageNumber, pageSize, totalItem);
 			return info;
 		}
@@ -115,9 +115,9 @@ namespace BlackJackServices
 			return pages;
 		}
 
-		private ResponsePaginationStatisticView CreateModel(List<Statistic> page, PageInfo info)
+		private GetPaginationStatisticViewItem CreateModel(List<Statistic> page, PageInfo info)
 		{
-			var response = new ResponsePaginationStatisticView
+			var response = new GetPaginationStatisticViewItem
 			{
 				Page = PageMapper(page),
 				PageNumber = info.PageNumber,
@@ -128,12 +128,71 @@ namespace BlackJackServices
 			return response;
 		}
 
-		private List<StatisticStatisticView> PageMapper(List<Statistic> page)
+		private List<StatisticGetPaginationStatisticView> PageMapper(List<Statistic> page)
 		{
-			var list = new List<StatisticStatisticView>();
+			var model = page
+				.Select(x => new StatisticGetPaginationStatisticView
+				{
+					GameId = x.GameId,
+					Score = x.Score,
+					UserName = x.UserName,
+					Winner = x.Winner
+				})
+				.ToList();
+			return model;
+		}
+
+		private List<CardPlayerGetGameStatisticView> CardMapper(List<CardPlayerStartGameView> list)
+		{
+			var model = list
+				.Select(x => new CardPlayerGetGameStatisticView
+				{
+					Ranks = x.Rank.ToString(),
+					Suit = x.Suit.ToString(),
+					Value = x.Value
+				})
+				.ToList();
+			return model;
+		}
+
+		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
+		{
+			var botsList = new List<Player>();
+
+			// id bots from game
+			var botsIdList = await _gameUsersRepository.GetBotsByUserIdAndGameId(userId, gameId);
+			if (botsIdList == null)
+			{
+				throw new NotFoundException();
+			}
+
+			// bots from game
+			foreach (var id in botsIdList)
+			{
+				botsList.Add(await _playerRepository.Get(id));
+			}
+			return botsList;
+		}
+
+		private GetUserPageStatisticViewItem UserCreateModel(List<Statistic> page, PageInfo info)
+		{
+			var response = new GetUserPageStatisticViewItem
+			{
+				Page = UserPageMapper(page),
+				PageNumber = info.PageNumber,
+				ItemsOnPage = info.ItemsOnPage,
+				TotalItems = info.TotalItems,
+				TotalPages = info.TotalPages
+			};
+			return response;
+		}
+
+		private List<StatisticGetUserPageStatisticView> UserPageMapper(List<Statistic> page)
+		{
+			var list = new List<StatisticGetUserPageStatisticView>();
 			foreach (var item in page)
 			{
-				var stat = new StatisticStatisticView();
+				var stat = new StatisticGetUserPageStatisticView();
 				stat.GameId = item.GameId;
 				stat.Score = item.Score;
 				stat.UserName = item.UserName;
@@ -143,50 +202,17 @@ namespace BlackJackServices
 			return list;
 		}
 
-		private List<ResponseCardStatisticView> CardMapper(List<ResponseCardGameView> list)
-		{
-			var listCard = new List<ResponseCardStatisticView>();
-			foreach (var card in list)
-			{
-				var newCard = new ResponseCardStatisticView();
-				newCard.Ranks = card.Ranks;
-				newCard.Suit = card.Suit;
-				newCard.Value = card.Value;
-				listCard.Add(newCard);
-			}
-			return listCard;
-		}
-
-		private async Task<List<Player>> GetBotsFromGame(string userId, string gameId)
-		{
-			var botsList = new List<Player>();
-
-			// id bots from game
-			var botsIdList = await _gameUsersRepository.GetBotsIdList(userId, gameId);
-			if (botsIdList == null)
-			{
-				throw new NotFoundException();
-			}
-
-			// bots from game
-			foreach (var id in botsIdList)
-			{
-				botsList.Add(_playerRepository.Get(id));
-			}
-			return botsList;
-		}
-
-		private PlayerStatisticView CreatePlayer(Player player, List<CardMove> moveList)
+		private async Task<PlayerGetGameStatisticViewItem> CreatePlayer(Player player, List<CardMove> moveList)
 		{
 			var playerMoves = moveList.Where(t => t.PlayerId == player.Id).ToList();
 			var cardsList = new List<Card>();
 
 			foreach (var move in playerMoves)
 			{
-				cardsList.Add(_cardRepository.Get(move.CardId));
+				cardsList.Add( await _cardRepository.Get(move.CardId));
 			}
 
-			var userView = new PlayerStatisticView();
+			var userView = new PlayerGetGameStatisticViewItem();
 			userView.Name = player.UserName;
 			userView.Cards.AddRange(GetCardView(cardsList));
 			userView.Score = GetScore(playerMoves);
@@ -194,12 +220,12 @@ namespace BlackJackServices
 			return userView;
 		}
 
-		private List<ResponseCardStatisticView> GetCardView(List<Card> cards)
+		private List<CardPlayerGetGameStatisticView> GetCardView(List<Card> cards)
 		{
-			var listCardView = new List<ResponseCardStatisticView>();
+			var listCardView = new List<CardPlayerGetGameStatisticView>();
 			foreach (var card in cards)
 			{
-				var cardModel = new ResponseCardStatisticView
+				var cardModel = new CardPlayerGetGameStatisticView
 				{
 					Ranks = card.Rank.ToString(),
 					Suit = card.Suit.ToString(),
@@ -210,12 +236,12 @@ namespace BlackJackServices
 			return listCardView;
 		}
 
-		private List<PlayerStatisticView> GetBots(List<Player> botList, List<CardMove> moveList)
+		private async Task<List<PlayerGetGameStatisticViewItem>> GetBots(List<Player> botList, List<CardMove> moveList)
 		{
-			var list = new List<PlayerStatisticView>();
+			var list = new List<PlayerGetGameStatisticViewItem>();
 			foreach (var bot in botList)
 			{
-				list.Add(CreatePlayer(bot, moveList));
+				list.Add(await CreatePlayer(bot, moveList));
 			}
 			return list;
 		}

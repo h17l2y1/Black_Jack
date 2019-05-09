@@ -1,5 +1,5 @@
 export class ResponseCardGameView {
-    ranks: string;
+    rank: string;
     suit: string;
     value: number
 }

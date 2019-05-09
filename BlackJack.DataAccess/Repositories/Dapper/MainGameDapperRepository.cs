@@ -2,17 +2,23 @@
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories
 {
 	public class MainGameDapperRepository<TEntity> : IMainGameRepository<TEntity> where TEntity : class
 	{
 		protected readonly string _tableName = $"{ typeof(TEntity).Name }s";
-
 		protected readonly string _connectionString;
+
+		protected IDbConnection Connection
+		{
+			get { return new SqlConnection(_connectionString); }
+		}
 
 		public MainGameDapperRepository(IOptions<ConnectionStrings> connectionConfig)
 		{
@@ -20,21 +26,20 @@ namespace BlackJackDataAccess.Repositories
 			_connectionString = connection.DefaultConnection;
 		}
 
-		public TEntity Get(string id)
+		public async Task<TEntity> Get(string id)
 		{
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				return connection.Get<TEntity>(id);
-			}
+			return await Connection.GetAsync<TEntity>(id);
 		}
 
-		public IQueryable<TEntity> GetAll()
+		public async Task<IEnumerable<TEntity>> GetAll()
 		{
-			using (IDbConnection connection = new SqlConnection(_connectionString))
-			{
-				return connection.GetAll<TEntity>().AsQueryable();
-			}
+			return await Connection.GetAllAsync<TEntity>();
 		}
 
+		public async Task Add(TEntity item)
+		{
+
+			await Connection.InsertAsync(item);
+		}
 	}
 }

@@ -4,17 +4,16 @@ using System.Threading.Tasks;
 
 namespace BlackJackDataAccess.Repositories.Interface
 {
-    public interface IGameUsersRepository : IMainGameRepository<GameUsers>
+    public interface IGameUsersRepository : IMainGameRepository<GameUser>
     {
-        Task AddPlayerToGame(GameUsers player);
 
-        Task<List<string>> GetBotsIdList(string userId, string gameId);
+        Task<List<string>> GetBotsByUserIdAndGameId(string userId, string gameId);
 
-        Task<GameUsers> GetFutureWinner(string playerId, string gameId);
+        Task<GameUser> GetFutureWinnerByPlayerIdAndGameId(string playerId, string gameId);
 
-        Task UpdateWinner(GameUsers player);
+        Task UpdateWinner(GameUser player);
 
-		Task<GameUsers> GetWinner(string gameId);
+		Task<GameUser> GetWinnerByGameId(string gameId);
 
 	}
 }

@@ -17,57 +17,27 @@ namespace BlackJackDataAccess.Repositories.Dapper
         {
         }
 
-        public int CountMove(string gameId, string playerName)
-        {
-            var sql = $@"
-                        SELECT COUNT(*)
-                        FROM CardMoves
-                        WHERE GameId='{gameId}' and Name='{playerName}'";
+		public int CountMove(string gameId, string playerName)
+		{
+			var sql = $@"SELECT COUNT(*) FROM CardMoves WHERE GameId='{gameId}' and Name='{playerName}'";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var count = connection.QuerySingle<int>(sql);
-                return count;
-            }
-        }
+			return Connection.QuerySingle<int>(sql);
+		}
 
-        public async Task AddCardToPlayer(CardMove move)
-        {
-            var sql = $@"
-                        INSERT INTO CardMoves(Id, CreationDate, Move, Role, Name, Value, PlayerId, GameId, CardId) 
-                        VALUES(@Id, @CreationDate, @Move, @Role, @Name, @Value, @PlayerId, @GameId, @CardId)";
+		public async Task<List<CardMove>> GetByGameId(string gameId)
+		{
+			var sql = $@"SELECT * FROM CardMoves WHERE GameId='{gameId}'";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-				await connection.QueryAsync(sql, move);
-            }
-        }
+			return (await Connection.QueryAsync<CardMove>(sql)).ToList();
+		}
 
-        public async Task<List<CardMove>> GetMovesFromGame(string gameId)
-        {
-            var sql = $@"
-                        SELECT * FROM CardMoves
-                        WHERE GameId='{gameId}'";
+		public async Task<List<CardMove>> GetByGameIdAndUserId(string gameId, string userId)
+		{
+			var sql = $@"SELECT * FROM CardMoves WHERE GameId='{gameId}' and PlayerId != '{userId}'";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-				var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
-				return list;
-            }
-        }
+			return (await Connection.QueryAsync<CardMove>(sql)).ToList();
+		}
 
-        public async Task<List<CardMove>> BotsCardMoveList(string gameId, string userId)
-        {
-            var sql = $@"
-                        SELECT * FROM CardMoves
-                        WHERE GameId='{gameId}' and PlayerId != '{userId}'";
 
-            using (IDbConnection connection = new SqlConnection(_connectionString))
-            {
-                var list = (await connection.QueryAsync<CardMove>(sql)).ToList();
-                return list;
-            }
-        }
-
-    }
+	}
 }

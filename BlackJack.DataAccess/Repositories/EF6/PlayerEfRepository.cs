@@ -14,26 +14,26 @@ namespace BlackJackDataAccess.Repositories
         {
 		}
 
-		public async Task<Player> FindDialer()
+		public async Task<Player> GetDialer()
 		{
-			var listBots = await _context.Users
-				.SingleOrDefaultAsync(t => t.Role == Players.Dialer.ToString());
-			return listBots;
+			var result = await _context.Users
+				.SingleOrDefaultAsync(t => t.Role == PlayersType.Dialer.ToString());
+			return result;
 		}
 
-		public async Task<List<Player>> FindAnyBodyAsync(string role)
+		public async Task<List<Player>> GetByRole(string role)
         {
-            var listBots = await _context.Users
+            var result = await _context.Users
                 .Where(t => t.Role == role)
                 .ToListAsync();
-            return listBots;
+            return result;
         }
 
-		public async Task<Player> GetByName(string userName)
+		public async Task<Player> GetByUserName(string userName)
 		{
-			var listBots = await _context.Users
+			var result = await _context.Users
 				.SingleOrDefaultAsync(t => t.UserName == userName);
-			return listBots;
+			return result;
 		}
 	}
 }

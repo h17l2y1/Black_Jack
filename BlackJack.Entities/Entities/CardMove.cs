@@ -12,12 +12,14 @@ namespace BlackJackEntities.Entities
         public string PlayerId { get; set; }
 
         public string GameId { get; set; }
+
         [ForeignKey("GameId")]
         [Computed]
         [NotMapped]
         public virtual Game Game { get; set; }
 
         public string CardId { get; set; }
+
         [ForeignKey("CardId")]
         [Computed]
         [NotMapped]
