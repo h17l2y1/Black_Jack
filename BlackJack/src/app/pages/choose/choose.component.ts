@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import * as jwt_decode from "jwt-decode";
+import { TransferService } from '../../../shared/services/transfer.service';
 import { AccountService } from '../../../shared/services/account.service';
 import { ResponseSignUpAccountView } from '../../../shared/models/Account/responseSignUpAccountView';
-import * as jwt_decode from "jwt-decode";
 
 
 @Component({
@@ -14,10 +14,14 @@ export class ChooseComponent implements OnInit {
 
   userModel = new ResponseSignUpAccountView;
 
-  constructor(private router: Router, private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private transferService: TransferService) { }
 
   ngOnInit() {
     this.getUserData();
+  }
+
+  onGame(){
+    this.transferService.setModel(this.userModel);
   }
 
   getUserData() {

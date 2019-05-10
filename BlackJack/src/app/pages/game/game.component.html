@@ -1,6 +1,16 @@
 
-Start game
+<!-- Start game -->
 <div class="selector">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">User Data from service</h5>
+          <p class="card-text"> Id: {{transferModel.userId}}</p>
+          <p class="card-text">Login: {{transferModel.userName}} </p>
+          <p class="card-text">Points: {{transferModel.points}}</p>
+          <p class="card-text">Role: {{transferModel.role}}</p>
+        </div>
+    </div>
+
   <div class="userLine">
     Bots Count 
     <select [(ngModel)]="startGameModel.countBots" >

@@ -1,6 +1,7 @@
 ﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
+using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Statistic;
@@ -34,6 +35,14 @@ namespace BlackJackServices
 
 		public async Task<GetGameStatisticViewItem> GetGame(string gameId, string userName)
 		{
+			if (
+				(userName == null && gameId == null) ||
+				(userName != null && gameId == null) ||
+				(userName == null && gameId != null))
+			{
+				throw new BadRequestException();
+			}
+
 			Player user = await _playerRepository.GetByUserName(userName);
 			List<Player> botList = await GetBotsFromGame(user.Id, gameId);
 			List<CardMove> moveList = await _cardMoveRepository.GetByGameId(gameId);
@@ -54,6 +63,11 @@ namespace BlackJackServices
 
 		public async Task<GetPaginationStatisticViewItem> GetPagination(int pageNumber, int pageSize)
 		{
+			if (pageNumber <= 0 && pageSize <= 0)
+			{
+				throw new BadRequestException();
+			}
+
 			List<Statistic> page = await _statisticRepository.GetAllGames((pageNumber - 1) * pageSize, pageSize);
 			if (page == null)
 			{
@@ -66,6 +80,11 @@ namespace BlackJackServices
 
 		public async Task<GetUserPageStatisticViewItem> GetUserStat(int pageNumber, int pageSize, string userName)
 		{
+			if (pageNumber <= 0 && pageSize <= 0 && userName == null)
+			{
+				throw new BadRequestException();
+			}
+
 			List<Statistic> page = await _statisticRepository.GetUserGames((pageNumber - 1) * pageSize, pageSize, userName);
 			if (page.Count == 0)
 			{

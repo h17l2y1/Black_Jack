@@ -17,15 +17,15 @@ export class StatisticService {
   constructor(private http:HttpClient) { }
 
   getGame(model : RequestGetGameStatisticView){
-    return this.http.get<ResponseGetGameStatisticView>(this.rootUrl + 'Statistic/GetGame/' + model.userName + "?gameId=" + model.gameId);
+    return this.http.get<ResponseGetGameStatisticView>(this.rootUrl + 'Statistic/GetGame/?userName=' + model.userName + "&gameId=" + model.gameId);
   }
 
   getPage(model: RequestPaginationStatisticView){
-    return this.http.get<ResponsePaginationStatisticView>(this.rootUrl + 'Statistic/GetPagination/' + model.page + "?size=" + model.size);
+    return this.http.get<ResponsePaginationStatisticView>(this.rootUrl + 'Statistic/GetPagination/?page=' + model.page + "&size=" + model.size);
   }
 
   getUserPage(model: RequestGetUserStatStatisticView){
-    return this.http.get<ResponsePaginationStatisticView>(this.rootUrl + 'Statistic/GetUserStat/' + model.page + "?size=" + model.size + "&userName=" + model.userName);
+    return this.http.get<ResponsePaginationStatisticView>(this.rootUrl + 'Statistic/GetUserStat/?page=' + model.page + "&size=" + model.size + "&userName=" + model.userName);
   }
 
 }

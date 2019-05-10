@@ -1,4 +1,3 @@
-using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +7,7 @@ namespace BlackJack.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {
         private readonly IAccountService _service;
 
@@ -17,40 +16,32 @@ namespace BlackJack.Controllers
             _service = service;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> Get(string id)
-        {
+		{
             var player = await _service.GetById(id);
             return Ok(player);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
-        {
-            var users = await _service.GetUsers();
-            return Ok(users);
-        }
+		[HttpGet]
+		public async Task<IActionResult> GetUsers()
+		{
+			var users = await _service.GetUsers();
+			return Ok(users);
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> LogIn([FromBody] SignUpAccountRequestView model)
-        {
-            if (ModelState.IsValid)
-            {
-                var token = await _service.LogIn(model.UserName);
-                return Ok(token);
-            }
-            throw new ModelNotValidException("RequestSignUpAccountView");
-        }
+		[HttpPost]
+		public async Task<IActionResult> LogIn([FromBody] SignUpAccountRequestView model)
+		{
+			var token = await _service.LogIn(model.UserName);
+			return Ok(token);
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> SignUp([FromBody] SignUpAccountRequestView model)
-        {
-            if (ModelState.IsValid)
-            {
-                var player = await _service.SignUp(model.UserName);
-                return Ok(player);
-            }
-            throw new ModelNotValidException("RequestSignUpAccountView");
-        }
-    }
+		[HttpPost]
+		public async Task<IActionResult> SignUp([FromBody] SignUpAccountRequestView model)
+		{
+			var player = await _service.SignUp(model.UserName);
+			return Ok(player);
+		}
+	}
 }

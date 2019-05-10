@@ -30,7 +30,7 @@ export class AccountService {
   }
 
   public get(userId : string){
-    return this.http.get<ResponseSignUpAccountView>(this.rootUrl + 'Account/Get/' + userId);
+    return this.http.get<ResponseSignUpAccountView>(this.rootUrl + 'Account/Get/?id=' + userId);
   }
 
   public getNames(){

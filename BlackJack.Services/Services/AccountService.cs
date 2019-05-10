@@ -2,6 +2,7 @@
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using BlackJackEntities.Enums;
+using BlackJackServices.Exceptions;
 using BlackJackServices.Jwt;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels;
@@ -46,12 +47,10 @@ namespace BlackJackServices.Services
 		public async Task<GetUsersAccountView> GetUsers()
 		{
 			var users = await _playerRepository.GetByRole(PlayersType.User.ToString());
-
 			var userNames = users
 			.Select(x => x.UserName)
 			.ToList();
 			var response = new GetUsersAccountView(userNames);
-
 			return response;
 		}
 
@@ -64,13 +63,16 @@ namespace BlackJackServices.Services
 				Role = PlayersType.User.ToString()
 			};
 			await _userManager.CreateAsync(user);
-
 			var response = _mappingService.AccountMapper(user, new SignUpAccountResponseView());
 			return response;
 		}
 
 		public async Task<GetAccountResponseView> GetById(string id)
 		{
+			if (id == null)
+			{
+				throw new BadRequestException();
+			}
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{

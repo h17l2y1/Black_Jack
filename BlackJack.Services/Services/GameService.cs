@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using BlackJack.Exceptions;
+﻿using BlackJack.Exceptions;
 using BlackJackDataAccess.Repositories.Interface;
 using BlackJackEntities.Entities;
 using BlackJackEntities.Enums;
+using BlackJackServices.Exceptions;
 using BlackJackServices.Services.Interfaces;
 using BlackJackViewModels.Game;
 using BlackJackViewModels.Game.GetCard;
-using BlackJackViewModels.Game.Stop;
 using MoreLinq;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +64,14 @@ namespace BlackJackServices.Services
 
 		public async Task<GetCardStartView> AddOneCard(string userId, string gameId)
 		{
+			if (
+				(userId == null && gameId == null) || 
+				(userId != null && gameId == null) ||
+				(userId == null && gameId != null))
+			{
+				throw new BadRequestException();
+			}
+
 			var player = new List<Player>();
 			Player user = await _playerRepository.Get(userId);
 			player.Add(user);

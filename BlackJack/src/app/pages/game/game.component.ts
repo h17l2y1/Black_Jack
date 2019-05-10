@@ -12,6 +12,7 @@ import { ResponseCardGameView } from '../../../shared/models/Game/responseCardGa
 import { RequestStopGameView } from '../../../shared/models/Game/requestStopGameView';
 import { ResponseStopGameView } from '../../../shared/models/Game/responseStopGameView';
 import { ResponseWinnerGameView } from '../../../shared/models/Game/responseWinnerGameView';
+import { TransferService } from '../../../shared/services/transfer.service';
 
 
 @Component({ 
@@ -33,11 +34,20 @@ export class GameComponent implements OnInit {
   stopModel = new RequestStopGameView;
   stopGameModel = new ResponseStopGameView;
   winnerModel = new ResponseWinnerGameView;
+  transferModel = new ResponseSignUpAccountView;
 
-  constructor(private router: Router, private accountService: AccountService, private gameService: GameService) { }
+  constructor(private router: Router, private accountService: AccountService, private gameService: GameService, private transferService: TransferService) { 
+    transferService.modelAdded$.subscribe(model => this.onItemAdded(model));
+    console.log(this.transferModel);
+  }
 
   ngOnInit() {
     this.getUserData();
+  }
+
+  private onItemAdded(model: ResponseSignUpAccountView): void {
+    this.transferModel = model;
+    console.log(this.transferModel);
   }
 
   onStopGame(){
@@ -46,7 +56,7 @@ export class GameComponent implements OnInit {
     this.stopModel.gameId = this.gameModel.gameId;
     this.gameService.stop(this.stopModel)    
     .subscribe((response) => {
-      this.stopGameModel = response
+      this.stopGameModel = response;
       this.gameModel.bots = this.stopGameModel.bots;
       this.gameModel.cardsleft = this.stopGameModel.cardsleft
       this.gameModel.user = this.stopGameModel.user;

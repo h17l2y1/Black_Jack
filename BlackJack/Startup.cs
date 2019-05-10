@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,11 +24,6 @@ namespace BlackJack
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //IConfiguration configuration = new ConfigurationBuilder()
-            //        .SetBasePath(Directory.GetCurrentDirectory())
-            //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-            //        .Build();
-
             services.Configure<AuthOptions>(Configuration.GetSection("AuthOptions"));
 
             services.Service(Configuration);
@@ -46,7 +42,7 @@ namespace BlackJack
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddCors();
+			services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory fac)
@@ -60,8 +56,6 @@ namespace BlackJack
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseMiddleware<ExceptionLoggingMiddleware>();
-
             app.UseAuthentication();
             app.UseCookiePolicy();
             app.UseDefaultFiles();
@@ -73,6 +67,7 @@ namespace BlackJack
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
+
+		}
     }
 }

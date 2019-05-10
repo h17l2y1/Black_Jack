@@ -22,7 +22,7 @@ export class GameService {
   }
 
   getCard(model : RequestGetCardGameView){
-    return this.http.get<ResponseCardGameView>(this.rootUrl + 'Game/GetCard/' + model.userId + "?gameId=" + model.gameId);
+    return this.http.get<ResponseCardGameView>(this.rootUrl + 'Game/GetCard/?userId=' + model.userId + "&gameId=" + model.gameId);
   }
 
   stop(model : RequestStopGameView){
