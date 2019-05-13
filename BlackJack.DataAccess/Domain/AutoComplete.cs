@@ -21,7 +21,7 @@ namespace BlackJackDataAccess.Domain
 				playerList.Add(new Player()
 				{
 					UserName = $"{PlayersType.Bot.ToString()}_{i}",
-					Role = PlayersType.Dialer.ToString()
+					Role = PlayersType.Bot.ToString()
 				});
 			}
 			return playerList;
