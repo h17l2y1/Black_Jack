@@ -1,4 +1,5 @@
 using BlackJack.Exceptions;
+using BlackJackServices.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;

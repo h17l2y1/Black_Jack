@@ -21,6 +21,6 @@ namespace BlackJackEntities.Entities
 		[ForeignKey("GameId")]
 		[Computed]
 		[NotMapped]
-		public Game Game { get; set; } 
-    }
+		public Game Game { get; set; }
+	}
 }
